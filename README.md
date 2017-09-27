@@ -27,6 +27,9 @@ John has created web apps using Ruby on Rails, and knowledge of C++ from courses
 
 Ryan Yean rkiew@sfu.ca
 
+Ryan is a third year engineering student whose studies are more focused towards computer engineering. He has taken multiple lower level computing courses in SFU and thus is adept at Object Oriented Programming. He has previously worked on a software which changes the speed limit of a speed-sign depending on the current road conditions as part of a project, and is familiar with Arduino boards. He is also familiar with many graphical software such as Sony Vegas and Photoshop. His hobbies are video editing, coding, and drawing.
+
+
 
 ### Meetings:
 
