@@ -36,8 +36,11 @@ Ryan is a third year engineering student whose studies are more focused towards 
 Weekly: 
 
 Monday, 4:30-5:30 in WMC 2502
+
 Thursday, 9:00am-12:00pm, CSIL (one of the team room)
+
 Saturday, 10:00am-1:00pm, CSIL (one of the team room)
+
 
 A table of contents
 
