@@ -7,11 +7,14 @@
 //
 
 import UIKit
-import Alamofire
-class ViewController: UIViewController {
+import CTPanoramaView
 
+class ViewController: UIViewController {
+    
+    @IBOutlet weak var experience_viewer_panorama: CTPanoramaView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadCylindricalImage()
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -20,6 +23,8 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    func loadCylindricalImage() {
+        experience_viewer_panorama.image = UIImage(named: "Experience1")
+    }
 }
 

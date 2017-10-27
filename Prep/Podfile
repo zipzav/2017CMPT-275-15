@@ -8,6 +8,7 @@ target 'Prep' do
   # Pods for Prep
 pod "Alamofire"
 pod "SwiftyJSON"
+pod "CTPanoramaView", "~> 1.0"
 target 'PrepTests' do
     inherit! :search_paths
     # Pods for testing

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "825E6505AAAE28361013BC506F8843A6"
-               BuildableName = "SwiftyJSON.framework"
-               BlueprintName = "SwiftyJSON"
+               BlueprintIdentifier = "FBA431458AF24B4EDC01ED4358B72C1C"
+               BuildableName = "CTPanoramaView.framework"
+               BlueprintName = "CTPanoramaView"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "825E6505AAAE28361013BC506F8843A6"
-            BuildableName = "SwiftyJSON.framework"
-            BlueprintName = "SwiftyJSON"
+            BlueprintIdentifier = "FBA431458AF24B4EDC01ED4358B72C1C"
+            BuildableName = "CTPanoramaView.framework"
+            BlueprintName = "CTPanoramaView"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

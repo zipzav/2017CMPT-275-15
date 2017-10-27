@@ -1,15 +1,18 @@
 PODS:
   - Alamofire (4.4.0)
+  - CTPanoramaView (1.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - Alamofire
+  - CTPanoramaView (~> 1.0)
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  CTPanoramaView: 26a11a330ff606ea5d059ffe86b7e34eb902023e
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: ebe2451aa3e8fe8816fc31903eb17d92761cff3c
+PODFILE CHECKSUM: c929bbdd16ca72dea54376f9a765c3326709d2a4
 
 COCOAPODS: 1.2.0
