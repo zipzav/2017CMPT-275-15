@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */; };
 		36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1451F7C663A0043A02F /* AppDelegate.swift */; };
 		36EEC1481F7C663A0043A02F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1471F7C663A0043A02F /* ViewController.swift */; };
 		36EEC14B1F7C663A0043A02F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36EEC1491F7C663A0043A02F /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		2E9191485841A6BD4D450898 /* Pods-PrepTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PrepTests/Pods-PrepTests.debug.xcconfig"; sourceTree = "<group>"; };
 		316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceObject.swift; sourceTree = "<group>"; };
 		36EEC1421F7C663A0043A02F /* Prep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36EEC1451F7C663A0043A02F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36EEC1471F7C663A0043A02F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 		36EEC1441F7C663A0043A02F /* Prep */ = {
 			isa = PBXGroup;
 			children = (
+				3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */,
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
 				36EEC1471F7C663A0043A02F /* ViewController.swift */,
 				36EEC1491F7C663A0043A02F /* Main.storyboard */,
@@ -446,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ViewController.swift in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
 			);
@@ -614,11 +618,14 @@
 			baseConfigurationReference = F030470BB62841E0964AE0E1 /* Pods-Prep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W2L84ABWT7;
 				INFOPLIST_FILE = Prep/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ZipZav.Prep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -629,11 +636,14 @@
 			baseConfigurationReference = B3A6C582F0175F6DA6F0AEFB /* Pods-Prep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W2L84ABWT7;
 				INFOPLIST_FILE = Prep/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ZipZav.Prep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
