@@ -20,13 +20,27 @@ class Experience{
         description = Description
         panoramas = [Panorama]()//Empty
     }
-
+    func addPanorama(newPanorama:Panorama){
+        panoramas.append(newPanorama)
+    }
+    func addPanorama(newImage:UIImage){
+        var newPanorama:Panorama = Panorama(Image:newImage)
+        panoramas.append(newPanorama)
+    }
+    func getPanorama(index:Int)->UIImage{
+        return panoramas[index].image
+    }
 }
 class Location{
     var x: Int
     var y: Int
     
     init(X: Int, Y:Int){
+        x = X
+        y = Y
+    }
+    
+    func updateLocation(X: Int, Y:Int){
         x = X
         y = Y
     }
@@ -37,11 +51,16 @@ class Panorama{
     var buttonObject : [Any]
     var buttonsPressed : Int //A counter? You could probably check how many buttons there are in buttonObect Array and compare against this value
     var nextPanoramaButtonLocation: [Location]
+    
     init(Image:UIImage){
         image = Image
         buttonsPressed = 0
         buttonLocation = [Location]()
         buttonObject = [Any]()
         nextPanoramaButtonLocation = [Location]()
+    }
+    func addButton(newButtonLocation:Location,newObject:Any){
+        buttonLocation.append(newButtonLocation)
+        buttonObject.append(newObject)
     }
 }
