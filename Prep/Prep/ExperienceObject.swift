@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import SceneKit
 
 class Experience{
     var name:String
@@ -31,35 +31,22 @@ class Experience{
         return panoramas[index].image
     }
 }
-class Location{
-    var x: Int
-    var y: Int
-    
-    init(X: Int, Y:Int){
-        x = X
-        y = Y
-    }
-    
-    func updateLocation(X: Int, Y:Int){
-        x = X
-        y = Y
-    }
-}
+
 class Panorama{
     var image:UIImage
-    var buttonLocation: [Location] //the index between buttonLocation and Button object should match, does not include the next panorama button
+    var buttonLocation: [SCNVector3] //the index between buttonLocation and Button object should match, does not include the next panorama button
     var buttonObject : [Any]
     var buttonsPressed : Int //A counter? You could probably check how many buttons there are in buttonObect Array and compare against this value
-    var nextPanoramaButtonLocation: [Location]
+    var nextPanoramaButtonLocation: [SCNVector3]
     
     init(Image:UIImage){
         image = Image
         buttonsPressed = 0
-        buttonLocation = [Location]()
+        buttonLocation = [SCNVector3]()
         buttonObject = [Any]()
-        nextPanoramaButtonLocation = [Location]()
+        nextPanoramaButtonLocation = [SCNVector3]()
     }
-    func addButton(newButtonLocation:Location,newObject:Any){
+    func addButton(newButtonLocation:SCNVector3,newObject:Any){
         buttonLocation.append(newButtonLocation)
         buttonObject.append(newObject)
     }

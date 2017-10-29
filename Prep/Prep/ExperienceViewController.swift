@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import CTPanoramaView
+//import CTPanoramaView
 
 class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
     
-    @IBOutlet weak var experience_viewer_panorama: CTPanoramaView!
+    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
             currentPanoramaIndex = 0
@@ -29,6 +29,8 @@ class ExperienceViewController: UIViewController {
         currentPanoramaIndex = 0;
         currentExperience = initializeFirstExperience()
         loadImage()
+        //experience_viewer_panorama.initialize_tap()
+        experience_viewer_panorama.addButtons()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -36,7 +38,7 @@ class ExperienceViewController: UIViewController {
     func initializeFirstExperience() -> Experience{
         var initExperience: Experience
         initExperience = Experience(Name: "City Strolling", Description: "Visit the train Station and Park")
-        
+        initExperience.addPanorama(newImage: UIImage(named: "Experience2")!)
         initExperience.addPanorama(newImage: UIImage(named: "Experience9")!) //Train
         initExperience.addPanorama(newImage: UIImage(named: "Experience5")!) //Park
         initExperience.addPanorama(newImage: UIImage(named: "Experience4")!) //Shops
