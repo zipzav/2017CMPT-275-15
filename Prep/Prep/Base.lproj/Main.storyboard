@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,6 +41,71 @@
             </objects>
             <point key="canvasLocation" x="57.421874999999993" y="-325"/>
         </scene>
+        <!--Collection View Controller-->
+        <scene sceneID="F5s-7U-hsS">
+            <objects>
+                <viewController id="ILP-Ib-Gy2" customClass="CollectionViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UEQ-zq-xOn">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NcZ-cG-YgM">
+                                <rect key="frame" x="41" y="92" width="942" height="656"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iYN-VK-9tW">
+                                    <size key="itemSize" width="308" height="450"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="il3-Fd-9S8">
+                                        <rect key="frame" x="0.0" y="0.0" width="308" height="450"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="308" height="450"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Experience1" translatesAutoresizingMaskIntoConstraints="NO" id="T2D-X5-0Sp">
+                                                    <rect key="frame" x="0.0" y="51" width="308" height="261"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxO-l5-Nrm">
+                                                    <rect key="frame" x="0.0" y="0.0" width="308" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L5d-Cy-rm9">
+                                                    <rect key="frame" x="95" y="400" width="117" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <connections>
+                                                        <segue destination="1iv-r4-FCH" kind="show" id="MFK-NG-2zr"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="0.17352620990000001" green="1" blue="0.95338433150000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="ILP-Ib-Gy2" id="61W-VH-ugh"/>
+                                    <outlet property="delegate" destination="ILP-Ib-Gy2" id="MQZ-2Y-yfI"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="HWn-8M-zAd"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6ko-b6-AtB"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ecM-dE-1hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-267.1875" y="371.875"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">
             <objects>
@@ -54,7 +119,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="1iv-r4-FCH" kind="relationship" relationship="rootViewController" id="pfa-2b-f4h"/>
+                        <segue destination="ILP-Ib-Gy2" kind="relationship" relationship="rootViewController" id="Z3b-q6-gC2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sfn-b8-Vtk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -62,4 +127,7 @@
             <point key="canvasLocation" x="-687" y="-325"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Experience1" width="4000" height="968"/>
+    </resources>
 </document>
