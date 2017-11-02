@@ -29,7 +29,7 @@ class ExperienceViewController: UIViewController {
         currentPanoramaIndex = 0;
         currentExperience = initializeFirstExperience()
         loadImage()
-        //experience_viewer_panorama.initialize_tap()
+        experience_viewer_panorama.initialize_tap()
         experience_viewer_panorama.addButtons()
         // Do any additional setup after loading the view, typically from a nib.
     }

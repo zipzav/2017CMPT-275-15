@@ -75,6 +75,8 @@ import ImageIO
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
     private var geometryNode: SCNNode?
+    private var buttonNodes: [SCNNode] = [SCNNode]()
+    private var buttonAction: [Any] = [Any]()
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
     
@@ -103,24 +105,31 @@ import ImageIO
         return .cylindrical
     }
     
-    // MARK: Class lifecycle methods
-    //public func initialize_tap(){
-    //    let tapRecognizer = UITapGestureRecognizer()
-    //    tapRecognizer.numberOfTapsRequired = 1
-    //    tapRecognizer.numberOfTouchesRequired = 1
-    //    tapRecognizer.addTarget(self, action: Selector(("sceneTapped:")))
-    //    sceneView.gestureRecognizers = [tapRecognizer]
-    //}
+     //MARK: Class lifecycle methods
+    public func initialize_tap(){
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleButtonTap(_:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.numberOfTouchesRequired = 1
+        tapRecognizer.addTarget(self, action: #selector(NewCTPanoramaView.handleButtonTap(_:)))
+        sceneView.gestureRecognizers = [tapRecognizer]
+    }
     
-    //func sceneTapped(recognizer: UITapGestureRecognizer) {
-    //let location = recognizer.location(in: sceneView)
+    @objc func handleButtonTap(_ gestureReconizer: UITapGestureRecognizer){
+    let location = gestureReconizer.location(in: sceneView)
         
-    //    let hitResults = sceneView.hitTest(location, options: nil)
-    //    if hitResults.count > 0 {
-    //        let result = hitResults[0]
-    //        let node = result.node
-    //    }
-    //    }
+        let hitResults = sceneView.hitTest(location, options: nil)
+        if hitResults.count > 0 {
+            let result = hitResults[0]
+            let node = result.node
+            if(node != geometryNode){
+                for buttonnode in buttonNodes{
+                    if (buttonnode == node){
+                        //perform action
+                    }
+                }
+            }
+        }
+        }
     public func addButtons(){
         //for index in 0..<buttonLocations.count{
         //newNode: SCNNode = SCNNode(buttonLocations[index])
@@ -169,7 +178,7 @@ import ImageIO
         sceneView.backgroundColor = UIColor.black
         
         if controlMethod == nil {
-            controlMethod = .touch
+            controlMethod = .motion
         }
     }
     
