@@ -14,18 +14,32 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var arrayOfIDs = [String]()
     var arrayOfTitles = [String]()
     var arrayOfColors = [UIColor]()
-    
+    var userExperience = [Experience]()
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
    
+    func initializePreMades(){
+        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
         
+        userExperience += [Experience1];
+
+
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        initializePreMades()
+        
         // Do any additional setup after loading the view.
-        arrayOfImages = [#imageLiteral(resourceName: "Experience3"), #imageLiteral(resourceName: "Experience7"), #imageLiteral(resourceName: "Experience5"), #imageLiteral(resourceName: "Experience9")]
-        arrayOfTitles = ["Shopping Mall", "Playground", "Primary School", "GrandPa's House"]
+        for experience in userExperience{
+            arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
+        arrayOfTitles += [experience.name] //to-do: obtained from saved experience
+        }
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
         
         //let layout = CollectionViewLayout as! UICollectionViewFlowLayout

@@ -14,7 +14,6 @@ class Experience{
     var name:String
     var description:String
     var panoramas: [Panorama] //Each Experience has an Array to hold all its Panorama
-    
     init (Name:String, Description:String){
         name = Name
         description = Description
