@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import SceneKit
+import AVFoundation
+
+var CurrentExperience:Experience? = nil
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -21,14 +25,27 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
    
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
+        //add Panorama
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
+        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
+        //Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
+        //add PanoramaButtons
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: "wav") as Any)
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
         
-        userExperience += [Experience1];
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: "wav") as Any)
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
+        userExperience += [Experience1]
 
+        var Experience2: Experience = Experience(Name: "Out at night", Description: "Strolling through the city centre at night")
+        Experience2.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
+        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
+        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
+        userExperience += [Experience2];
 
     }
     override func viewDidLoad() {
@@ -110,5 +127,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    @IBAction func experienceButtonpressed(_ sender: Any) {
+        CurrentExperience = userExperience[0]
+    }
 }

@@ -75,8 +75,10 @@ import ImageIO
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
     private var geometryNode: SCNNode?
-    private var buttonNodes: [SCNNode] = [SCNNode]()
-    private var buttonAction: [Any] = [Any]()
+    private var buttonLocations:[SCNVector3] = [SCNVector3]()
+    private var buttonActions: [Any] = [Any]() //array to keep buttons' corresponding action items(video, sound)
+    private var buttonNodes: [SCNNode] = [SCNNode]() //array to keep made button Nodes
+
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
     
@@ -106,6 +108,10 @@ import ImageIO
     }
     
      //MARK: Class lifecycle methods
+    public func setButtonInfo(location:[SCNVector3], action:[Any]){
+        buttonLocations = location
+        buttonActions = action
+    }
     public func initialize_tap(){
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleButtonTap(_:)))
         tapRecognizer.numberOfTapsRequired = 1
@@ -131,22 +137,33 @@ import ImageIO
         }
         }
     public func addButtons(){
-        //for index in 0..<buttonLocations.count{
-        //newNode: SCNNode = SCNNode(buttonLocations[index])
-        //    scene.rootNode.addChildNode(newNode)
-        //}
+        for index in 0..<buttonLocations.count{
+            //let newNode: SCNNode = SCNNode(buttonLocations[index])
+            let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+
+            geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
+            geometry.firstMaterial?.isDoubleSided = true;
+            
+            let newNode:SCNNode = SCNNode()
+            newNode.geometry = geometry
+            newNode.position = buttonLocations[index]
+            buttonNodes += [newNode]
+            
+            scene.rootNode.addChildNode(newNode)
+        }
         
-        let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+        //let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
         //geometry.firstMaterial?.diffuse.contents  = UIColor.green
         //geometry.material.diffuse.contents = UIColor.
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
-        geometry.firstMaterial?.isDoubleSided = true;
+        //geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
+        //geometry.firstMaterial?.isDoubleSided = true;
 
-        let newNode:SCNNode = SCNNode()
-        newNode.geometry = geometry
-        newNode.position = SCNVector3(x: 5 , y: 0 ,z: 5)
+        //let newNode:SCNNode = SCNNode()
+        //newNode.geometry = geometry
+        //newNode.position = SCNVector3(x: 5 , y: 0 ,z: 5)
         //newNode.rotation=SCNVector4(x:5,y:0,z:5,w:2)
-        scene.rootNode.addChildNode(newNode)
+        //Add SceneNode to Array
+        //scene.rootNode.addChildNode(newNode)
     }
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -185,9 +202,15 @@ import ImageIO
     // MARK: Configuration helper methods
     
     private func createGeometryNode() {
-        guard let image = image else {return}
         
+        guard let image = image else {return}
+        //delete buttons and panorama from scene
+        for node in buttonNodes{
+            node.removeFromParentNode()
+        }
         geometryNode?.removeFromParentNode()
+        buttonNodes = [SCNNode]()
+        addButtons()
         
         let material = SCNMaterial()
         material.diffuse.contents = image

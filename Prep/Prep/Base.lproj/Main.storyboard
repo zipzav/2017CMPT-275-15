@@ -83,7 +83,8 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Button"/>
                                                     <connections>
-                                                        <segue destination="1iv-r4-FCH" kind="show" id="MFK-NG-2zr"/>
+                                                        <action selector="experienceButtonpressed:" destination="ILP-Ib-Gy2" eventType="touchUpInside" id="8jA-do-7Gk"/>
+                                                        <segue destination="1iv-r4-FCH" kind="show" identifier="collectiontoexperienceviewer" id="MFK-NG-2zr"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -104,7 +105,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecM-dE-1hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-687" y="410"/>
+            <point key="canvasLocation" x="-687.3046875" y="409.375"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">

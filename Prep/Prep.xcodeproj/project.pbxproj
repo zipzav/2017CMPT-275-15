@@ -143,12 +143,12 @@
 		36EEC1441F7C663A0043A02F /* Prep */ = {
 			isa = PBXGroup;
 			children = (
-				3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */,
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
+				3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */,
+				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */,
 				3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */,
 				36EEC1491F7C663A0043A02F /* Main.storyboard */,
-				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
