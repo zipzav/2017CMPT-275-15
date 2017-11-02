@@ -16,6 +16,7 @@
 		36EEC1501F7C663A0043A02F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */; };
 		36EEC15B1F7C663A0043A02F /* PrepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC15A1F7C663A0043A02F /* PrepTests.swift */; };
 		36EEC1661F7C663A0043A02F /* PrepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1651F7C663A0043A02F /* PrepUITests.swift */; };
+		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
 		A71521923266CD994744F895 /* Pods_Prep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4D6DAC6326A3FE5BD0D13F7 /* Pods_Prep.framework */; };
 		D1ECFB025E75F92946B35E2F /* Pods_PrepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */; };
 		D795DA008921F38F534B2CBA /* Pods_PrepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C26E1F863580E3329D85D233 /* Pods_PrepUITests.framework */; };
@@ -56,6 +57,7 @@
 		36EEC1611F7C663A0043A02F /* PrepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36EEC1651F7C663A0043A02F /* PrepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepUITests.swift; sourceTree = "<group>"; };
 		36EEC1671F7C663A0043A02F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		400B64951FA837990023FA63 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		5C4F6A5028616F86210D904E /* Pods-PrepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepUITests/Pods-PrepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5C950575FC963E329D6D87AD /* Pods-PrepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepTests/Pods-PrepTests.release.xcconfig"; sourceTree = "<group>"; };
 		B3A6C582F0175F6DA6F0AEFB /* Pods-Prep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Prep.release.xcconfig"; path = "Pods/Target Support Files/Pods-Prep/Pods-Prep.release.xcconfig"; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */,
 				3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */,
 				36EEC1491F7C663A0043A02F /* Main.storyboard */,
+				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
@@ -456,6 +459,7 @@
 				3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
+				400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
