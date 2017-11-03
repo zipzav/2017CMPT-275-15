@@ -18,11 +18,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var arrayOfIDs = [String]()
     var arrayOfTitles = [String]()
     var arrayOfColors = [UIColor]()
-    var userExperience = [Experience]()
+    var arrayOfExperiences = [Experience]()
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
-   
+    
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
         //add Panorama
@@ -56,16 +56,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         initializePreMades()
         
-        // Do any additional setup after loading the view.
-        for experience in userExperience{
+        for experience in arrayOfExperiences{
             arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
-        arrayOfTitles += [experience.name] //to-do: obtained from saved experience
+            arrayOfTitles += [experience.name] //to-do: obtained from saved experience
         }
+        
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
-        
-        //let layout = CollectionViewLayout as! UICollectionViewFlowLayout
-        //layout.itemSize = CGSize(width, width + heightAdjustment)
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,22 +98,16 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         return CGSize(width: 0, height: leftAndRightPaddings * 3)
     }
 
-    
+    // Cell Customization
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        
+        let title = cell.viewWithTag(1) as! UILabel
+        title.text = arrayOfTitles[indexPath.row]
         
         let imageView = cell.viewWithTag(2) as! UIImageView
         imageView.image = arrayOfImages[indexPath.row]
         
-        let label = cell.viewWithTag(1) as! UILabel
-        label.text = arrayOfTitles[indexPath.row]
-        
-        
-        //Add code to set selectedBackgroundView property
-        //let view = UIView(frame: cell.bounds)
-        // Set background color that you want
-        //view.backgroundColor = UIColor.brown
-        //cell.selectedBackgroundView = view
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
         return cell
@@ -135,8 +125,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Pass the selected object to the new view controller.
     }
     */
-    
-    @IBAction func experienceButtonpressed(_ sender: Any) {
-        CurrentExperience = userExperience[0]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        CurrentExperience = arrayOfExperiences[indexPath.row]
+        
+        let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+        self.navigationController?.pushViewController(viewController!, animated: true)
     }
 }
