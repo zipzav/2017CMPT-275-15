@@ -13,7 +13,7 @@ class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
     
-    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
+    @IBOutlet public weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
             currentPanoramaIndex = 0
