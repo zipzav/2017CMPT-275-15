@@ -32,19 +32,23 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
         //Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
         //add PanoramaButtons
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: "wav") as Any)
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
+        //let urlPathString:String? = Bundle.main.path(forResource: "car-pass", ofType: ".wav")
+        //let temp = Bundle.main.path(forResource: "car-pass", ofType: ".wav")
+        //let url:URL = Bundle.main.url(forResource: "car-pass", withExtension: "wav")!
+
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: ".wav")!)
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: ".wav")!)
+        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: ".wav")!)
         
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: "wav") as Any)
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: ".wav")!)
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.url(forResource: "car-pass", withExtension: ".wav")!)
+        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: ".wav")!)
         userExperience += [Experience1]
 
         var Experience2: Experience = Experience(Name: "Out at night", Description: "Strolling through the city centre at night")
         Experience2.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
-        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: "wav") as Any)
-        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: "wav") as Any)
+        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.url(forResource: "car_honk", withExtension: ".wav")!)
+        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.url(forResource: "dogs-barking", withExtension: ".wav")!)
         userExperience += [Experience2];
 
     }
@@ -117,6 +121,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        CurrentExperience = userExperience[indexPath.item]
     }
     /*
     // MARK: - Navigation

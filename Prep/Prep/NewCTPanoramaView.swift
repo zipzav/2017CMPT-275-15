@@ -18,6 +18,24 @@ import UIKit
 import SceneKit
 import CoreMotion
 import ImageIO
+import AVFoundation
+import AVKit
+
+extension ExperienceViewController {
+    func Video(movieUrl : URL)
+    {
+
+        do {
+            audioplayer = try AVAudioPlayer(contentsOf: movieUrl)
+            //audioplayer?.prepareToPlay()
+            audioplayer?.play()
+            
+        } catch {
+            let temp = 21;
+        }
+    }
+    
+}
 
 @objc public protocol CTPanoramaCompass {
     func updateUI(rotationAngle: CGFloat, fieldOfViewAngle: CGFloat)
@@ -128,9 +146,10 @@ import ImageIO
             let result = hitResults[0]
             let node = result.node
             if(node != geometryNode){
-                for buttonnode in buttonNodes{
-                    if (buttonnode == node){
-                        //perform action
+                for index in 0...buttonNodes.count-1{
+                    if (buttonNodes[index] == node){
+                        let movieUrl: URL = buttonActions[index] as! URL
+                        ExperienceViewController().Video(movieUrl : movieUrl)
                     }
                 }
             }

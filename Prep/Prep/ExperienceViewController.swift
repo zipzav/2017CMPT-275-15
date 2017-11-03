@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import AVFoundation
+import AVKit
 //import CTPanoramaView
 
 class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
-    
+    var playerController = AVPlayerViewController()
+    var audioplayer : AVAudioPlayer?
     @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
@@ -35,18 +38,8 @@ class ExperienceViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
-    //hardcoded Experience Initialization
-   // func initializeFirstExperience() -> Experience{
-    //    var initExperience: Experience
-    //    initExperience = Experience(Name: "City Strolling", Description: "Visit the train Station and Park")
-    //    initExperience.addPanorama(newImage: UIImage(named: "Experience2")!)
-    //    initExperience.addPanorama(newImage: UIImage(named: "Experience9")!) //Train
-    //    initExperience.addPanorama(newImage: UIImage(named: "Experience5")!) //Park
-    //    initExperience.addPanorama(newImage: UIImage(named: "Experience4")!) //Shops
-    //    return initExperience
-    //}
 
-    //loads Panorama Image with the current currentPanoramaIndex
+    //loads Panorama Image with the current currentPanoramaIndex, also sets the button locations and object
     func loadImage() {
         experience_viewer_panorama.setButtonInfo(location:
             (currentExperience?.panoramas[currentPanoramaIndex].buttonLocation)!, action: (currentExperience?.panoramas[currentPanoramaIndex].buttonObject)!)
