@@ -15,7 +15,7 @@ class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
     var playerController = AVPlayerViewController()
-    var audioplayer : AVAudioPlayer?
+    var avPlayer : AVPlayer?
     @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
@@ -33,18 +33,23 @@ class ExperienceViewController: UIViewController {
         //currentExperience = initializeFirstExperience() we have to obtain the Experience from the Collection
         currentExperience = CurrentExperience
         loadImage()
+        if(experience_viewer_panorama != nil){
         experience_viewer_panorama.initialize_tap()
         experience_viewer_panorama.addButtons()
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     
 
     //loads Panorama Image with the current currentPanoramaIndex, also sets the button locations and object
     func loadImage() {
+        if(experience_viewer_panorama != nil){
         experience_viewer_panorama.setButtonInfo(location:
             (currentExperience?.panoramas[currentPanoramaIndex].buttonLocation)!, action: (currentExperience?.panoramas[currentPanoramaIndex].buttonObject)!)
             
-        experience_viewer_panorama.image = currentExperience?.getPanorama(index: currentPanoramaIndex)
+            experience_viewer_panorama.image = currentExperience?.getPanorama(index: currentPanoramaIndex)
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {

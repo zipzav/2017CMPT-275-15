@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */; };
 		3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */; };
+		3688DD391FAF9465000BBA38 /* video1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD381FAF93F7000BBA38 /* video1.mp4 */; };
+		3688DD3B1FAFB0C4000BBA38 /* video2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */; };
+		3688DD3D1FAFC265000BBA38 /* baristainteraction.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */; };
+		3688DD3F1FAFC2C7000BBA38 /* waitinginline.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */; };
 		36D682F71FABCE01009E7803 /* car_honk.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F51FABCDEF009E7803 /* car_honk.wav */; };
 		36D682F81FABCE01009E7803 /* car-pass.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F61FABCDF0009E7803 /* car-pass.wav */; };
 		36D682F91FABCE01009E7803 /* dogs-barking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F31FABCDEE009E7803 /* dogs-barking.wav */; };
@@ -50,6 +54,10 @@
 		316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceObject.swift; sourceTree = "<group>"; };
 		3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCTPanoramaView.swift; sourceTree = "<group>"; };
+		3688DD381FAF93F7000BBA38 /* video1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video1.mp4; sourceTree = "<group>"; };
+		3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video2.mp4; sourceTree = "<group>"; };
+		3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = baristainteraction.mp4; sourceTree = "<group>"; };
+		3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = waitinginline.mp4; sourceTree = "<group>"; };
 		36D682F21FABCDED009E7803 /* train-pulls-into-the-station.flac */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-pulls-into-the-station.flac"; sourceTree = "<group>"; };
 		36D682F31FABCDEE009E7803 /* dogs-barking.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "dogs-barking.wav"; sourceTree = "<group>"; };
 		36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "outdoor-crowd-noise.wav"; sourceTree = "<group>"; };
@@ -161,6 +169,10 @@
 				36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */,
 				40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */,
 				3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */,
+				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
+				3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */,
+				3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */,
+				3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */,
 				36D682F51FABCDEF009E7803 /* car_honk.wav */,
 				36D682F61FABCDF0009E7803 /* car-pass.wav */,
 				36D682F31FABCDEE009E7803 /* dogs-barking.wav */,
@@ -308,6 +320,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3688DD3F1FAFC2C7000BBA38 /* waitinginline.mp4 in Resources */,
+				3688DD3D1FAFC265000BBA38 /* baristainteraction.mp4 in Resources */,
+				3688DD3B1FAFB0C4000BBA38 /* video2.mp4 in Resources */,
+				3688DD391FAF9465000BBA38 /* video1.mp4 in Resources */,
 				36D682F71FABCE01009E7803 /* car_honk.wav in Resources */,
 				36D682F81FABCE01009E7803 /* car-pass.wav in Resources */,
 				36D682F91FABCE01009E7803 /* dogs-barking.wav in Resources */,

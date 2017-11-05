@@ -7,6 +7,18 @@
 //
 
 import UIKit
+extension NewCTPanoramaView {
+    func ChangeNavigationSettings(swipe: Bool)
+    {
+        if(swipe == true){
+            controlMethod = .motion
+        }
+        else{
+            controlMethod = .touch
+        }
+    }
+    
+}
 
 class SettingViewController: UITableViewController {
 
@@ -42,22 +54,12 @@ class SettingViewController: UITableViewController {
     
     @IBAction func controlMethodSwitch(_ sender: UISwitch) {
         if(sender.isOn == true) {
-            experience_switch = true;
-        }else {
-            experience_switch = false;
+            sender.setOn(false, animated: true)
+            NewCTPanoramaView().ChangeNavigationSettings(swipe:true)
         }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
-        if segue.destination is ExperienceViewController
-        {
-            let vc = segue.destination as? ExperienceViewController
-            if(experience_switch) {
-                vc?.experience_viewer_panorama.controlMethod = .touch
-            }else {
-                vc?.experience_viewer_panorama.controlMethod = .motion // Accelerometer & gyroscope based control
-            }
+        else {
+            sender.setOn(true, animated: true)
+            NewCTPanoramaView().ChangeNavigationSettings(swipe:false)
         }
     }
     

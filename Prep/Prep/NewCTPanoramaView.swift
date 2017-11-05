@@ -20,18 +20,25 @@ import CoreMotion
 import ImageIO
 import AVFoundation
 import AVKit
+import SpriteKit
 
 extension ExperienceViewController {
     func Video(movieUrl : URL)
     {
 
         do {
-            audioplayer = try AVAudioPlayer(contentsOf: movieUrl)
-            //audioplayer?.prepareToPlay()
-            audioplayer?.play()
+            avPlayer = AVPlayer(url: movieUrl)
+            playerController.player = avPlayer
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                    topController = presentedViewController
+            }
+            topController?.present( playerController, animated: true) {
+                ()-> Void in self.playerController.player?.play()
+            }
             
         } catch {
-            let temp = 21;
         }
     }
     
@@ -94,13 +101,13 @@ extension ExperienceViewController {
     private let motionManager = CMMotionManager()
     private var geometryNode: SCNNode?
     private var buttonLocations:[SCNVector3] = [SCNVector3]()
-    private var buttonActions: [Any] = [Any]() //array to keep buttons' corresponding action items(video, sound)
+    private var buttonActions: [String?] = [String]() //array to keep buttons' corresponding action items(video, sound)
     private var buttonNodes: [SCNNode] = [SCNNode]() //array to keep made button Nodes
 
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
     
-    private lazy var cameraNode: SCNNode = {
+    private lazy var cameraNode: SCNNode? = {
         let node = SCNNode()
         let camera = SCNCamera()
         camera.yFov = 70
@@ -109,11 +116,11 @@ extension ExperienceViewController {
     }()
     
     private lazy var fovHeight: CGFloat = {
-        return CGFloat(tan(self.cameraNode.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
+        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
     }()
     
     private var xFov: CGFloat {
-        return CGFloat(self.cameraNode.camera!.yFov) * self.bounds.width / self.bounds.height
+        return CGFloat(self.cameraNode!.camera!.yFov) * self.bounds.width / self.bounds.height
     }
     
     private var panoramaTypeForCurrentImage: CTPanoramaType {
@@ -126,7 +133,7 @@ extension ExperienceViewController {
     }
     
      //MARK: Class lifecycle methods
-    public func setButtonInfo(location:[SCNVector3], action:[Any]){
+    public func setButtonInfo(location:[SCNVector3], action:[String?]){
         buttonLocations = location
         buttonActions = action
     }
@@ -148,13 +155,15 @@ extension ExperienceViewController {
             if(node != geometryNode){
                 for index in 0...buttonNodes.count-1{
                     if (buttonNodes[index] == node){
-                        let movieUrl: URL = buttonActions[index] as! URL
-                        ExperienceViewController().Video(movieUrl : movieUrl)
+                        let urlStr = buttonActions[index]
+                        let url = NSURL(fileURLWithPath: urlStr!)
+                        ExperienceViewController().Video(movieUrl: url as URL)
                     }
                 }
             }
         }
-        }
+    }
+        
     public func addButtons(){
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
@@ -170,19 +179,6 @@ extension ExperienceViewController {
             
             scene.rootNode.addChildNode(newNode)
         }
-        
-        //let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
-        //geometry.firstMaterial?.diffuse.contents  = UIColor.green
-        //geometry.material.diffuse.contents = UIColor.
-        //geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
-        //geometry.firstMaterial?.isDoubleSided = true;
-
-        //let newNode:SCNNode = SCNNode()
-        //newNode.geometry = geometry
-        //newNode.position = SCNVector3(x: 5 , y: 0 ,z: 5)
-        //newNode.rotation=SCNVector4(x:5,y:0,z:5,w:2)
-        //Add SceneNode to Array
-        //scene.rootNode.addChildNode(newNode)
     }
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -208,7 +204,7 @@ extension ExperienceViewController {
     private func commonInit() {
         add(view: sceneView)
         
-        scene.rootNode.addChildNode(cameraNode)
+        scene.rootNode.addChildNode(cameraNode!)
         
         sceneView.scene = scene
         sceneView.backgroundColor = UIColor.black
@@ -296,11 +292,11 @@ extension ExperienceViewController {
                 userHeading += .pi/2
                 
                 if panoramaView.panoramaType == .cylindrical {
-                    panoramaView.cameraNode.eulerAngles = SCNVector3Make(0, Float(-userHeading), 0) // Prevent vertical movement in a cylindrical panorama
+                    panoramaView.cameraNode!.eulerAngles = SCNVector3Make(0, Float(-userHeading), 0) // Prevent vertical movement in a cylindrical panorama
                 }
                 else {
                     // Use quaternions when in spherical mode to prevent gimbal lock
-                    panoramaView.cameraNode.orientation = motionData.orientation()
+                    panoramaView.cameraNode!.orientation = motionData.orientation()
                 }
                 panoramaView.reportMovement(CGFloat(userHeading), panoramaView.xFov.toRadians())
             })
@@ -308,7 +304,7 @@ extension ExperienceViewController {
     }
     
     private func resetCameraAngles() {
-        cameraNode.eulerAngles = SCNVector3Make(0, 0, 0)
+        cameraNode!.eulerAngles = SCNVector3Make(0, 0, 0)
         self.reportMovement(0, xFov.toRadians(), callHandler: false)
     }
     
@@ -333,7 +329,7 @@ extension ExperienceViewController {
             }
             
             let location = panRec.translation(in: sceneView)
-            let orientation = cameraNode.eulerAngles
+            let orientation = cameraNode!.eulerAngles
             var newOrientation = SCNVector3Make(orientation.x + Float(location.y - prevLocation.y) * Float(modifiedPanSpeed.y),
                                                 orientation.y + Float(location.x - prevLocation.x) * Float(modifiedPanSpeed.x),
                                                 orientation.z)
@@ -342,10 +338,10 @@ extension ExperienceViewController {
                 newOrientation.x = max(min(newOrientation.x, 1.1),-1.1)
             }
             
-            cameraNode.eulerAngles = newOrientation
+            cameraNode!.eulerAngles = newOrientation
             prevLocation = location
             
-            reportMovement(CGFloat(-cameraNode.eulerAngles.y), xFov.toRadians())
+            reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians())
         }
     }
     
@@ -353,7 +349,7 @@ extension ExperienceViewController {
         super.layoutSubviews()
         if bounds.size.width != prevBounds.size.width || bounds.size.height != prevBounds.size.height {
             sceneView.setNeedsDisplay()
-            reportMovement(CGFloat(-cameraNode.eulerAngles.y), xFov.toRadians(), callHandler: false)
+            reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians(), callHandler: false)
         }
     }
 }
@@ -424,3 +420,5 @@ fileprivate extension FloatingPoint {
         return self * .pi / 180
     }
 }
+
+
