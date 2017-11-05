@@ -9,6 +9,12 @@ target 'Prep' do
 pod "Alamofire"
 pod "SwiftyJSON"
 pod "CTPanoramaView", "~> 1.0"
+pod 'Firebase/Core'
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
+pod 'Firebase/Firestore'
+pod 'Firebase/Storage'
+pod 'ScalingCarousel'
 target 'PrepTests' do
     inherit! :search_paths
     # Pods for testing
