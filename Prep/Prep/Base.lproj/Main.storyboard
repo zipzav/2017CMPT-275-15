@@ -44,7 +44,7 @@
         <!--Collection View Controller-->
         <scene sceneID="F5s-7U-hsS">
             <objects>
-                <viewController id="ILP-Ib-Gy2" customClass="CollectionViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="homepage" id="ILP-Ib-Gy2" customClass="CollectionViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UEQ-zq-xOn">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

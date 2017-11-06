@@ -1,10 +1,14 @@
-//
-//  ExperienceObject.swift
+//  File: ExperienceObject.swift
+//  Team Name: Invincible
+//  Developers:
+//      Zavier Aguila
+//      John Ko
+//      Gary Chung
+//  Known Bugs:
 //  Prep
 //
-//  Created by Zavier Patrick David Aguila on 10/28/17.
+//  Created by Zavier Patrick David Aguila on 9/27/17.
 //  Copyright © 2017 Zavier Patrick David Aguila. All rights reserved.
-//
 
 import Foundation
 import UIKit

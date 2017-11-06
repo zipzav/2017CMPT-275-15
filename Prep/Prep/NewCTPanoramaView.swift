@@ -1,18 +1,14 @@
-//
-//  NewCTPanoramaView.swift
+//  File: NewCTPanoramaView.swift
+//  Team Name: Invincible
+//  Developers:
+//      Zavier Aguila
+//      John Ko
+//      Gary Chung
+//  Known Bugs:
 //  Prep
 //
-//  Created by Zavier Patrick David Aguila on 10/28/17.
+//  Created by Zavier Patrick David Aguila on 9/27/17.
 //  Copyright © 2017 Zavier Patrick David Aguila. All rights reserved.
-//
-
-//
-//  CTPanoramaView
-//  CTPanoramaView
-//
-//  Created by Cihan Tek on 11/10/16.
-//  Copyright © 2016 Home. All rights reserved.
-//
 
 import UIKit
 import SceneKit
@@ -23,6 +19,7 @@ import AVKit
 import SpriteKit
 
 extension ExperienceViewController {
+    //Plays the video that corresponds to the given URL
     func Video(movieUrl : URL)
     {
 
@@ -41,6 +38,7 @@ extension ExperienceViewController {
         } catch {
         }
     }
+    //Checks if it the last panorama in the experience, if yes, display congratulations message, if not continue on the next panorama
     func GoNextPanorama(){
         let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
@@ -71,40 +69,33 @@ extension ExperienceViewController {
 @objc public class NewCTPanoramaView: UIView {
     
     // MARK: Public properties
-    
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
-    
     public var image: UIImage? {
         didSet {
             panoramaType = panoramaTypeForCurrentImage
         }
     }
-    
     public var overlayView: UIView? {
         didSet {
             replace(overlayView: oldValue, with: overlayView)
         }
     }
-    
     public var panoramaType: CTPanoramaType = .cylindrical {
         didSet {
             createGeometryNode()
             resetCameraAngles()
         }
     }
-    
     public var controlMethod: CTPanoramaControlMethod! {
         didSet {
             switchControlMethod(to: controlMethod!)
             resetCameraAngles()
         }
     }
-    
     public var compass: CTPanoramaCompass?
     public var movementHandler: ((_ rotationAngle: CGFloat, _ fieldOfViewAngle: CGFloat) -> ())?
     
     // MARK: Private properties
-    
     private let radius: CGFloat = 10
     private let sceneView = SCNView()
     private let scene = SCNScene()
@@ -147,6 +138,7 @@ extension ExperienceViewController {
         buttonLocations = location
         buttonActions = action
     }
+    //Initialize Tap Gesture Recognizer to capture button taps
     public func initialize_tap(){
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleButtonTap(_:)))
         tapRecognizer.numberOfTapsRequired = 1
@@ -154,7 +146,7 @@ extension ExperienceViewController {
         tapRecognizer.addTarget(self, action: #selector(NewCTPanoramaView.handleButtonTap(_:)))
         sceneView.gestureRecognizers = [tapRecognizer]
     }
-    
+    //Handles the button tap events and excecutes corresponding trigger
     @objc func handleButtonTap(_ gestureReconizer: UITapGestureRecognizer){
     let location = gestureReconizer.location(in: sceneView)
         
@@ -172,27 +164,10 @@ extension ExperienceViewController {
                     }
                 }
             }
-           // else if (node == nextButton){
-           //     for flag in buttonPressedFlag{
-           //         if(flag == false){
-           //             let alert = UIAlertController(title: "Panorama unfinished", message: "There's still some triggers remaining.", preferredStyle: .alert)
-           //             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
-           //             }))
-                        
-           //             var topController = UIApplication.shared.keyWindow?.rootViewController
-           //             while let presentedViewController = topController?.presentedViewController {
-           //                 topController = presentedViewController
-           //             }
-           //             topController?.present(alert, animated: true, completion: nil)
-           //             return
-                //}
-               // }
-               // ExperienceViewController().GoNextPanorama()
-            //}
         }
     }
 
-        
+    //Creates the buttons of the current panorama and sets them in 3d space and links the proper audio/video files
     public func addButtons(){
         buttonPressedFlag = [Bool]()
         buttonNodes = [SCNNode]()
@@ -211,16 +186,6 @@ extension ExperienceViewController {
             scene.rootNode.addChildNode(newNode)
             buttonPressedFlag += [false]
         }
-       // let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
-        
-       // geometry.firstMaterial?.diffuse.contents = UIImage(named: "nextpanobutton")
-       // geometry.firstMaterial?.isDoubleSided = true;
-        
-       // let newNode:SCNNode = SCNNode()
-       // newNode.geometry = geometry
-       // newNode.position = nextbuttonLocations
-       // nextButton = newNode
-       // scene.rootNode.addChildNode(newNode)
         
     }
     public required init?(coder aDecoder: NSCoder) {
@@ -259,6 +224,7 @@ extension ExperienceViewController {
     
     // MARK: Configuration helper methods
     
+    //Creats the panoramic sphere/cylinder of the current panorama
     private func createGeometryNode() {
         
         guard let image = image else {return}
@@ -267,8 +233,6 @@ extension ExperienceViewController {
             node.removeFromParentNode()
         }
         geometryNode?.removeFromParentNode()
-        //buttonNodes = [SCNNode]()
-        //addButtons()
         
         let material = SCNMaterial()
         material.diffuse.contents = image
@@ -359,7 +323,6 @@ extension ExperienceViewController {
     }
     
     // MARK: Gesture handling
-    
     @objc private func handlePan(panRec: UIPanGestureRecognizer) {
         if panRec.state == .began {
             prevLocation = CGPoint.zero
@@ -387,7 +350,6 @@ extension ExperienceViewController {
             reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians())
         }
     }
-    
     public override func layoutSubviews() {
         super.layoutSubviews()
         if bounds.size.width != prevBounds.size.width || bounds.size.height != prevBounds.size.height {
@@ -398,7 +360,6 @@ extension ExperienceViewController {
 }
 
 fileprivate extension CMDeviceMotion {
-    
     func orientation() -> SCNVector4 {
         
         let attitude = self.attitude.quaternion

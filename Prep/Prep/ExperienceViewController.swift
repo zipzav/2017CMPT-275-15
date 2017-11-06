@@ -1,15 +1,19 @@
-//
-//  ViewController.swift
+//  File: ExperienceViewController.swift
+//  Team Name: Invincible
+//  Developers:
+//      Zavier Aguila
+//      John Ko
+//      Gary Chung
+//  Known Bugs:
 //  Prep
 //
 //  Created by Zavier Patrick David Aguila on 9/27/17.
 //  Copyright © 2017 Zavier Patrick David Aguila. All rights reserved.
-//
 
 import UIKit
 import AVFoundation
 import AVKit
-//import CTPanoramaView
+
 
 class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;
@@ -18,9 +22,14 @@ class ExperienceViewController: UIViewController {
     var avPlayer : AVPlayer?
     @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
-        if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
+        if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){//If the user is at the last panorama, send a congratulations
             let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+                //var topController = UIApplication.shared.keyWindow?.rootViewController
+                //while let presentedViewController = topController?.presentedViewController {
+                //    topController = presentedViewController
+                //}
+               // topController?.present(homepage, animated: true, completion: nil)
             }))
             
             var topController = UIApplication.shared.keyWindow?.rootViewController

@@ -1,10 +1,14 @@
-//
-//  CollectionViewController.swift
+//  File: CollectionViewController.swift
+//  Team Name: Invincible
+//  Developers:
+//      Zavier Aguila
+//      John Ko
+//      Gary Chung
+//  Known Bugs:
 //  Prep
 //
-//  Created by sychung on 10/30/17.
+//  Created by Zavier Patrick David Aguila on 9/27/17.
 //  Copyright © 2017 Zavier Patrick David Aguila. All rights reserved.
-//
 
 import UIKit
 import SceneKit
