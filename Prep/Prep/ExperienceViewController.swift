@@ -19,12 +19,37 @@ class ExperienceViewController: UIViewController {
     @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     @IBAction func next_panorama(_ sender: UIBarButtonItem) {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
-            currentPanoramaIndex = 0
+            let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+            }))
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(alert, animated: true, completion: nil)
         }
         else{
+            for flag in experience_viewer_panorama.buttonPressedFlag{
+                if(flag == false){
+                    let alert = UIAlertController(title: "Panorama unfinished", message: "There's still some triggers remaining.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+                    }))
+                    
+                    var topController = UIApplication.shared.keyWindow?.rootViewController
+                    while let presentedViewController = topController?.presentedViewController {
+                        topController = presentedViewController
+                    }
+                    topController?.present(alert, animated: true, completion: nil)
+                    return
+                }
+            }
             currentPanoramaIndex += 1
+            loadImage()
+            experience_viewer_panorama.addButtons()
+
         }
-        loadImage()
+
     }
     
     override func viewDidLoad() {
@@ -48,6 +73,7 @@ class ExperienceViewController: UIViewController {
             (currentExperience?.panoramas[currentPanoramaIndex].buttonLocation)!, action: (currentExperience?.panoramas[currentPanoramaIndex].buttonObject)!)
             
             experience_viewer_panorama.image = currentExperience?.getPanorama(index: currentPanoramaIndex)
+            experience_viewer_panorama.nextbuttonLocations = (currentExperience?.panoramas[currentPanoramaIndex].nextPanoramaButtonLocation)!
         }
         
     }

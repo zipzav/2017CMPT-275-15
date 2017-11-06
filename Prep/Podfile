@@ -6,8 +6,6 @@ target 'Prep' do
   use_frameworks!
 
   # Pods for Prep
-pod "Alamofire"
-pod "SwiftyJSON"
 pod "CTPanoramaView", "~> 1.0"
 pod 'Firebase/Core'
 pod 'Firebase/Auth'

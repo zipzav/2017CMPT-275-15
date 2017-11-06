@@ -41,9 +41,19 @@ extension ExperienceViewController {
         } catch {
         }
     }
-    
+    func GoNextPanorama(){
+        let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+        }))
+        
+        var topController = UIApplication.shared.keyWindow?.rootViewController
+        while let presentedViewController = topController?.presentedViewController {
+            topController = presentedViewController
+        }
+        topController?.present(alert, animated: true, completion: nil)
+    }
 }
-
+    
 @objc public protocol CTPanoramaCompass {
     func updateUI(rotationAngle: CGFloat, fieldOfViewAngle: CGFloat)
 }
@@ -101,12 +111,12 @@ extension ExperienceViewController {
     private let motionManager = CMMotionManager()
     private var geometryNode: SCNNode?
     private var buttonLocations:[SCNVector3] = [SCNVector3]()
+    public var nextbuttonLocations:SCNVector3 = SCNVector3Make(0, 0, 0)
     private var buttonActions: [String?] = [String]() //array to keep buttons' corresponding action items(video, sound)
-    private var buttonNodes: [SCNNode] = [SCNNode]() //array to keep made button Nodes
-
+    private var buttonNodes: [SCNNode] = [SCNNode]() //array to keep made button Node
+    public var buttonPressedFlag:[Bool] = [Bool]()
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
-    
     private lazy var cameraNode: SCNNode? = {
         let node = SCNNode()
         let camera = SCNCamera()
@@ -114,7 +124,7 @@ extension ExperienceViewController {
         node.camera = camera
         return node
     }()
-    
+    private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
         return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
     }()
@@ -152,19 +162,40 @@ extension ExperienceViewController {
         if hitResults.count > 0 {
             let result = hitResults[0]
             let node = result.node
-            if(node != geometryNode){
+            if(node != geometryNode && node != nextButton){
                 for index in 0...buttonNodes.count-1{
                     if (buttonNodes[index] == node){
+                        buttonPressedFlag[index] = true
                         let urlStr = buttonActions[index]
                         let url = NSURL(fileURLWithPath: urlStr!)
                         ExperienceViewController().Video(movieUrl: url as URL)
                     }
                 }
             }
+           // else if (node == nextButton){
+           //     for flag in buttonPressedFlag{
+           //         if(flag == false){
+           //             let alert = UIAlertController(title: "Panorama unfinished", message: "There's still some triggers remaining.", preferredStyle: .alert)
+           //             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
+           //             }))
+                        
+           //             var topController = UIApplication.shared.keyWindow?.rootViewController
+           //             while let presentedViewController = topController?.presentedViewController {
+           //                 topController = presentedViewController
+           //             }
+           //             topController?.present(alert, animated: true, completion: nil)
+           //             return
+                //}
+               // }
+               // ExperienceViewController().GoNextPanorama()
+            //}
         }
     }
+
         
     public func addButtons(){
+        buttonPressedFlag = [Bool]()
+        buttonNodes = [SCNNode]()
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
             let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
@@ -178,7 +209,19 @@ extension ExperienceViewController {
             buttonNodes += [newNode]
             
             scene.rootNode.addChildNode(newNode)
+            buttonPressedFlag += [false]
         }
+       // let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+        
+       // geometry.firstMaterial?.diffuse.contents = UIImage(named: "nextpanobutton")
+       // geometry.firstMaterial?.isDoubleSided = true;
+        
+       // let newNode:SCNNode = SCNNode()
+       // newNode.geometry = geometry
+       // newNode.position = nextbuttonLocations
+       // nextButton = newNode
+       // scene.rootNode.addChildNode(newNode)
+        
     }
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -224,8 +267,8 @@ extension ExperienceViewController {
             node.removeFromParentNode()
         }
         geometryNode?.removeFromParentNode()
-        buttonNodes = [SCNNode]()
-        addButtons()
+        //buttonNodes = [SCNNode]()
+        //addButtons()
         
         let material = SCNMaterial()
         material.diffuse.contents = image

@@ -36,17 +36,20 @@ class Panorama{
     var buttonLocation: [SCNVector3] //the index between buttonLocation and Button object should match, does not include the next panorama button
     var buttonObject : [String?]
     var buttonsPressed : Int //A counter? You could probably check how many buttons there are in buttonObect Array and compare against this value
-    var nextPanoramaButtonLocation: [SCNVector3]
+    var nextPanoramaButtonLocation: SCNVector3
     
     init(Image:UIImage){
         image = Image
         buttonsPressed = 0
         buttonLocation = [SCNVector3]()
         buttonObject = [String?]()
-        nextPanoramaButtonLocation = [SCNVector3]()
+        nextPanoramaButtonLocation = SCNVector3Make(0, 0, 0)
     }
     func addButton(newButtonLocation:SCNVector3,newObject:String?){
         buttonLocation.append(newButtonLocation)
         buttonObject.append(newObject)
+    }
+    func addNextPanoramaButton(nextButtonLocation:SCNVector3){
+        nextPanoramaButtonLocation=nextButtonLocation
     }
 }

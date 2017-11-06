@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (4.5.1)
   - BoringSSL (9.1):
     - BoringSSL/Implementation (= 9.1)
     - BoringSSL/Interface (= 9.1)
@@ -88,10 +87,8 @@ PODS:
   - nanopb/encode (0.3.8)
   - Protobuf (3.4.0)
   - ScalingCarousel (2.0.1)
-  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - Alamofire
   - CTPanoramaView (~> 1.0)
   - Firebase/Auth
   - Firebase/Core
@@ -99,10 +96,8 @@ DEPENDENCIES:
   - Firebase/Firestore
   - Firebase/Storage
   - ScalingCarousel
-  - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   BoringSSL: 84318770d120503ab1a6aaf1df777c5ca053697e
   CTPanoramaView: 7d150988e7dfcf33ae91ceb07aec928ae32f7665
   Firebase: d83d287bdb6b1c78320561482706d1fcfc8ddfc1
@@ -123,8 +118,7 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 03eef2ee0b674770735cf79d9c4d3659cf6908e8
   ScalingCarousel: b27c40d8dee8716cd23e50fb7e6eec4dabb6bd6c
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 6cfad7bc62a4323a03e0ab8cf195f0cd90df378a
+PODFILE CHECKSUM: 288321eb9e00aab2ecc3b2405c368976f2414066
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.2.0
