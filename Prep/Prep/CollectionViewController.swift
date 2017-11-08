@@ -69,7 +69,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -107,7 +106,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     // Cell Customization
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
         let title = cell.viewWithTag(1) as! UILabel
         title.text = arrayOfTitles[indexPath.row]
         
