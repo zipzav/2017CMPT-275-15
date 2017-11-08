@@ -17,6 +17,7 @@ import AVFoundation
 var CurrentExperience:Experience? = nil
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     var arrayOfImages = [UIImage]()
     var arrayOfIDs = [String]()
@@ -62,15 +63,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         initializePreMades()
         
+        addButton.isEnabled = false
+        
         for experience in arrayOfExperiences{
             arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
             arrayOfTitles += [experience.name] //to-do: obtained from saved experience
         }
-        let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
-        lpgr.minimumPressDuration = 0.5
-        lpgr.delegate = self
-        lpgr.delaysTouchesBegan = true
-        
         
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
     }
@@ -80,6 +78,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Dispose of any resources that can be recreated.
     }
     
+    @objc func longPress(press:UILongPressGestureRecognizer)
+    {
+        if press.state == .began
+        {
+            addButton.isEnabled = true
+        }
+    }
     // Getting the Size of Items
     // Note: For Collection View Box, Width: 942, Height: 656
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -122,6 +127,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
+        
+        // add guesture recognizer
+        let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
+        longPressGestureRecong.minimumPressDuration = 1.5
+        cell.addGestureRecognizer(longPressGestureRecong)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
