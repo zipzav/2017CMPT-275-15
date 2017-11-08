@@ -16,7 +16,7 @@ import AVFoundation
 
 var CurrentExperience:Experience? = nil
 
-class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     
     var arrayOfImages = [UIImage]()
     var arrayOfIDs = [String]()
@@ -66,9 +66,15 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
             arrayOfTitles += [experience.name] //to-do: obtained from saved experience
         }
+        let lpgr : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "handleLongPress:")
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delegate = self
+        lpgr.delaysTouchesBegan = true
+        
         
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -104,19 +110,22 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
 
     // Cell Customization
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? CollectionViewCell else { return }
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
-        let title = cell.viewWithTag(1) as! UILabel
-        title.text = arrayOfTitles[indexPath.row]
+        let title = cell.title
+        title!.text = arrayOfTitles[indexPath.row]
         
-        let imageView = cell.viewWithTag(2) as! UIImageView
-        imageView.image = arrayOfImages[indexPath.row]
+        let imageView = cell.previewImage
+        imageView!.image = arrayOfImages[indexPath.row]
         
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
-        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
     }
     
     //func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
