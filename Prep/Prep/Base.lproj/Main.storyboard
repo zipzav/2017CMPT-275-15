@@ -188,6 +188,9 @@
                             <outlet property="delegate" destination="rpV-h7-rj8" id="mWN-Dm-Wri"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="controlSwitch" destination="39l-eg-cm8" id="Ual-iG-X2p"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3F-9q-gDJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

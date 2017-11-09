@@ -28,6 +28,8 @@ class SettingViewController: UITableViewController {
 
     private var experience_switch = false;
     
+    @IBOutlet weak var controlSwitch: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +38,10 @@ class SettingViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let value = UserDefaults.standard.bool(forKey: "lButtonSelected")
+        controlSwitch.setOn(value, animated: true)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,11 +65,17 @@ class SettingViewController: UITableViewController {
     @IBAction func controlMethodSwitch(_ sender: UISwitch) {
         if(sender.isOn == true) {
             sender.setOn(false, animated: true)
+            experience_switch = false
             NewCTPanoramaView().ChangeNavigationSettings(swipe:true)
+            
+            UserDefaults.standard.set(false, forKey: "lButtonSelected")
         }
         else {
             sender.setOn(true, animated: true)
+            experience_switch = true
             NewCTPanoramaView().ChangeNavigationSettings(swipe:false)
+            
+            UserDefaults.standard.set(true, forKey: "lButtonSelected")
         }
     }
     
