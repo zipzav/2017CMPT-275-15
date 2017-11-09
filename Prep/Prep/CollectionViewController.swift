@@ -154,6 +154,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         CurrentExperience = arrayOfExperiences[indexPath.row]
         
         let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+        //self.navigationController?.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController!, animated: true)
     }
 }

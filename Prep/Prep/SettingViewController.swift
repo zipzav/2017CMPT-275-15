@@ -26,7 +26,7 @@ extension NewCTPanoramaView {
 
 class SettingViewController: UITableViewController {
 
-    private var experience_switch = false;
+    private var experience_switch = true; // Use .touch control by default
     
     @IBOutlet weak var controlSwitch: UISwitch!
     
@@ -41,7 +41,6 @@ class SettingViewController: UITableViewController {
         
         let value = UserDefaults.standard.bool(forKey: "lButtonSelected")
         controlSwitch.setOn(value, animated: true)
-        
     }
 
     override func didReceiveMemoryWarning() {
