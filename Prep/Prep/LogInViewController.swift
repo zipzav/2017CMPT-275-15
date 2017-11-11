@@ -25,11 +25,13 @@ class LogInViewController: UIViewController {
     var isSignIn:Bool = true
     
     
-    
+    //SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
+        SignInButton.setTitleColor(UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0), for: .normal)
         // Do any additional setup after loading the view.
     }
     override func didReceiveMemoryWarning() {
@@ -39,6 +41,7 @@ class LogInViewController: UIViewController {
     
     @IBAction func SignInSelectorChanged(_ sender: UISegmentedControl) {
         
+        //segmentedControl.tintColor = [UIColor colorWithRed:140/255 green:0.61176f  blue:0.61176f  alpha:1.0f]
         isSignIn = !isSignIn
         //Check the bool and set the button and labels
         if isSignIn {
