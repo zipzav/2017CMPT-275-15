@@ -13,6 +13,10 @@ pod 'Firebase/Database'
 pod 'Firebase/Firestore'
 pod 'Firebase/Storage'
 pod 'ScalingCarousel'
+pod 'DTZFloatingActionButton'
+pod 'expanding-collection', '~> 1.0.3' swift 3
+pod 'GoogleSignIn'
+
 target 'PrepTests' do
     inherit! :search_paths
     # Pods for testing

@@ -74,6 +74,19 @@ class ExperienceViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        let value = UserDefaults.standard.bool(forKey: "lButtonSelected")
+        updateControlMethod(value)
+    }
+    
+    func updateControlMethod(_ isTouch: Bool) {
+        if(isTouch) {
+            experience_viewer_panorama.controlMethod = .touch
+        } else {
+            experience_viewer_panorama.controlMethod = .motion
+        }
+    }
 
     //loads Panorama Image with the current currentPanoramaIndex, also sets the button locations and object
     func loadImage() {
