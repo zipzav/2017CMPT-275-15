@@ -19,6 +19,8 @@ var CurrentExperience:Experience? = nil
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var arrayOfImages = [UIImage]()
     var arrayOfIDs = [String]()
     var arrayOfTitles = [String]()
@@ -27,6 +29,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
+    var cellSelected:IndexPath?
     
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -78,13 +81,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Dispose of any resources that can be recreated.
     }
     
-    @objc func longPress(press:UILongPressGestureRecognizer)
-    {
-        if press.state == .began
-        {
-            addButton.isEnabled = true
-        }
-    }
+  
     // Getting the Size of Items
     // Note: For Collection View Box, Width: 942, Height: 656
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -128,10 +125,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
         
+        
+        
         // add guesture recognizer
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
         longPressGestureRecong.minimumPressDuration = 1.5
         cell.addGestureRecognizer(longPressGestureRecong)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -152,9 +152,25 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     */
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         CurrentExperience = arrayOfExperiences[indexPath.row]
-        
         let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
         //self.navigationController?.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController!, animated: true)
+    }
+    
+    @objc func longPress(press:UILongPressGestureRecognizer)
+    {
+        if press.state == .began
+        {
+            //addButton.isEnabled = true
+            let touchPoint = press.location(in: collectionView)
+            let indexPath = collectionView.indexPathForItem(at: touchPoint)
+            if indexPath != nil {
+                CurrentExperience = arrayOfExperiences[indexPath!.row]
+                
+                let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+                self.navigationController?.pushViewController(viewController!, animated: true)
+            }
+        }
+        
     }
 }
