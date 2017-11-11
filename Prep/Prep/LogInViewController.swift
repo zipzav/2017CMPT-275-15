@@ -30,26 +30,35 @@ class LogInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Set the segnmented slection to match the color of the theme
         SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
-        SignInButton.setTitleColor(UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0), for: .normal)
-        // Do any additional setup after loading the view.
-    }
+        
+        //Set the segnmented slection text (font size) to match the theme
+        let font = UIFont.systemFont(ofSize: 18)
+        SignInSelection.setTitleTextAttributes([NSAttributedStringKey.font: font], for: .normal)
+        
+        //Setting the background color of the button
+        SignInButton.backgroundColor = UIColor(red: 159.0/255.0, green:110.0/255.0, blue: 228.0/255.0, alpha: 1.0)
+        
+        //Making the corners of the sign-in button rounded to match the style of the page
+        SignInButton.layer.cornerRadius = 5
+        SignInButton.layer.borderWidth = 1
+        SignInButton.layer.borderColor = UIColor(red: 159.0/255.0, green:110.0/255.0, blue: 228.0/255.0, alpha: 1.0).cgColor
+   }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     @IBAction func SignInSelectorChanged(_ sender: UISegmentedControl) {
-        
-        //segmentedControl.tintColor = [UIColor colorWithRed:140/255 green:0.61176f  blue:0.61176f  alpha:1.0f]
         isSignIn = !isSignIn
         //Check the bool and set the button and labels
         if isSignIn {
-            SignInLabel.text = "Sign In"
+            //SignInLabel.text = "Sign In"
             SignInButton.setTitle("Sign In", for: .normal)
         }
         else {
-            SignInLabel.text = "Register"
+            //SignInLabel.text = "Register"
             SignInButton.setTitle("Register", for: .normal)
         }
     }
