@@ -52,7 +52,8 @@ class LogInViewController: UIViewController {
     }
     
     @IBAction func SignInButtonTapped(_ sender: UIButton) {
-        
+        self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+        return;
         //Checking email and password
     if let email = EmailTextField.text, let password = PasswordTextField.text {
             //Check if it's signin or register

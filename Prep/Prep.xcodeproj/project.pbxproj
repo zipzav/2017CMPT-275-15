@@ -25,9 +25,11 @@
 		36EEC1501F7C663A0043A02F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */; };
 		36EEC15B1F7C663A0043A02F /* PrepTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC15A1F7C663A0043A02F /* PrepTests.swift */; };
 		36EEC1661F7C663A0043A02F /* PrepUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1651F7C663A0043A02F /* PrepUITests.swift */; };
+		36F197BC1FB787680009E34C /* ExperienceEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */; };
+		36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */; };
 		400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */; };
 		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
-		40D00E9C1FB6658800BF28C1 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorViewController.swift */; };
+		40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */; };
 		40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */; };
 		877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877540311FB667ED0014CF99 /* LogInViewController.swift */; };
 		877540351FB681D40014CF99 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877540341FB680460014CF99 /* GoogleService-Info.plist */; };
@@ -80,9 +82,11 @@
 		36EEC1611F7C663A0043A02F /* PrepUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrepUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36EEC1651F7C663A0043A02F /* PrepUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepUITests.swift; sourceTree = "<group>"; };
 		36EEC1671F7C663A0043A02F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceEditorViewController.swift; sourceTree = "<group>"; };
+		36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaEditView.swift; sourceTree = "<group>"; };
 		4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		400B64951FA837990023FA63 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
-		40D00E9B1FB6658800BF28C1 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
+		40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStarPageViewController.swift; sourceTree = "<group>"; };
 		40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		5C4F6A5028616F86210D904E /* Pods-PrepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepUITests/Pods-PrepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5C950575FC963E329D6D87AD /* Pods-PrepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepTests/Pods-PrepTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -173,24 +177,26 @@
 			children = (
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
 				3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */,
-				40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */,
-				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				877540311FB667ED0014CF99 /* LogInViewController.swift */,
+				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */,
 				36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */,
 				3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */,
+				40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */,
+				36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */,
+				36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */,
+				40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */,
 				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
 				3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */,
 				3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */,
 				3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */,
+				36D682F21FABCDED009E7803 /* train-pulls-into-the-station.flac */,
 				877540341FB680460014CF99 /* GoogleService-Info.plist */,
 				36D682F51FABCDEF009E7803 /* car_honk.wav */,
 				36D682F61FABCDF0009E7803 /* car-pass.wav */,
 				36D682F31FABCDEE009E7803 /* dogs-barking.wav */,
 				36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */,
-				36D682F21FABCDED009E7803 /* train-pulls-into-the-station.flac */,
 				36EEC1491F7C663A0043A02F /* Main.storyboard */,
-				40D00E9B1FB6658800BF28C1 /* EditorViewController.swift */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
@@ -548,10 +554,12 @@
 				3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */,
 				3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */,
-				40D00E9C1FB6658800BF28C1 /* EditorViewController.swift in Sources */,
+				40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */,
 				400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */,
+				36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */,
 				877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
+				36F197BC1FB787680009E34C /* ExperienceEditorViewController.swift in Sources */,
 				400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */,
 				40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */,
 			);

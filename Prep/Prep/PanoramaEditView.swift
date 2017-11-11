@@ -18,55 +18,7 @@ import AVFoundation
 import AVKit
 import SpriteKit
 
-extension ExperienceViewController {
-    //Plays the video that corresponds to the given URL
-    func Video(movieUrl : URL)
-    {
-
-        do {
-            avPlayer = AVPlayer(url: movieUrl)
-            playerController.player = avPlayer
-            
-            var topController = UIApplication.shared.keyWindow?.rootViewController
-            while let presentedViewController = topController?.presentedViewController {
-                    topController = presentedViewController
-            }
-            topController?.present( playerController, animated: true) {
-                ()-> Void in self.playerController.player?.play()
-            }
-            
-        } catch {
-        }
-    }
-    //Checks if it the last panorama in the experience, if yes, display congratulations message, if not continue on the next panorama
-    func GoNextPanorama(){
-        let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
-        }))
-        
-        var topController = UIApplication.shared.keyWindow?.rootViewController
-        while let presentedViewController = topController?.presentedViewController {
-            topController = presentedViewController
-        }
-        topController?.present(alert, animated: true, completion: nil)
-    }
-}
-    
-@objc public protocol CTPanoramaCompass {
-    func updateUI(rotationAngle: CGFloat, fieldOfViewAngle: CGFloat)
-}
-
-@objc public enum CTPanoramaControlMethod: Int {
-    case motion
-    case touch
-}
-
-@objc public enum CTPanoramaType: Int {
-    case cylindrical
-    case spherical
-}
-
-@objc public class NewCTPanoramaView: UIView {
+@objc public class PanoramaEditView: UIView {
     
     // MARK: Public properties
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
@@ -133,7 +85,7 @@ extension ExperienceViewController {
         return .cylindrical
     }
     
-     //MARK: Class lifecycle methods
+    //MARK: Class lifecycle methods
     public func setButtonInfo(location:[SCNVector3], action:[String?]){
         buttonLocations = location
         buttonActions = action
@@ -148,7 +100,7 @@ extension ExperienceViewController {
     }
     //Handles the button tap events and excecutes corresponding trigger
     @objc func handleButtonTap(_ gestureReconizer: UITapGestureRecognizer){
-    let location = gestureReconizer.location(in: sceneView)
+        let location = gestureReconizer.location(in: sceneView)
         
         let hitResults = sceneView.hitTest(location, options: nil)
         if hitResults.count > 0 {
@@ -166,7 +118,7 @@ extension ExperienceViewController {
             }
         }
     }
-
+    
     //Creates the buttons of the current panorama and sets them in 3d space and links the proper audio/video files
     public func addButtons(){
         buttonPressedFlag = [Bool]()
@@ -174,7 +126,7 @@ extension ExperienceViewController {
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
             let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
-
+            
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
             
@@ -218,7 +170,7 @@ extension ExperienceViewController {
         sceneView.backgroundColor = UIColor.black
         
         if controlMethod == nil {
-            controlMethod = .motion
+            controlMethod = .touch
         }
     }
     
@@ -427,5 +379,6 @@ fileprivate extension FloatingPoint {
         return self * .pi / 180
     }
 }
+
 
 

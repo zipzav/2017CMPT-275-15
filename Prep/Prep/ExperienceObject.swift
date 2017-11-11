@@ -33,6 +33,9 @@ class Experience{
     func getPanorama(index:Int)->UIImage{
         return panoramas[index].image
     }
+    func numPanorama()-> Int{
+        return panoramas.count
+    }
 }
 
 class Panorama{
@@ -55,5 +58,8 @@ class Panorama{
     }
     func addNextPanoramaButton(nextButtonLocation:SCNVector3){
         nextPanoramaButtonLocation=nextButtonLocation
+    }
+    func getImage()->UIImage{
+        return image
     }
 }

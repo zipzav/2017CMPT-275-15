@@ -14,18 +14,17 @@ import UIKit
 import SceneKit
 import AVFoundation
 
-var CurrentExperience:Experience? = nil
+var GlobalCurrentExperience:Experience? = nil
+var arrayOfExperiences = [Experience]()
+var arrayOfImages = [UIImage]()
+var arrayOfTitles = [String]()
+var GlobalcurrentExperienceIndex:Int = 0
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
-    
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    var arrayOfImages = [UIImage]()
     var arrayOfIDs = [String]()
-    var arrayOfTitles = [String]()
     var arrayOfColors = [UIColor]()
-    var arrayOfExperiences = [Experience]()
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
@@ -33,16 +32,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
+        
         //add Panorama
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
         Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
-        //Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
-        //add PanoramaButtons
-        //let urlPathString:String? = Bundle.main.path(forResource: "car-pass", ofType: ".wav")
-        //let temp = Bundle.main.path(forResource: "car-pass", ofType: ".wav")
-        //let url:URL = Bundle.main.url(forResource: "car-pass", withExtension: "wav")!
 
         Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "waitinginline", ofType: "mp4")!)
         Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "outdoor-crowd-noise", ofType: "wav")!)
@@ -151,7 +146,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     */
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        CurrentExperience = arrayOfExperiences[indexPath.row]
+        GlobalCurrentExperience = arrayOfExperiences[indexPath.row]
+        GlobalcurrentExperienceIndex = indexPath.row
         let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
         //self.navigationController?.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController!, animated: true)
@@ -165,7 +161,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             let touchPoint = press.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: touchPoint)
             if indexPath != nil {
-                CurrentExperience = arrayOfExperiences[indexPath!.row]
+                GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
                 
                 let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
                 self.navigationController?.pushViewController(viewController!, animated: true)
