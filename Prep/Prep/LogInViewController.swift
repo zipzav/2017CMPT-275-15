@@ -22,6 +22,9 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var SignInButton: UIButton!
     
+    @IBOutlet weak var PrepLogo: UIImageView!
+    
+    
     var isSignIn:Bool = true
     
     
@@ -49,6 +52,8 @@ class LogInViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
     
     @IBAction func SignInSelectorChanged(_ sender: UISegmentedControl) {
         isSignIn = !isSignIn
