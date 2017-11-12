@@ -13,6 +13,7 @@
 import UIKit
 import SceneKit
 import AVFoundation
+import DTZFloatingActionButton
 
 var GlobalCurrentExperience:Experience? = nil
 var arrayOfExperiences = [Experience]()
@@ -60,7 +61,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         initializePreMades()
-        
+        floatingButton()
         addButton.isEnabled = false
         
         for experience in arrayOfExperiences{
@@ -168,5 +169,21 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             }
         }
         
+    }
+    
+    // Add button
+    func floatingButton() {
+        let actionButton = DTZFloatingActionButton(frame:CGRect(x: view.frame.size.width - 56 - 14,
+                                                                y: view.frame.size.height - 56 - 14,
+                                                                width: 56,
+                                                                height: 56
+        ))
+        actionButton.handler = {
+            button in
+            print("Hi!")
+        }
+        actionButton.isScrollView = true
+        self.view.addSubview(actionButton)
+
     }
 }

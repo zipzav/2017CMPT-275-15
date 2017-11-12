@@ -30,6 +30,7 @@
 		36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */; };
 		400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */; };
 		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
+		40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */; };
 		40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */; };
 		40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */; };
 		877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877540311FB667ED0014CF99 /* LogInViewController.swift */; };
@@ -88,6 +89,9 @@
 		36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaEditView.swift; sourceTree = "<group>"; };
 		4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		400B64951FA837990023FA63 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		40606CC71FB8F3B9002737C6 /* Prep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prep-Bridging-Header.h"; sourceTree = "<group>"; };
+		40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Alerts.h"; sourceTree = "<group>"; };
+		40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Alerts.m"; sourceTree = "<group>"; };
 		40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStarPageViewController.swift; sourceTree = "<group>"; };
 		40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		5C4F6A5028616F86210D904E /* Pods-PrepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepUITests/Pods-PrepUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -202,7 +206,10 @@
 				36EEC1491F7C663A0043A02F /* Main.storyboard */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
+				40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */,
+				40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
+				40606CC71FB8F3B9002737C6 /* Prep-Bridging-Header.h */,
 			);
 			path = Prep;
 			sourceTree = "<group>";
@@ -302,6 +309,7 @@
 				TargetAttributes = {
 					36EEC1411F7C663A0043A02F = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					36EEC1551F7C663A0043A02F = {
@@ -562,6 +570,7 @@
 				400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */,
 				36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */,
 				877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */,
+				40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
 				36F197BC1FB787680009E34C /* ExperienceEditorViewController.swift in Sources */,
 				400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */,
@@ -732,6 +741,7 @@
 			baseConfigurationReference = F030470BB62841E0964AE0E1 /* Pods-Prep.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W2L84ABWT7;
@@ -741,6 +751,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ZipZav.Prep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Prep/Prep-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -751,6 +763,7 @@
 			baseConfigurationReference = B3A6C582F0175F6DA6F0AEFB /* Pods-Prep.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W2L84ABWT7;
@@ -760,6 +773,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ZipZav.Prep;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Prep/Prep-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

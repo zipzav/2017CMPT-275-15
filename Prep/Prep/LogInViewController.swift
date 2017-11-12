@@ -96,7 +96,8 @@ class LogInViewController: UIViewController {
                         self.performSegue(withIdentifier: "GoToHomePage", sender: self)
                     }
                     else{
-                        
+                        // TODO: Mandy, Please refer to this website for adding spinner and error message. https://github.com/firebase/quickstart-ios/blob/master/authentication/AuthenticationExampleSwift/EmailViewController.swift
+                        self.showMessagePrompt("email/password can't be empty")
                     }
                 })
             }
