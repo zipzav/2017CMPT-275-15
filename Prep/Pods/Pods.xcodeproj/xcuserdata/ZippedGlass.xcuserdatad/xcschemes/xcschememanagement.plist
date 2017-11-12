@@ -60,47 +60,40 @@
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
-		<key>OpenCV.xcscheme</key>
+		<key>Pods-Prep.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>16</integer>
 		</dict>
-		<key>Pods-Prep.xcscheme</key>
+		<key>Pods-PrepTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>17</integer>
 		</dict>
-		<key>Pods-PrepTests.xcscheme</key>
+		<key>Pods-PrepUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>18</integer>
 		</dict>
-		<key>Pods-PrepUITests.xcscheme</key>
+		<key>Protobuf.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>19</integer>
 		</dict>
-		<key>Protobuf.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>20</integer>
-		</dict>
 		<key>ScalingCarousel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>21</integer>
+			<integer>20</integer>
 		</dict>
 		<key>expanding-collection.xcscheme</key>
 		<dict>

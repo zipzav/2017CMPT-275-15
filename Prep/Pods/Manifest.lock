@@ -100,7 +100,6 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - OpenCV (3.3.1)
   - Protobuf (3.4.0)
   - ScalingCarousel (2.0.2)
 
@@ -116,7 +115,6 @@ DEPENDENCIES:
   - Firebase/Storage
   - GoogleSignIn
   - KYShutterButton
-  - OpenCV
   - ScalingCarousel
 
 SPEC CHECKSUMS:
@@ -144,10 +142,9 @@ SPEC CHECKSUMS:
   KYShutterButton: 794612eedc2ee75114326f7394703f0f49bf0882
   leveldb-library: 44ef425bfde64f5b41daef86b38db2d13edbbee1
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  OpenCV: d81447860f038d60723084aa02ecc963f95c55fa
   Protobuf: 03eef2ee0b674770735cf79d9c4d3659cf6908e8
   ScalingCarousel: 5538c80dd209d3d5439be68b145272dd8b9b319a
 
-PODFILE CHECKSUM: 70fcefa67830eb6e0265324532630d681b891363
+PODFILE CHECKSUM: a21cc229d37edfc8bc88baf23ba77522db2ddaa3
 
 COCOAPODS: 1.2.0

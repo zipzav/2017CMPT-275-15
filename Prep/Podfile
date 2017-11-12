@@ -16,7 +16,6 @@ pod 'ScalingCarousel'
 pod 'DTZFloatingActionButton'
 pod 'expanding-collection', '~> 1.0.3'
 pod 'GoogleSignIn’
-pod 'OpenCV’
 pod 'CameraManager', '~> 4.0'
 pod ‘KYShutterButton’
 
