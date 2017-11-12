@@ -18,6 +18,7 @@
 		36D682F91FABCE01009E7803 /* dogs-barking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F31FABCDEE009E7803 /* dogs-barking.wav */; };
 		36D682FA1FABCE01009E7803 /* outdoor-crowd-noise.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */; };
 		36D682FB1FABCE01009E7803 /* train-pulls-into-the-station.flac in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F21FABCDED009E7803 /* train-pulls-into-the-station.flac */; };
+		36D8DFB71FB7C13900576FAA /* PanoramaCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D8DFB61FB7C13900576FAA /* PanoramaCaptureViewController.swift */; };
 		36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1451F7C663A0043A02F /* AppDelegate.swift */; };
 		36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */; };
 		36EEC14B1F7C663A0043A02F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36EEC1491F7C663A0043A02F /* Main.storyboard */; };
@@ -69,6 +70,7 @@
 		36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "outdoor-crowd-noise.wav"; sourceTree = "<group>"; };
 		36D682F51FABCDEF009E7803 /* car_honk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = car_honk.wav; sourceTree = "<group>"; };
 		36D682F61FABCDF0009E7803 /* car-pass.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "car-pass.wav"; sourceTree = "<group>"; };
+		36D8DFB61FB7C13900576FAA /* PanoramaCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaCaptureViewController.swift; sourceTree = "<group>"; };
 		36EEC1421F7C663A0043A02F /* Prep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36EEC1451F7C663A0043A02F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36EEC1471F7C663A0043A02F /* ExperienceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */,
 				36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */,
 				36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */,
+				36D8DFB61FB7C13900576FAA /* PanoramaCaptureViewController.swift */,
 				40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */,
 				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
 				3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */,
@@ -555,6 +558,7 @@
 				3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */,
 				40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */,
+				36D8DFB71FB7C13900576FAA /* PanoramaCaptureViewController.swift in Sources */,
 				400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */,
 				36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */,
 				877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */,

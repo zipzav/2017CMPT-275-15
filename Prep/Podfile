@@ -14,8 +14,11 @@ pod 'Firebase/Firestore'
 pod 'Firebase/Storage'
 pod 'ScalingCarousel'
 pod 'DTZFloatingActionButton'
-pod 'expanding-collection', '~> 1.0.3' swift 3
-pod 'GoogleSignIn'
+pod 'expanding-collection', '~> 1.0.3'
+pod 'GoogleSignIn’
+pod 'OpenCV’
+pod 'CameraManager', '~> 4.0'
+pod ‘KYShutterButton’
 
 target 'PrepTests' do
     inherit! :search_paths

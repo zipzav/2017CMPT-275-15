@@ -19,11 +19,20 @@ class PanoramaTableView : UITableView{
 }
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate {
   //  @IBOutlet weak var panoramatableview: PanoramaTableView!
+    @IBOutlet weak var experienceTitle: UILabel!
+    @IBOutlet weak var experienceDescription: UILabel!
     var panoramatableview: PanoramaTableView!
     var currentExperience: Experience? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
         currentExperience = arrayOfExperiences[0]
+        experienceTitle.text = currentExperience?.getTitle()
+        experienceDescription.text = currentExperience?.getDescription()
+        experienceTitle.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
+        experienceTitle.numberOfLines = 0
+        experienceDescription.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
+        experienceDescription.numberOfLines = 0
+        
         panoramatableview = PanoramaTableView()
         panoramatableview.register(UITableViewCell.self, forCellReuseIdentifier: "UITableViewCell")
         panoramatableview.dataSource = self
@@ -32,6 +41,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         self.view.addSubview(panoramatableview)
         // Do any additional setup after loading the view.
     }
+
 
 
     
@@ -55,6 +65,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         }
         let panorama = currentExperience?.panoramas[indexPath.row]
         cell.imageView?.image = panorama?.getImage()
+        cell.imageView?.frame = CGRect(x: 0,y: 0,width: 401,height: 150)
         cell.imageView?.contentMode = UIViewContentMode.scaleToFill
         cell.imageView?.clipsToBounds = true
         return cell

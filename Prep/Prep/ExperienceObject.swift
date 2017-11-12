@@ -36,6 +36,18 @@ class Experience{
     func numPanorama()-> Int{
         return panoramas.count
     }
+    func getTitle()->String{
+        return name
+    }
+    func getDescription()->String{
+        return description
+    }
+    func setTitle(newtitle: String){
+        name = newtitle
+    }
+    func getDescription(newDescription: String){
+        description = newDescription
+    }
 }
 
 class Panorama{

@@ -41,6 +41,31 @@
             </objects>
             <point key="canvasLocation" x="-687" y="1102"/>
         </scene>
+        <!--Panorama Capture View Controller-->
+        <scene sceneID="1gL-2v-sDi">
+            <objects>
+                <viewController id="pzw-vy-RnL" customClass="PanoramaCaptureViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7uK-XL-h3H">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gf6-AU-1ya">
+                                <rect key="frame" x="0.0" y="64" width="1024" height="704"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="0NG-mK-X0A"/>
+                    </view>
+                    <connections>
+                        <outlet property="cameraview" destination="Gf6-AU-1ya" id="jUP-gd-Q9Q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rtx-uF-xQ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-369.140625" y="1860.9375"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="xD7-wO-NIL">
             <objects>
@@ -255,12 +280,19 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oWu-jA-bmi">
                                 <rect key="frame" x="74" y="112" width="401" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Add Panorama"/>
+                                <connections>
+                                    <segue destination="pzw-vy-RnL" kind="show" id="zCw-MG-ds1"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="FoX-Gn-OsT"/>
                     </view>
+                    <connections>
+                        <outlet property="experienceDescription" destination="ofw-Jg-74t" id="9eG-ya-QhK"/>
+                        <outlet property="experienceTitle" destination="lwH-M9-2fb" id="Zb9-Xe-Uca"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
