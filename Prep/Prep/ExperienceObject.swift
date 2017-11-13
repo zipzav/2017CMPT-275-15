@@ -18,9 +18,12 @@ class Experience{
     var name:String
     var description:String
     var panoramas: [Panorama] //Each Experience has an Array to hold all its Panorama
-    init (Name:String, Description:String){
+    var key:String // unique id in database
+    
+    init (Name:String, Description:String, Id: String){
         name = Name
         description = Description
+        key = Id
         panoramas = [Panorama]()//Empty
     }
     func addPanorama(newPanorama:Panorama){

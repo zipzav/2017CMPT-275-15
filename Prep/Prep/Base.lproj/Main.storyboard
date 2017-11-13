@@ -66,21 +66,6 @@
             </objects>
             <point key="canvasLocation" x="-369.140625" y="1860.9375"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="xD7-wO-NIL">
-            <objects>
-                <viewController id="LNi-tS-cIm" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="o9E-mB-scF">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <viewLayoutGuide key="safeArea" id="qQH-oJ-UlV"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0mK-2R-izN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1341" y="409"/>
-        </scene>
         <!--Collection View Controller-->
         <scene sceneID="F5s-7U-hsS">
             <objects>
@@ -248,7 +233,7 @@
         <!--Editor Start Page View Controller-->
         <scene sceneID="R0n-0W-hsn">
             <objects>
-                <viewController id="4Bf-up-AFb" customClass="EditorStartPageViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="editorStartPage" id="4Bf-up-AFb" customClass="EditorStartPageViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1zx-Fe-29u">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -276,6 +261,9 @@
                                 <rect key="frame" x="607" y="635" width="85" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Delete"/>
+                                <connections>
+                                    <action selector="trashButton:" destination="4Bf-up-AFb" eventType="touchUpInside" id="k5y-Rd-nc1"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oWu-jA-bmi">
                                 <rect key="frame" x="74" y="112" width="401" height="112"/>
@@ -330,7 +318,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="caY-pg-Wve">
-                                <rect key="frame" x="0.0" y="114" width="1024" height="334"/>
+                                <rect key="frame" x="0.0" y="114" width="1024" height="330"/>
                                 <subviews>
                                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="preplogo" translatesAutoresizingMaskIntoConstraints="NO" id="blF-VU-bXf">
                                         <rect key="frame" x="212" y="-180" width="600" height="180"/>
@@ -375,16 +363,16 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TEB-Nc-Yr2">
-                                        <rect key="frame" x="212" y="200" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="200" width="600" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9w8-l6-AeZ">
-                                                <rect key="frame" x="0.0" y="0.0" width="77" height="50"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="77" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textField opaque="NO" contentMode="scaleToFill" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="123123" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CFu-fH-pll">
-                                                <rect key="frame" x="97" y="0.0" width="503" height="50"/>
+                                                <rect key="frame" x="97" y="0.0" width="503" height="30"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
@@ -396,7 +384,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDY-63-fAA">
-                                        <rect key="frame" x="212" y="300" width="600" height="34"/>
+                                        <rect key="frame" x="212" y="280" width="600" height="50"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                         <constraints>

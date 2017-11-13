@@ -79,5 +79,11 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         // Pass the selected object to the new view controller.
     }
     */
-
+    @IBAction func trashButton(_ sender: UIButton) {
+        //let childUpdates = ["/user/\(uid)" : nil] as [String : Any?] // set to nil deletes it from database
+        //ref.updateChildValues(childUpdates)
+        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+        self.navigationController?.popViewController(animated: true)
+    }
+    
 }

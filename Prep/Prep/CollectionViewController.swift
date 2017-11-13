@@ -23,6 +23,9 @@ var arrayOfImages = [UIImage]()
 var arrayOfTitles = [String]()
 var GlobalcurrentExperienceIndex:Int = 0
 var experiences: Array<DataSnapshot> = []
+var GlobalCurrentExperienceID: String? = ""
+var GlobalUserID: String? = ""
+var ref: DatabaseReference!
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -34,37 +37,37 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let heightAdjustment: CGFloat = 150
     var cellSelected:IndexPath?
     
-    var ref: DatabaseReference!
+
     var comments: Array<DataSnapshot> = []
     var kSectionComments = 1
     
-    func initializePreMades(){
-        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
-        
-        //add Panorama
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
-        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
-
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "waitinginline", ofType: "mp4")!)
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "outdoor-crowd-noise", ofType: "wav")!)
-        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "baristainteraction", ofType: "mp4")!)
-        Experience1.panoramas[0].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
-        
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "car-pass", ofType: "wav")!)
-        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
-        Experience1.panoramas[1].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
-        arrayOfExperiences += [Experience1]
-
-        var Experience2: Experience = Experience(Name: "Out at night", Description: "Strolling through the city centre at night")
-        Experience2.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
-        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
-        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
-        arrayOfExperiences += [Experience2];
-
-    }
+//    func initializePreMades(){
+//        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
+//
+//        //add Panorama
+//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
+//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
+//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
+//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
+//
+//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "waitinginline", ofType: "mp4")!)
+//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "outdoor-crowd-noise", ofType: "wav")!)
+//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "baristainteraction", ofType: "mp4")!)
+//        Experience1.panoramas[0].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
+//
+//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
+//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "car-pass", ofType: "wav")!)
+//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
+//        Experience1.panoramas[1].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
+//        arrayOfExperiences += [Experience1]
+//
+//        var Experience2: Experience = Experience(Name: "Out at night", Description: "Strolling through the city centre at night")
+//        Experience2.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
+//        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
+//        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
+//        arrayOfExperiences += [Experience2];
+//
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         //initializePreMades()
@@ -77,6 +80,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //experiences.removeAll()
         // [START child_event_listener]
         // Listen for new comments in the Firebase database
+        
         fetchExperience()
         
         
@@ -90,12 +94,25 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     func fetchExperience() {
         var exp: Experience?
-        ref.child("user").observe(.childAdded, with: { (snapshot) -> Void in
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("user is not logged in")
+            return
+        }
+        ref.child("user").setValue(uid)
+        GlobalUserID = uid
+        
+        ref.child("user").child(uid).observe(.childAdded, with: { (snapshot) -> Void in
             self.comments.append(snapshot)
             
+            print("key of experience \(snapshot.key)")
+            
             if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
+                
             if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
-                exp = Experience(Name: snapName as! String, Description: snapDescription as! String)
+                
+                
+                exp = Experience(Name: snapName as! String, Description: snapDescription as! String, Id: snapshot.key )
                 print("count for comments \(self.comments.count)")
                 print("count for arrayOfExperiences \(arrayOfExperiences.count)")
                 // Search for a child call panoramas
@@ -152,7 +169,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //            })
 //        }
         
-        ref.child("user").observe(.childRemoved, with: { (snapshot) -> Void in
+        ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
             //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
             
             let index = self.indexOfMessage(snapshot)
@@ -305,9 +322,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             let indexPath = collectionView.indexPathForItem(at: touchPoint)
             if indexPath != nil {
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
-                
-                let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+                GlobalCurrentExperienceID = GlobalCurrentExperience?.key
+                let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
                 self.navigationController?.pushViewController(viewController!, animated: true)
+                
             }
         }
         
@@ -330,19 +348,20 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 //                exp.child("description").setValue("Strolling through the city centre at night")
                 //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
                 
-                
-                let PanID = self.ref.child(uid).childByAutoId().key
+                let ExpID = ref.child(uid).childByAutoId().key
+                let PanID = ref.child(uid).childByAutoId().key
 
-                let imgObjInfo = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
-               
+   
                 
-                let userObjInfo = ["name": "Out at night",
+                let expObjInfo = ["name": "Out at night",
                                    "description": "Strolling through the city centre at night",
-                                   PanID : imgObjInfo
+                                   PanID : ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
                     ] as [String : Any]
                 
-                 let childUpdates = ["/user/\(uid)" : userObjInfo]
-                self.ref.updateChildValues(childUpdates)
+                let userInfo = [ExpID: expObjInfo]
+                
+                 let childUpdates = ["/user/\(uid)" : userInfo]
+                ref.updateChildValues(childUpdates)
 
 //                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
 //                self.ref.updateChildValues(childUpdate)
