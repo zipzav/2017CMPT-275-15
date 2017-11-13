@@ -14,6 +14,8 @@ import UIKit
 import SceneKit
 import AVFoundation
 import DTZFloatingActionButton
+import FirebaseAuth
+import FirebaseDatabase
 
 var GlobalCurrentExperience:Experience? = nil
 var arrayOfExperiences = [Experience]()
@@ -30,6 +32,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
     var cellSelected:IndexPath?
+    
+    var ref: DatabaseReference!
     
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -63,6 +67,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         initializePreMades()
         floatingButton()
         addButton.isEnabled = false
+        
+        // Set the Firebase reference
+        ref = Database.database().reference()
         
         for experience in arrayOfExperiences{
             arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
@@ -180,7 +187,28 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         ))
         actionButton.handler = {
             button in
-            print("Hi!")
+            if let uid = Auth.auth().currentUser?.uid {
+                print("pass")
+                //                let user = self.ref.child(uid)
+                //                let exp = user.child("Experience3")
+                //                exp.child("name").setValue("Out at night")
+                //                exp.child("description").setValue("Strolling through the city centre at night")
+                //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
+                
+                let userObjInfo = ["name": "Out at night",
+                                   "description": "Strolling through the city centre at night"
+                ]
+                let imgObjInfo = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
+                let PanID = self.ref.child(uid).childByAutoId().key
+                let childUpdates = ["/user/\(uid)" : userObjInfo]
+                self.ref.updateChildValues(childUpdates)
+                
+                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
+                self.ref.updateChildValues(childUpdate)
+                
+            } else {
+                print("fail")
+            }
         }
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
