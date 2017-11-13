@@ -22,6 +22,7 @@ var arrayOfExperiences = [Experience]()
 var arrayOfImages = [UIImage]()
 var arrayOfTitles = [String]()
 var GlobalcurrentExperienceIndex:Int = 0
+var experiences: Array<DataSnapshot> = []
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -64,12 +65,18 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializePreMades()
+        //initializePreMades()
         floatingButton()
         addButton.isEnabled = false
         
         // Set the Firebase reference
         ref = Database.database().reference()
+        
+        //experiences.removeAll()
+        // [START child_event_listener]
+        // Listen for new comments in the Firebase database
+        fetchExperience()
+        
         
         for experience in arrayOfExperiences{
             arrayOfImages += [experience.getPanorama(index: 0)] //to-do: obtained from saved experience
@@ -79,10 +86,44 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
     }
     
+    func fetchExperience() {
+        var exp: Experience?
+        ref.child("user").observe(.childAdded, with: { (snapshot) -> Void in
+            if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
+            if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
+                exp = Experience(Name: snapName as! String, Description: snapDescription as! String)
+                
+                // Search for a child call panoramas
+                for childsnap in snapshot.children.allObjects as! [DataSnapshot] {
+                    print("key of child \(childsnap.key)")
+                    
+                    let snapObject = childsnap.value as? [String: AnyObject]
+                    if let image = snapObject?["image"] {
+                        //print(image)
+                        
+                        // Convert Url to UIImage
+                        let url = URL(string:image as! String)
+                        if let data = try? Data(contentsOf: url!) {
+                            exp?.addPanorama(newImage: UIImage(data: data)!)
+                        }
+                    }
+                }
+                    //Append the data to our array
+                    arrayOfExperiences += [exp!]
+                
+                    DispatchQueue.main.async(execute: {
+                        self.collectionView.reloadData()
+                })
+            }
+            }
+        }, withCancel: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
     
   
     // Getting the Size of Items
@@ -103,7 +144,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrayOfImages.count
+        return arrayOfExperiences.count
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
     // Getting the Header and Footer Sizes
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -119,11 +164,15 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         guard let cell = cell as? CollectionViewCell else { return }
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
+        
+        let cellExperiences = arrayOfExperiences[indexPath.item]
+
+        
         let title = cell.title
-        title!.text = arrayOfTitles[indexPath.row]
+        title!.text = cellExperiences.name
         
         let imageView = cell.previewImage
-        imageView!.image = arrayOfImages[indexPath.row]
+        imageView!.image = cellExperiences.getPanorama(index: 0)
         
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
