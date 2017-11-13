@@ -8,6 +8,10 @@
 
 import UIKit
 
+//protocol CollectionViewCellDelegate: class {
+//    func delete(cell: CollectionViewCell)
+//}
+
 class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var title: UILabel!

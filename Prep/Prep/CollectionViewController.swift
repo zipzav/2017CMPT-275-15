@@ -35,6 +35,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var cellSelected:IndexPath?
     
     var ref: DatabaseReference!
+    var comments: Array<DataSnapshot> = []
+    var kSectionComments = 1
     
     func initializePreMades(){
         var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -89,11 +91,15 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func fetchExperience() {
         var exp: Experience?
         ref.child("user").observe(.childAdded, with: { (snapshot) -> Void in
+            self.comments.append(snapshot)
+            
             if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
             if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
                 exp = Experience(Name: snapName as! String, Description: snapDescription as! String)
-                
+                print("count for comments \(self.comments.count)")
+                print("count for arrayOfExperiences \(arrayOfExperiences.count)")
                 // Search for a child call panoramas
+                print("count for children.allObjects.count \(snapshot.children.allObjects.count)")
                 for childsnap in snapshot.children.allObjects as! [DataSnapshot] {
                     print("key of child \(childsnap.key)")
                     
@@ -105,18 +111,101 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         let url = URL(string:image as! String)
                         if let data = try? Data(contentsOf: url!) {
                             exp?.addPanorama(newImage: UIImage(data: data)!)
+                            arrayOfExperiences += [exp!]
+                            
+                            if let sec = self.collectionView?.numberOfSections {
+                                print("num of sec \(sec) ")
+                                let cell = self.collectionView.numberOfItems(inSection: 0)
+                                let com = self.comments.count
+                                print("num of cell \(cell)")
+
+                            }
+                            
+                            DispatchQueue.main.async(execute: {
+                                self.collectionView.insertItems(at: [IndexPath(row: self.comments.count-1, section: 0)])
+                            })
                         }
+                        //Append the data to our array
+                        
+                        
                     }
                 }
-                    //Append the data to our array
-                    arrayOfExperiences += [exp!]
-                
-                    DispatchQueue.main.async(execute: {
-                        self.collectionView.reloadData()
-                })
+                //DispatchQueue.main.async(execute: {
+                    //self.collectionView.reloadData()
+                //})
             }
             }
         }, withCancel: nil)
+        
+        
+//        DataService.dataService.fetchDataFromServer { (channel) in
+//            self.channels.append(channel)
+//            let indexPath = IndexPath(item: self.channels.count - 1, section: 0)
+//            self.collectionView?.insertItems(at: [indexPath])
+//        }
+//        Fetch Data From Server Function:
+//
+//        func fetchDataFromServer(callBack: @escaping (Channel) -> ()) {
+//            DataService.dataService.CHANNEL_REF.observe(.childAdded, with: { (snapshot) in
+//                let channel = Channel(key: snapshot.key, snapshot: snapshot.value as! Dictionary<String, AnyObject>)
+//                callBack(channel)
+//            })
+//        }
+        
+        ref.child("user").observe(.childRemoved, with: { (snapshot) -> Void in
+            //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
+            
+            let index = self.indexOfMessage(snapshot)
+            print("index at \(index)")
+            self.comments.remove(at: index)
+            arrayOfExperiences.remove(at: index)
+            print("count for numberOfSections \(self.collectionView.numberOfSections)")
+            print("count for numberOfItems \(self.collectionView.numberOfItems(inSection: 0))")
+            DispatchQueue.main.async(execute: {
+                self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
+            })
+            
+            //self.collectionView.reloadData()
+//            if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
+//                if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
+//                    exp = Experience(Name: snapName as! String, Description: snapDescription as! String)
+//
+//                    // Search for a child call panoramas
+//                    for childsnap in snapshot.children.allObjects as! [DataSnapshot] {
+//                        print("key of child \(childsnap.key)")
+//
+//                        let snapObject = childsnap.value as? [String: AnyObject]
+//                        if let image = snapObject?["image"] {
+//                            //print(image)
+//
+//                            // Convert Url to UIImage
+//                            let url = URL(string:image as! String)
+//                            if let data = try? Data(contentsOf: url!) {
+//                                exp?.addPanorama(newImage: UIImage(data: data)!)
+//                            }
+//                        }
+//                    }
+//                    //Append the data to our array
+//                    arrayOfExperiences += [exp!]
+//
+//                    DispatchQueue.main.async(execute: {
+//                        self.collectionView.reloadData()
+//                    })
+//                }
+//            }
+        }, withCancel: nil)
+    }
+    func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
+        var index = 0
+        for  comment in self.comments {
+            print("snapshot key is \(snapshot.key)")
+            
+            if snapshot.key == comment.key {
+                return index
+            }
+            index += 1
+        }
+        return -1
     }
     
     override func didReceiveMemoryWarning() {
@@ -144,11 +233,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrayOfExperiences.count
+        return comments.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return kSectionComments
     }
     // Getting the Header and Footer Sizes
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -167,7 +256,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         let cellExperiences = arrayOfExperiences[indexPath.item]
 
-        
         let title = cell.title
         title!.text = cellExperiences.name
         
@@ -176,8 +264,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
         cell.backgroundColor = arrayOfColors[randomIndex]
-        
-        
         
         // add guesture recognizer
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
@@ -244,17 +330,31 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 //                exp.child("description").setValue("Strolling through the city centre at night")
                 //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
                 
-                let userObjInfo = ["name": "Out at night",
-                                   "description": "Strolling through the city centre at night"
-                ]
-                let imgObjInfo = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
+                
                 let PanID = self.ref.child(uid).childByAutoId().key
-                let childUpdates = ["/user/\(uid)" : userObjInfo]
+
+                let imgObjInfo = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
+               
+                
+                let userObjInfo = ["name": "Out at night",
+                                   "description": "Strolling through the city centre at night",
+                                   PanID : imgObjInfo
+                    ] as [String : Any]
+                
+                 let childUpdates = ["/user/\(uid)" : userObjInfo]
                 self.ref.updateChildValues(childUpdates)
-                
-                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
-                self.ref.updateChildValues(childUpdate)
-                
+
+//                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
+//                self.ref.updateChildValues(childUpdate)
+//
+//                DispatchQueue.main.async(execute: {
+//                    self.ref.updateChildValues(childUpdates)
+//                })
+//
+//                DispatchQueue.main.async(execute: {
+//                     self.ref.updateChildValues(childUpdate)
+//                })
+            
             } else {
                 print("fail")
             }
