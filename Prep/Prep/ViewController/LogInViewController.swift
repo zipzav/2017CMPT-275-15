@@ -34,19 +34,19 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set the segnmented slection to match the color of the theme
-        SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
+        SignInSelection.tintColor = UIColor.PrepGreen
         
         //Set the segnmented slection text (font size) to match the theme
         let font = UIFont.systemFont(ofSize: 18)
         SignInSelection.setTitleTextAttributes([NSAttributedStringKey.font: font], for: .normal)
         
         //Setting the background color of the button
-        SignInButton.backgroundColor = UIColor(red: 159.0/255.0, green:110.0/255.0, blue: 228.0/255.0, alpha: 1.0)
+        SignInButton.backgroundColor = UIColor.PrepPurple
         
         //Making the corners of the sign-in button rounded to match the style of the page
         SignInButton.layer.cornerRadius = 5
         SignInButton.layer.borderWidth = 1
-        SignInButton.layer.borderColor = UIColor(red: 159.0/255.0, green:110.0/255.0, blue: 228.0/255.0, alpha: 1.0).cgColor
+        SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

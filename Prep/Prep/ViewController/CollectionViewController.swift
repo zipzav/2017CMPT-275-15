@@ -17,12 +17,16 @@ import DTZFloatingActionButton
 import FirebaseAuth
 import FirebaseDatabase
 
+
+// Global Variables
 var GlobalCurrentExperience:Experience? = nil
 var arrayOfExperiences = [Experience]()
+
 var arrayOfImages = [UIImage]()
 var arrayOfTitles = [String]()
 var GlobalcurrentExperienceIndex:Int = 0
-var experiences: Array<DataSnapshot> = []
+
+var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
 var ref: DatabaseReference!
@@ -30,7 +34,7 @@ var ref: DatabaseReference!
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var collectionView: UICollectionView!
-    var arrayOfIDs = [String]()
+    
     var arrayOfColors = [UIColor]()
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
@@ -38,8 +42,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var cellSelected:IndexPath?
     
 
-    var comments: Array<DataSnapshot> = []
-    var kSectionComments = 1
+    var kSection = 1
+    var _refHandle: DatabaseHandle!
     
 //    func initializePreMades(){
 //        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -79,7 +83,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         //experiences.removeAll()
         // [START child_event_listener]
-        // Listen for new comments in the Firebase database
+        // Listen for new experience in the Firebase database
         
         fetchExperience()
         
@@ -92,6 +96,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
     }
     
+    deinit {
+        if let refHandle = _refHandle {
+            ref.child("user").child(GlobalUserID!).removeObserver(withHandle: _refHandle)
+        }
+    }
+
     func fetchExperience() {
         var exp: Experience?
         
@@ -102,8 +112,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         ref.child("user").setValue(uid)
         GlobalUserID = uid
         
-        ref.child("user").child(uid).observe(.childAdded, with: { (snapshot) -> Void in
-            self.comments.append(snapshot)
+        _refHandle = ref.child("user").child(uid).observe(.childAdded, with: { (snapshot) -> Void in
+            GlobalExperienceSnapshots.append(snapshot)
             
             print("key of experience \(snapshot.key)")
             
@@ -113,7 +123,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 
                 
                 exp = Experience(Name: snapName as! String, Description: snapDescription as! String, Id: snapshot.key )
-                print("count for comments \(self.comments.count)")
+                print("count for GlobalExperienceSnapshots \(GlobalExperienceSnapshots.count)")
                 print("count for arrayOfExperiences \(arrayOfExperiences.count)")
                 // Search for a child call panoramas
                 print("count for children.allObjects.count \(snapshot.children.allObjects.count)")
@@ -133,13 +143,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                             if let sec = self.collectionView?.numberOfSections {
                                 print("num of sec \(sec) ")
                                 let cell = self.collectionView.numberOfItems(inSection: 0)
-                                let com = self.comments.count
+                                let com = GlobalExperienceSnapshots.count
                                 print("num of cell \(cell)")
 
                             }
                             
                             DispatchQueue.main.async(execute: {
-                                self.collectionView.insertItems(at: [IndexPath(row: self.comments.count-1, section: 0)])
+                                self.collectionView.insertItems(at: [IndexPath(row: GlobalExperienceSnapshots.count-1, section: 0)])
                             })
                         }
                         //Append the data to our array
@@ -169,12 +179,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //            })
 //        }
         
-        ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
+        _refHandle = ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
             //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
             
             let index = self.indexOfMessage(snapshot)
             print("index at \(index)")
-            self.comments.remove(at: index)
+            GlobalExperienceSnapshots.remove(at: index)
             arrayOfExperiences.remove(at: index)
             print("count for numberOfSections \(self.collectionView.numberOfSections)")
             print("count for numberOfItems \(self.collectionView.numberOfItems(inSection: 0))")
@@ -214,10 +224,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
-        for  comment in self.comments {
+        for  snap in GlobalExperienceSnapshots {
             print("snapshot key is \(snapshot.key)")
             
-            if snapshot.key == comment.key {
+            if snapshot.key == snap.key {
                 return index
             }
             index += 1
@@ -250,11 +260,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return comments.count
+        return GlobalExperienceSnapshots.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return kSectionComments
+        return kSection
     }
     // Getting the Header and Footer Sizes
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -268,21 +278,35 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     // Cell Customization
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? CollectionViewCell else { return }
+
+        let experienceSnapshot = GlobalExperienceSnapshots[indexPath.item]
+        guard let exp = experienceSnapshot.value as? [String : AnyObject] else { return }
+        let title = cell.title
+        title!.text = exp["name"] as! String
+
+        let imageView = cell.previewImage
+        
+        for childsnap in experienceSnapshot.children.allObjects as! [DataSnapshot] {
+
+            let snapObject = childsnap.value as? [String: AnyObject]
+            if let image = snapObject?["image"] {
+                // Convert Url to UIImage
+                let url = URL(string:image as! String)
+                let data = try? Data(contentsOf: url!)
+                if let image: UIImage = UIImage(data: data!) {
+                    imageView!.image = image
+                }
+            }
+        }
+            
+        
+        // Add Style
+        //let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
+        //cell.backgroundColor = arrayOfColors[randomIndex]
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         
-        let cellExperiences = arrayOfExperiences[indexPath.item]
-
-        let title = cell.title
-        title!.text = cellExperiences.name
-        
-        let imageView = cell.previewImage
-        imageView!.image = cellExperiences.getPanorama(index: 0)
-        
-        let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
-        cell.backgroundColor = arrayOfColors[randomIndex]
-        
-        // add guesture recognizer
+        // Add guesture recognizer
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
         longPressGestureRecong.minimumPressDuration = 1.5
         cell.addGestureRecognizer(longPressGestureRecong)
