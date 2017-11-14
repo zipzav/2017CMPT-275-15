@@ -16,7 +16,7 @@ import AVFoundation
 import DTZFloatingActionButton
 import FirebaseAuth
 import FirebaseDatabase
-
+import FirebaseStorage
 
 // Global Variables
 var GlobalCurrentExperience:Experience? = nil
@@ -30,6 +30,10 @@ var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
 var ref: DatabaseReference!
+
+var storageRef: StorageReference!
+
+    
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -72,6 +76,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //        arrayOfExperiences += [Experience2];
 //
 //    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //initializePreMades()
@@ -81,9 +87,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Set the Firebase reference
         ref = Database.database().reference()
         
+        storageRef = Storage.storage().reference()
+        
         //experiences.removeAll()
         // [START child_event_listener]
         // Listen for new experience in the Firebase database
+        
         
         fetchExperience()
         
@@ -345,8 +354,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             let touchPoint = press.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: touchPoint)
             if indexPath != nil {
+                GlobalcurrentExperienceIndex = indexPath!.row
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
-                GlobalCurrentExperienceID = GlobalCurrentExperience?.key
+                GlobalCurrentExperienceID = GlobalCurrentExperience?.key // user id in database
                 let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
                 self.navigationController?.pushViewController(viewController!, animated: true)
                 
@@ -366,26 +376,61 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             button in
             if let uid = Auth.auth().currentUser?.uid {
                 print("pass")
+                
+                let ExpID = ref.child(uid).childByAutoId().key
+                let PanID = ref.child(uid).childByAutoId().key
+
+                var downloadURL:String = "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"
+                
+                //                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                //                let documentsDirectory = paths[0]
+                //                let filePath = "file:\(documentsDirectory)/myimage.jpg"
+                //                guard let fileURL = URL(string: filePath) else { return }
+                //                guard let storagePath = UserDefaults.standard.object(forKey: "storagePath") as? String else {
+                //                    return
+                //                }
+                //
+                let localFile: NSData = UIImageJPEGRepresentation(#imageLiteral(resourceName: "preplogo"), 0.5)! as NSData
+                
+                let imageRef = ref.child("user").child(uid).child(ExpID).child(PanID)
+                
+                let uploadTask = storageRef.child("\(ExpID)/\(PanID)/tmp.jpg")
+                // Upload the file to the path "images/rivers.jpg"
+                _ = uploadTask.putData(localFile as Data, metadata: nil) { metadata, error in
+                    if let error = error {
+                        // Uh-oh, an error occurred!
+                        print(error)
+                    } else {
+                        // Metadata contains file metadata such as size, content-type, and download URL.
+                        downloadURL = metadata!.downloadURL()!.absoluteString
+                        print("downloadURL is \(downloadURL)")
+                        
+                        let expObjInfo = ["name": "Out at night",
+                                          "description": "Strolling through the city centre at night",
+                                          PanID : ["image": downloadURL]
+                            ] as [String : Any]
+                        
+                        //let userInfo = [ExpID: expObjInfo]
+                        
+                        let childUpdates = ["/user/\(uid)" : [ExpID: expObjInfo]]
+                        ref.updateChildValues(childUpdates)
+                        
+                    }
+                }
+                
+                
                 //                let user = self.ref.child(uid)
                 //                let exp = user.child("Experience3")
                 //                exp.child("name").setValue("Out at night")
                 //                exp.child("description").setValue("Strolling through the city centre at night")
                 //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
-                
-                let ExpID = ref.child(uid).childByAutoId().key
-                let PanID = ref.child(uid).childByAutoId().key
 
    
                 
-                let expObjInfo = ["name": "Out at night",
-                                   "description": "Strolling through the city centre at night",
-                                   PanID : ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
-                    ] as [String : Any]
+
+
+
                 
-                let userInfo = [ExpID: expObjInfo]
-                
-                 let childUpdates = ["/user/\(uid)" : userInfo]
-                ref.updateChildValues(childUpdates)
 
 //                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
 //                self.ref.updateChildValues(childUpdate)

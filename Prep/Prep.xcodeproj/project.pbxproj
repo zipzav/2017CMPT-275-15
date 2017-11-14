@@ -32,7 +32,7 @@
 		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
 		40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */; };
 		40869FC61FBA3C700047C7F7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40869FC51FBA3C700047C7F7 /* UIColorExtension.swift */; };
-		40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */; };
+		40D00E9C1FB6658800BF28C1 /* EditorStartPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */; };
 		40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */; };
 		877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877540311FB667ED0014CF99 /* LogInViewController.swift */; };
 		877540351FB681D40014CF99 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877540341FB680460014CF99 /* GoogleService-Info.plist */; };
@@ -94,7 +94,7 @@
 		40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Alerts.h"; sourceTree = "<group>"; };
 		40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Alerts.m"; sourceTree = "<group>"; };
 		40869FC51FBA3C700047C7F7 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
-		40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStarPageViewController.swift; sourceTree = "<group>"; };
+		40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStartPageViewController.swift; sourceTree = "<group>"; };
 		40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		5C4F6A5028616F86210D904E /* Pods-PrepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepUITests/Pods-PrepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5C950575FC963E329D6D87AD /* Pods-PrepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepTests/Pods-PrepTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				36D8DFB61FB7C13900576FAA /* PanoramaCaptureViewController.swift */,
-				40D00E9B1FB6658800BF28C1 /* EditorStarPageViewController.swift */,
+				40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */,
 				36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */,
 				877540311FB667ED0014CF99 /* LogInViewController.swift */,
 				400B64951FA837990023FA63 /* CollectionViewController.swift */,
@@ -593,7 +593,7 @@
 				40869FC61FBA3C700047C7F7 /* UIColorExtension.swift in Sources */,
 				3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */,
-				40D00E9C1FB6658800BF28C1 /* EditorStarPageViewController.swift in Sources */,
+				40D00E9C1FB6658800BF28C1 /* EditorStartPageViewController.swift in Sources */,
 				36D8DFB71FB7C13900576FAA /* PanoramaCaptureViewController.swift in Sources */,
 				400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */,
 				36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */,
