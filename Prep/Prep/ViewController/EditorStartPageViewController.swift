@@ -9,6 +9,8 @@
 import UIKit
 import Photos
 import FirebaseStorage
+import FirebaseAuth
+import FirebaseDatabase
 
 class PanoramaTableViewCell : UITableViewCell{
     var previewImage = UIImageView()
@@ -20,7 +22,7 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     }
 }
 
-
+var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
 
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
   //  @IBOutlet weak var panoramatableview: PanoramaTableView!
@@ -39,16 +41,34 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     // Create a storage reference from our storage service
     var storageRef: StorageReference!
     
+    // Database
+    var _refHandle: DatabaseHandle!
+    var experienceRef : DatabaseReference!
+    
+    var ExperienceID = ""
+    var PanoramaID = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // configure storage
         storageRef = Storage.storage().reference()
         
         // Setup TextView
-        currentExperience = arrayOfExperiences[GlobalcurrentExperienceIndex]
-        experienceTitle.text = currentExperience?.getTitle()
-        experienceDescription.text = currentExperience?.getDescription()
-        
+        if GlobalcurrentExperienceIndex != -1 {
+            // Setup textfield when user selects existing experience
+            currentExperience = arrayOfExperiences[GlobalcurrentExperienceIndex]
+            experienceTitle.text = currentExperience?.getTitle()
+            experienceDescription.text = currentExperience?.getDescription()
+            ExperienceID = GlobalCurrentExperienceID!
+            PanoramaID = ref.child(ExperienceID).childByAutoId().key
+        } else {
+            // new experience
+            trashButtonOutlet.isEnabled = false
+            ExperienceID = ref.child(GlobalUserID!).childByAutoId().key
+            currentExperience = Experience(Name: "", Description: "", Id: ExperienceID);
+        }
+
+        fetchPanoramas()
 //        experienceTitle.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
 //        experienceTitle.numberOfLines = 0
 //        experienceDescription.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
@@ -65,6 +85,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         
         // Configuring the TextView
         //experienceTitle.backgroundColor = UIColor.PrepPurple
+        experienceTitle.attributedPlaceholder = NSAttributedString(string:"Experience needs a title", attributes: [NSAttributedStringKey.foregroundColor: UIColor.black])
         experienceDescription.isEditable = true
         experienceDescription.backgroundColor = UIColor.lightGray
         
@@ -79,7 +100,66 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         saveButtonOutlet.clipsToBounds = true
         
     }
+    
+    func fetchPanoramas() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("user is not logged in")
+            return
+        }
+        
+        guard GlobalcurrentExperienceIndex == -1 else {
+            return
+        }
+        experienceRef = ref.child("user").child(uid).child(ExperienceID)
 
+        _refHandle = experienceRef.observe(.childAdded, with: { (snapshot) -> Void in
+            
+            
+            GlobalPanoramaSnapshots.append(snapshot)
+                
+            let snapObject = snapshot.value as? [String: AnyObject]
+            if let image = snapObject?["image"] {
+                //print(image)
+                
+                // Convert Url to UIImage
+                let url = URL(string:image as! String)
+                if let data = try? Data(contentsOf: url!) {
+                    self.currentExperience?.addPanorama(newImage: UIImage(data: data)!)
+                    //arrayOfExperiences += [self.currentExperience!]
+                    
+                    print("New count for arrayOfExperiences \(arrayOfExperiences.count)")
+                    
+                    if let sec = self.panoramatableview?.numberOfSections {
+                        print("panoramatableview: num of sec \(sec) ")
+                        let cell = self.panoramatableview.numberOfRows(inSection: 0)
+                        print("panoramatableview: num of cell \(cell)")
+                        
+                    }
+                    let num = self.currentExperience?.numPanorama()
+                    print("currentExperience has pan : \(num)")
+                    DispatchQueue.main.async(execute: {
+                        self.panoramatableview.insertRows(at: [IndexPath(row: GlobalPanoramaSnapshots.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+                    })
+                }
+                //DispatchQueue.main.async(execute: {
+                //self.collectionView.reloadData()
+                //})
+            }
+        }, withCancel: nil)
+        
+        
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        if let refHandle = _refHandle {
+//            ref.child("user").child((Auth.auth().currentUser?.uid)!).removeObserver(withHandle: refHandle)
+//        }
+        experienceRef.removeAllObservers()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -89,7 +169,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currentExperience!.numPanorama()
+            return currentExperience!.numPanorama()
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cellIdentifier = "UITableViewCell"
@@ -98,11 +178,13 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
             fatalError("The dequeued cell is not an instance of PanoramaTableViewCell.")
         }
-        let panorama = currentExperience?.panoramas[indexPath.row]
-        cell.imageView?.image = panorama?.getImage()
-        cell.imageView?.frame = CGRect(x: 0,y: 0,width: 401,height: 150)
-        cell.imageView?.contentMode = UIViewContentMode.scaleToFill
-        cell.imageView?.clipsToBounds = true
+        
+            let panorama = currentExperience?.panoramas[indexPath.row]
+            cell.imageView?.image = panorama?.getImage()
+            cell.imageView?.frame = CGRect(x: 0,y: 0,width: 401,height: 150)
+            cell.imageView?.contentMode = UIViewContentMode.scaleToFill
+            cell.imageView?.clipsToBounds = true
+        
         return cell
     }
     /*
@@ -116,24 +198,37 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     */
     
     @IBAction func trashButton(_ sender: UIButton) {
-        //let childUpdates = ["/user/\(uid)" : nil] as [String : Any?] // set to nil deletes it from database
-        //ref.updateChildValues(childUpdates)
-        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+        
+        if GlobalcurrentExperienceIndex != -1 {
+            ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+        } else {
+            ref.child("user").child(GlobalUserID!).child(ExperienceID).removeValue()
+        }
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func saveAndUploadButton(_ sender: UIButton) {
+        if let uid = Auth.auth().currentUser?.uid {
+            // Store experience object along with image to database
+            let name = experienceTitle.text
+            let description = experienceDescription.text
+
+            let object = ["name": name ?? "default name",
+                          "description": description ?? "default description"
+                ]
+            //ref.child("user").child(uid).child(ExperienceID).child(PanoramaID).setValue(["image":fileURL])
+            ref.child("user/\(uid)/\(ExperienceID)").updateChildValues(object)
+            self.performSegue(withIdentifier: "SaveAndGoToHomePage", sender: self)
+        }
     }
     
     // MARK: - Image Picker
     
     @IBAction func didTapTakPicture(_ sender: AnyObject) {
         let picker = UIImagePickerController()
-        
-        //if UIImagePickerController.isSourceTypeAvailable(.camera) {
-        //    picker.sourceType = .camera
-        //} else {
-            picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app
-        //}
-        
+        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app
         picker.delegate = self
+        picker.allowsEditing = false
         picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
         present(picker, animated: true, completion:nil)
     }
@@ -143,57 +238,52 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         picker.dismiss(animated: true, completion:nil)
         
         urlTextView.text = "Beginning Upload"
-        // if it's a photo from the library, not an image from the camera
-        if #available(iOS 8.0, *), let referenceUrl = info[UIImagePickerControllerReferenceURL] as? URL {
-            let assets = PHAsset.fetchAssets(withALAssetURLs: [referenceUrl], options: nil)
-            let asset = assets.firstObject
-            asset?.requestContentEditingInput(with: nil, completionHandler: { (contentEditingInput, info) in
-                let imageFile = contentEditingInput?.fullSizeImageURL
-                let filePath = GlobalUserID! +
-                "/\(Int(Date.timeIntervalSinceReferenceDate * 1000))/\(imageFile!.lastPathComponent)"
-                // [START uploadimage]
-                self.storageRef.child(filePath)
-                    .putFile(from: imageFile!, metadata: nil) { (metadata, error) in
-                        if let error = error {
-                            print("Error uploading: \(error)")
-                            self.urlTextView.text = "Upload Failed"
-                            return
-                        }
-                        self.uploadSuccess(metadata!, storagePath: filePath)
-                }
-                // [END uploadimage]
-            })
-        } else {
-            guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else { return }
-            guard let imageData = UIImageJPEGRepresentation(image, 0.8) else { return }
-            let imagePath = GlobalUserID! +
-            "/\(Int(Date.timeIntervalSinceReferenceDate * 1000)).jpg"
-            let metadata = StorageMetadata()
-            metadata.contentType = "image/jpeg"
-            self.storageRef.child(imagePath).putData(imageData, metadata: metadata) { (metadata, error) in
-                if let error = error {
-                    print("Error uploading: \(error)")
-                    self.urlTextView.text = "Upload Failed"
-                    return
-                }
-                self.uploadSuccess(metadata!, storagePath: imagePath)
+            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage
+            {
+                var imageUploadManager = UploadManager()
+                imageUploadManager.uploadImage(image, progressBlock: { (percentage) in
+                    print(percentage)
+                }, completionBlock: { [weak self] (fileURL, errorMessage) in
+                    guard let strongself = self else {return}
+                    // Handle Error
+                    if let error = errorMessage {
+                        print("Error uploading: \(error)")
+                        //self.urlTextView.text = "Upload Failed"
+                        return
+                    }
+                    // Handle fileURL by real time database
+                    print("file URL is \(fileURL?.absoluteString)")
+                    self?.uploadSuccess(fileURL!)
+                })
             }
-        }
+//        }
     }
     
-    func uploadSuccess(_ metadata: StorageMetadata, storagePath: String) {
-        print("Upload Succeeded!")
-        self.urlTextView.text = metadata.downloadURL()?.absoluteString
-        UserDefaults.standard.set(storagePath, forKey: "storagePath")
-        UserDefaults.standard.synchronize()
-        //self.downloadPicButton.isEnabled = true
+    func uploadSuccess(_ fileURL: URL) {
+        if let uid = Auth.auth().currentUser?.uid {
+            print("Upload Succeeded!")
+            trashButtonOutlet.isEnabled = true
+            PanoramaID = ref.child(ExperienceID).childByAutoId().key
+            
+            // Store experience object along with image to database
+//            let name = experienceTitle.text
+//            let description = experienceDescription.text
+//
+//            let object = ["name": name ?? "default name",
+//                          "description": description ?? "default description",
+//                          PanoramaID : ["image": "\(fileURL.absoluteString)"]
+//                ] as [String : Any]
+//
+//            let childUpdates = ["/user/\(GlobalUserID!)" : [ExperienceID: object]]
+            
+            //ref.child("user").child(uid).child(ExperienceID).child(PanoramaID).setValue(["image":fileURL])
+            ref.child("user/\(uid)/\(ExperienceID)").child(PanoramaID).setValue(["image":"\(fileURL.absoluteString)"])
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion:nil)
     }
-    
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?){
         experienceTitle.resignFirstResponder()
@@ -201,3 +291,4 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     
 }
+

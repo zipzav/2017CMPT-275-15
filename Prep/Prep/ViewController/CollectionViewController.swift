@@ -33,6 +33,7 @@ var ref: DatabaseReference!
 
 var storageRef: StorageReference!
 
+
     
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
@@ -45,9 +46,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let heightAdjustment: CGFloat = 150
     var cellSelected:IndexPath?
     
-
-    var kSection = 1
+    var userRef: DatabaseReference!
     var _refHandle: DatabaseHandle!
+    var kSection = 1
     
 //    func initializePreMades(){
 //        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -86,14 +87,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         // Set the Firebase reference
         ref = Database.database().reference()
-        
         storageRef = Storage.storage().reference()
         
-        //experiences.removeAll()
-        // [START child_event_listener]
         // Listen for new experience in the Firebase database
-        
-        
         fetchExperience()
         
         
@@ -118,19 +114,25 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             print("user is not logged in")
             return
         }
-        ref.child("user").setValue(uid)
+        
+        //ref.child("user").setValue(uid)
         GlobalUserID = uid
         
-        _refHandle = ref.child("user").child(uid).observe(.childAdded, with: { (snapshot) -> Void in
+        userRef = ref.child("user").child(uid)
+        
+        userRef.observe(.childAdded, with: { (snapshot) -> Void in
+            if snapshot.childrenCount > 0 {
+                GlobalExperienceSnapshots.removeAll()
+                arrayOfExperiences.removeAll()
+            }
             GlobalExperienceSnapshots.append(snapshot)
-            
             print("key of experience \(snapshot.key)")
             
             if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
                 
             if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
                 
-                
+                // Create experience object by passing in title, description, and snapshot.key (experience_id in database)
                 exp = Experience(Name: snapName as! String, Description: snapDescription as! String, Id: snapshot.key )
                 print("count for GlobalExperienceSnapshots \(GlobalExperienceSnapshots.count)")
                 print("count for arrayOfExperiences \(arrayOfExperiences.count)")
@@ -188,7 +190,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
 //            })
 //        }
         
-        _refHandle = ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
+        userRef.observe(.childRemoved, with: { (snapshot) -> Void in
             //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
             
             let index = self.indexOfMessage(snapshot)
@@ -242,6 +244,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             index += 1
         }
         return -1
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        if let refHandle = _refHandle {
+//            ref.child("user").child((Auth.auth().currentUser?.uid)!).removeObserver(withHandle: refHandle)
+//        }
+         userRef.removeAllObservers()
     }
     
     override func didReceiveMemoryWarning() {
@@ -356,7 +366,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             if indexPath != nil {
                 GlobalcurrentExperienceIndex = indexPath!.row
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
-                GlobalCurrentExperienceID = GlobalCurrentExperience?.key // user id in database
+                GlobalCurrentExperienceID = GlobalCurrentExperience?.key // get experience id
+                print(GlobalCurrentExperienceID)
                 let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
                 self.navigationController?.pushViewController(viewController!, animated: true)
                 
@@ -374,78 +385,83 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         ))
         actionButton.handler = {
             button in
-            if let uid = Auth.auth().currentUser?.uid {
-                print("pass")
-                
-                let ExpID = ref.child(uid).childByAutoId().key
-                let PanID = ref.child(uid).childByAutoId().key
-
-                var downloadURL:String = "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"
-                
-                //                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-                //                let documentsDirectory = paths[0]
-                //                let filePath = "file:\(documentsDirectory)/myimage.jpg"
-                //                guard let fileURL = URL(string: filePath) else { return }
-                //                guard let storagePath = UserDefaults.standard.object(forKey: "storagePath") as? String else {
-                //                    return
-                //                }
-                //
-                let localFile: NSData = UIImageJPEGRepresentation(#imageLiteral(resourceName: "preplogo"), 0.5)! as NSData
-                
-                let imageRef = ref.child("user").child(uid).child(ExpID).child(PanID)
-                
-                let uploadTask = storageRef.child("\(ExpID)/\(PanID)/tmp.jpg")
-                // Upload the file to the path "images/rivers.jpg"
-                _ = uploadTask.putData(localFile as Data, metadata: nil) { metadata, error in
-                    if let error = error {
-                        // Uh-oh, an error occurred!
-                        print(error)
-                    } else {
-                        // Metadata contains file metadata such as size, content-type, and download URL.
-                        downloadURL = metadata!.downloadURL()!.absoluteString
-                        print("downloadURL is \(downloadURL)")
-                        
-                        let expObjInfo = ["name": "Out at night",
-                                          "description": "Strolling through the city centre at night",
-                                          PanID : ["image": downloadURL]
-                            ] as [String : Any]
-                        
-                        //let userInfo = [ExpID: expObjInfo]
-                        
-                        let childUpdates = ["/user/\(uid)" : [ExpID: expObjInfo]]
-                        ref.updateChildValues(childUpdates)
-                        
-                    }
-                }
-                
-                
-                //                let user = self.ref.child(uid)
-                //                let exp = user.child("Experience3")
-                //                exp.child("name").setValue("Out at night")
-                //                exp.child("description").setValue("Strolling through the city centre at night")
-                //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
-
-   
-                
-
-
-
-                
-
-//                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
-//                self.ref.updateChildValues(childUpdate)
-//
-//                DispatchQueue.main.async(execute: {
-//                    self.ref.updateChildValues(childUpdates)
-//                })
-//
-//                DispatchQueue.main.async(execute: {
-//                     self.ref.updateChildValues(childUpdate)
-//                })
             
-            } else {
-                print("fail")
-            }
+            GlobalcurrentExperienceIndex = -1 // new experience
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
+            self.navigationController?.pushViewController(viewController!, animated: true)
+            
+//            if let uid = Auth.auth().currentUser?.uid {
+//                print("pass")
+//
+//                let ExpID = ref.child(uid).childByAutoId().key
+//                let PanID = ref.child(uid).childByAutoId().key
+//
+//                var downloadURL:String = "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"
+//
+//                //                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+//                //                let documentsDirectory = paths[0]
+//                //                let filePath = "file:\(documentsDirectory)/myimage.jpg"
+//                //                guard let fileURL = URL(string: filePath) else { return }
+//                //                guard let storagePath = UserDefaults.standard.object(forKey: "storagePath") as? String else {
+//                //                    return
+//                //                }
+//                //
+//                let localFile: NSData = UIImageJPEGRepresentation(#imageLiteral(resourceName: "preplogo"), 0.5)! as NSData
+//
+//                let imageRef = ref.child("user").child(uid).child(ExpID).child(PanID)
+//
+//                let uploadTask = storageRef.child("\(ExpID)/\(PanID)/tmp.jpg")
+//                // Upload the file to the path "images/rivers.jpg"
+//                _ = uploadTask.putData(localFile as Data, metadata: nil) { metadata, error in
+//                    if let error = error {
+//                        // Uh-oh, an error occurred!
+//                        print(error)
+//                    } else {
+//                        // Metadata contains file metadata such as size, content-type, and download URL.
+//                        downloadURL = metadata!.downloadURL()!.absoluteString
+//                        print("downloadURL is \(downloadURL)")
+//
+//                        let expObjInfo = ["name": "Out at night",
+//                                          "description": "Strolling through the city centre at night",
+//                                          PanID : ["image": downloadURL]
+//                            ] as [String : Any]
+//
+//                        //let userInfo = [ExpID: expObjInfo]
+//
+//                        let childUpdates = ["/user/\(uid)" : [ExpID: expObjInfo]]
+//                        ref.updateChildValues(childUpdates)
+//
+//                    }
+//                }
+//
+//
+//                //                let user = self.ref.child(uid)
+//                //                let exp = user.child("Experience3")
+//                //                exp.child("name").setValue("Out at night")
+//                //                exp.child("description").setValue("Strolling through the city centre at night")
+//                //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
+//
+//
+//
+//
+//
+//
+//
+//
+////                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
+////                self.ref.updateChildValues(childUpdate)
+////
+////                DispatchQueue.main.async(execute: {
+////                    self.ref.updateChildValues(childUpdates)
+////                })
+////
+////                DispatchQueue.main.async(execute: {
+////                     self.ref.updateChildValues(childUpdate)
+////                })
+//
+//            } else {
+//                print("fail")
+//            }
         }
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)

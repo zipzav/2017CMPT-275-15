@@ -45,11 +45,17 @@ class Experience{
     func getDescription()->String{
         return description
     }
+    func getId()->String{
+        return key
+    }
     func setTitle(newtitle: String){
         name = newtitle
     }
-    func getDescription(newDescription: String){
+    func setDescription(newDescription: String){
         description = newDescription
+    }
+    func setId(newId: String){
+        key = newId
     }
 }
 
