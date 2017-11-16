@@ -32,8 +32,6 @@ var GlobalUserID: String? = ""
 var ref: DatabaseReference!
 
 var storageRef: StorageReference!
-
-
     
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
@@ -49,6 +47,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var userRef: DatabaseReference!
     var _refHandle: DatabaseHandle!
     var kSection = 1
+    
+    var arrayOfSnapshotKeys = [String]()
     
 //    func initializePreMades(){
 //        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
@@ -115,81 +115,51 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             return
         }
         
-        //ref.child("user").setValue(uid)
+        // Assign unqiue user id from FireaseAuth to global variable
         GlobalUserID = uid
         
+        // Assign a database reference
         userRef = ref.child("user").child(uid)
         
+        // Listen for any add child node events in the database and update collection view
         userRef.observe(.childAdded, with: { (snapshot) -> Void in
-            if snapshot.childrenCount > 0 {
-                GlobalExperienceSnapshots.removeAll()
-                arrayOfExperiences.removeAll()
+            // Store Id in newly creatd experience object
+            exp = Experience(Name: "", Description: "", Id: snapshot.key )
+            if let snapshotObject = snapshot.value as? [String: AnyObject] {
+
+                if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
+                    exp?.setTitle(newtitle: snapName as! String)
+                    exp?.setDescription(newDescription: snapDescription as! String)
+                }
+                
             }
-            GlobalExperienceSnapshots.append(snapshot)
-            print("key of experience \(snapshot.key)")
             
-            if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
-                
-            if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
-                
-                // Create experience object by passing in title, description, and snapshot.key (experience_id in database)
-                exp = Experience(Name: snapName as! String, Description: snapDescription as! String, Id: snapshot.key )
-                print("count for GlobalExperienceSnapshots \(GlobalExperienceSnapshots.count)")
-                print("count for arrayOfExperiences \(arrayOfExperiences.count)")
-                // Search for a child call panoramas
-                print("count for children.allObjects.count \(snapshot.children.allObjects.count)")
-                for childsnap in snapshot.children.allObjects as! [DataSnapshot] {
-                    print("key of child \(childsnap.key)")
+            for snap in snapshot.children.allObjects as! [DataSnapshot] {
+                self.arrayOfSnapshotKeys.append(snap.key)
+                if let snapObject = snap.value as? [String: String] {
                     
-                    let snapObject = childsnap.value as? [String: AnyObject]
-                    if let image = snapObject?["image"] {
-                        //print(image)
-                        
-                        // Convert Url to UIImage
-                        let url = URL(string:image as! String)
+                    if let image = snapObject ["image"] {
+                        //Convert Url to UIImage
+                        let url = URL(string:image)
                         if let data = try? Data(contentsOf: url!) {
                             exp?.addPanorama(newImage: UIImage(data: data)!)
+                            
+                            //Append the data to our array
                             arrayOfExperiences += [exp!]
+                            GlobalExperienceSnapshots.append(snapshot)
                             
-                            if let sec = self.collectionView?.numberOfSections {
-                                print("num of sec \(sec) ")
-                                let cell = self.collectionView.numberOfItems(inSection: 0)
-                                let com = GlobalExperienceSnapshots.count
-                                print("num of cell \(cell)")
-
-                            }
+                            //DispatchQueue.main.async(execute: {
+                                self.collectionView.insertItems(at: [IndexPath(row: (exp?.numPanorama())!-1, section: 0)])
+                            //})
                             
-                            DispatchQueue.main.async(execute: {
-                                self.collectionView.insertItems(at: [IndexPath(row: GlobalExperienceSnapshots.count-1, section: 0)])
-                            })
                         }
-                        //Append the data to our array
-                        
-                        
                     }
                 }
-                //DispatchQueue.main.async(execute: {
-                    //self.collectionView.reloadData()
-                //})
             }
-            }
+            
         }, withCancel: nil)
         
-        
-//        DataService.dataService.fetchDataFromServer { (channel) in
-//            self.channels.append(channel)
-//            let indexPath = IndexPath(item: self.channels.count - 1, section: 0)
-//            self.collectionView?.insertItems(at: [indexPath])
-//        }
-//        Fetch Data From Server Function:
-//
-//        func fetchDataFromServer(callBack: @escaping (Channel) -> ()) {
-//            DataService.dataService.CHANNEL_REF.observe(.childAdded, with: { (snapshot) in
-//                let channel = Channel(key: snapshot.key, snapshot: snapshot.value as! Dictionary<String, AnyObject>)
-//                callBack(channel)
-//            })
-//        }
-        
+        // Listen for any remove child node events in the database and update collection view
         userRef.observe(.childRemoved, with: { (snapshot) -> Void in
             //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
             
@@ -203,34 +173,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
             })
             
-            //self.collectionView.reloadData()
-//            if let snapObject = snapshot.value as? [String: AnyObject] { // Database is not empty
-//                if let snapName = snapObject["name"], let snapDescription = snapObject["description"] {
-//                    exp = Experience(Name: snapName as! String, Description: snapDescription as! String)
-//
-//                    // Search for a child call panoramas
-//                    for childsnap in snapshot.children.allObjects as! [DataSnapshot] {
-//                        print("key of child \(childsnap.key)")
-//
-//                        let snapObject = childsnap.value as? [String: AnyObject]
-//                        if let image = snapObject?["image"] {
-//                            //print(image)
-//
-//                            // Convert Url to UIImage
-//                            let url = URL(string:image as! String)
-//                            if let data = try? Data(contentsOf: url!) {
-//                                exp?.addPanorama(newImage: UIImage(data: data)!)
-//                            }
-//                        }
-//                    }
-//                    //Append the data to our array
-//                    arrayOfExperiences += [exp!]
-//
-//                    DispatchQueue.main.async(execute: {
-//                        self.collectionView.reloadData()
-//                    })
-//                }
-//            }
         }, withCancel: nil)
     }
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
@@ -247,10 +189,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        if let refHandle = _refHandle {
-//            ref.child("user").child((Auth.auth().currentUser?.uid)!).removeObserver(withHandle: refHandle)
-//        }
          userRef.removeAllObservers()
     }
     
@@ -259,8 +197,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Dispose of any resources that can be recreated.
     }
 
-    
-  
     // Getting the Size of Items
     // Note: For Collection View Box, Width: 942, Height: 656
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -307,17 +243,17 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         for childsnap in experienceSnapshot.children.allObjects as! [DataSnapshot] {
 
-            let snapObject = childsnap.value as? [String: AnyObject]
-            if let image = snapObject?["image"] {
-                // Convert Url to UIImage
-                let url = URL(string:image as! String)
-                let data = try? Data(contentsOf: url!)
-                if let image: UIImage = UIImage(data: data!) {
-                    imageView!.image = image
+            if let snapObject = childsnap.value as? [String: String] {
+                if let image = snapObject["image"] {
+                    // Convert Url to UIImage
+                    let url = URL(string:image)
+                    let data = try? Data(contentsOf: url!)
+                    if let image: UIImage = UIImage(data: data!) {
+                        imageView!.image = image
+                    }
                 }
             }
         }
-            
         
         // Add Style
         //let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
@@ -336,18 +272,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         return collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
     }
     
-    //func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    //    CurrentExperience = userExperience[indexPath.item]
-    //}
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         GlobalCurrentExperience = arrayOfExperiences[indexPath.row]
         GlobalcurrentExperienceIndex = indexPath.row
@@ -385,83 +309,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         ))
         actionButton.handler = {
             button in
-            
-            GlobalcurrentExperienceIndex = -1 // new experience
+            // Did Tap Button
+            GlobalcurrentExperienceIndex = -1 // -1 for new experience
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
             self.navigationController?.pushViewController(viewController!, animated: true)
-            
-//            if let uid = Auth.auth().currentUser?.uid {
-//                print("pass")
-//
-//                let ExpID = ref.child(uid).childByAutoId().key
-//                let PanID = ref.child(uid).childByAutoId().key
-//
-//                var downloadURL:String = "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"
-//
-//                //                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-//                //                let documentsDirectory = paths[0]
-//                //                let filePath = "file:\(documentsDirectory)/myimage.jpg"
-//                //                guard let fileURL = URL(string: filePath) else { return }
-//                //                guard let storagePath = UserDefaults.standard.object(forKey: "storagePath") as? String else {
-//                //                    return
-//                //                }
-//                //
-//                let localFile: NSData = UIImageJPEGRepresentation(#imageLiteral(resourceName: "preplogo"), 0.5)! as NSData
-//
-//                let imageRef = ref.child("user").child(uid).child(ExpID).child(PanID)
-//
-//                let uploadTask = storageRef.child("\(ExpID)/\(PanID)/tmp.jpg")
-//                // Upload the file to the path "images/rivers.jpg"
-//                _ = uploadTask.putData(localFile as Data, metadata: nil) { metadata, error in
-//                    if let error = error {
-//                        // Uh-oh, an error occurred!
-//                        print(error)
-//                    } else {
-//                        // Metadata contains file metadata such as size, content-type, and download URL.
-//                        downloadURL = metadata!.downloadURL()!.absoluteString
-//                        print("downloadURL is \(downloadURL)")
-//
-//                        let expObjInfo = ["name": "Out at night",
-//                                          "description": "Strolling through the city centre at night",
-//                                          PanID : ["image": downloadURL]
-//                            ] as [String : Any]
-//
-//                        //let userInfo = [ExpID: expObjInfo]
-//
-//                        let childUpdates = ["/user/\(uid)" : [ExpID: expObjInfo]]
-//                        ref.updateChildValues(childUpdates)
-//
-//                    }
-//                }
-//
-//
-//                //                let user = self.ref.child(uid)
-//                //                let exp = user.child("Experience3")
-//                //                exp.child("name").setValue("Out at night")
-//                //                exp.child("description").setValue("Strolling through the city centre at night")
-//                //                exp.child("panoramas").child("image").setValue("https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf")
-//
-//
-//
-//
-//
-//
-//
-//
-////                let childUpdate = [ "/user/\(uid)/\(PanID)" : imgObjInfo]
-////                self.ref.updateChildValues(childUpdate)
-////
-////                DispatchQueue.main.async(execute: {
-////                    self.ref.updateChildValues(childUpdates)
-////                })
-////
-////                DispatchQueue.main.async(execute: {
-////                     self.ref.updateChildValues(childUpdate)
-////                })
-//
-//            } else {
-//                print("fail")
-//            }
+
         }
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)

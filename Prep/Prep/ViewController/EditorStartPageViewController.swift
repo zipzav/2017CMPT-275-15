@@ -69,11 +69,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         }
 
         fetchPanoramas()
-//        experienceTitle.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
-//        experienceTitle.numberOfLines = 0
-//        experienceDescription.lineBreakMode = .byWordWrapping // notice the 'b' instead of 'B'
-//        experienceDescription.numberOfLines = 0
-        
         
         // Setup table view
         panoramatableview = PanoramaTableView()
@@ -108,19 +103,19 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             return
         }
         
-        guard GlobalcurrentExperienceIndex == -1 else {
-            return
-        }
+//        guard GlobalcurrentExperienceIndex == -1 else {
+//            return
+//        }
         experienceRef = ref.child("user").child(uid).child(ExperienceID)
 
         _refHandle = experienceRef.observe(.childAdded, with: { (snapshot) -> Void in
             
-            
-            GlobalPanoramaSnapshots.append(snapshot)
+            // TODO: Perhaps use snapshot.children to improve loading speed
                 
             let snapObject = snapshot.value as? [String: AnyObject]
             if let image = snapObject?["image"] {
-                //print(image)
+                
+                GlobalPanoramaSnapshots.append(snapshot)
                 
                 // Convert Url to UIImage
                 let url = URL(string:image as! String)
@@ -139,12 +134,10 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                     let num = self.currentExperience?.numPanorama()
                     print("currentExperience has pan : \(num)")
                     DispatchQueue.main.async(execute: {
-                        self.panoramatableview.insertRows(at: [IndexPath(row: GlobalPanoramaSnapshots.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+                        // Reloads table view
+                        self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                     })
                 }
-                //DispatchQueue.main.async(execute: {
-                //self.collectionView.reloadData()
-                //})
             }
         }, withCancel: nil)
         
@@ -187,15 +180,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         
         return cell
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @IBAction func trashButton(_ sender: UIButton) {
         
@@ -263,20 +247,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         if let uid = Auth.auth().currentUser?.uid {
             print("Upload Succeeded!")
             trashButtonOutlet.isEnabled = true
+            // Generate a unique ID for the panorama object and store it to realtime database
             PanoramaID = ref.child(ExperienceID).childByAutoId().key
-            
-            // Store experience object along with image to database
-//            let name = experienceTitle.text
-//            let description = experienceDescription.text
-//
-//            let object = ["name": name ?? "default name",
-//                          "description": description ?? "default description",
-//                          PanoramaID : ["image": "\(fileURL.absoluteString)"]
-//                ] as [String : Any]
-//
-//            let childUpdates = ["/user/\(GlobalUserID!)" : [ExperienceID: object]]
-            
-            //ref.child("user").child(uid).child(ExperienceID).child(PanoramaID).setValue(["image":fileURL])
             ref.child("user/\(uid)/\(ExperienceID)").child(PanoramaID).setValue(["image":"\(fileURL.absoluteString)"])
         }
     }
