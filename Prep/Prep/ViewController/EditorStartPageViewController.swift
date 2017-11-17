@@ -22,7 +22,7 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     }
 }
 
-var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
+//var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
 
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
   //  @IBOutlet weak var panoramatableview: PanoramaTableView!
@@ -30,8 +30,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     var currentExperience: Experience? = nil
     
     @IBOutlet weak var experienceTitle: UITextField!
-    
-    
     @IBOutlet weak var experienceDescription: UITextView!
     
     @IBOutlet weak var trashButtonOutlet: UIButton!
@@ -104,9 +102,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         }
         
         currentExperience?.panoramas.removeAll()
-//        guard GlobalcurrentExperienceIndex == -1 else {
-//            return
-//        }
         experienceRef = ref.child("user").child(uid).child(ExperienceID)
 
         _refHandle = experienceRef.observe(.childAdded, with: { (snapshot) -> Void in
@@ -116,24 +111,14 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             let snapObject = snapshot.value as? [String: AnyObject]
             if let image = snapObject?["image"] {
                 
-                GlobalPanoramaSnapshots.append(snapshot)
+                //GlobalPanoramaSnapshots.append(snapshot)
                 
                 // Convert Url to UIImage
                 let url = URL(string:image as! String)
                 if let data = try? Data(contentsOf: url!) {
                     self.currentExperience?.addPanorama(newImage: UIImage(data: data)!)
-                    //arrayOfExperiences += [self.currentExperience!]
                     
-                    print("New count for arrayOfExperiences \(arrayOfExperiences.count)")
-                    
-                    if let sec = self.panoramatableview?.numberOfSections {
-                        print("panoramatableview: num of sec \(sec) ")
-                        let cell = self.panoramatableview.numberOfRows(inSection: 0)
-                        print("panoramatableview: num of cell \(cell)")
-                        
-                    }
                     let num = self.currentExperience?.numPanorama()
-                    print("currentExperience has pan : \(num)")
                     DispatchQueue.main.async(execute: {
                         // Reloads table view
                         self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
@@ -180,6 +165,10 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             cell.imageView?.clipsToBounds = true
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Go to ExperienceEditor
     }
     
     @IBAction func trashButton(_ sender: UIButton) {
@@ -237,7 +226,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                         return
                     }
                     // Handle fileURL by real time database
-                    print("file URL is \(fileURL?.absoluteString)")
                     self?.uploadSuccess(fileURL!)
                 })
             }
