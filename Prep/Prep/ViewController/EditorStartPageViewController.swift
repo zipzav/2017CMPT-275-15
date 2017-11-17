@@ -103,6 +103,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             return
         }
         
+        currentExperience?.panoramas.removeAll()
 //        guard GlobalcurrentExperienceIndex == -1 else {
 //            return
 //        }
@@ -188,7 +189,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         } else {
             ref.child("user").child(GlobalUserID!).child(ExperienceID).removeValue()
         }
-        self.navigationController?.popViewController(animated: true)
+        self.performSegue(withIdentifier: "SaveAndGoToHomePage", sender: self)
     }
     
     @IBAction func saveAndUploadButton(_ sender: UIButton) {

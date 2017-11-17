@@ -129,11 +129,11 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8g-UF-OaF">
-                                <rect key="frame" x="446" y="652" width="117" height="30"/>
+                                <rect key="frame" x="444" y="652" width="122" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Edtior Start Page"/>
+                                <state key="normal" title="Upload premades"/>
                                 <connections>
-                                    <segue destination="4Bf-up-AFb" kind="show" id="fJb-vL-4Kp"/>
+                                    <action selector="uploadPreMades:" destination="ILP-Ib-Gy2" eventType="touchUpInside" id="hWg-Lr-mji"/>
                                 </connections>
                             </button>
                         </subviews>

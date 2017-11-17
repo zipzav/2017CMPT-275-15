@@ -115,6 +115,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             return
         }
         
+        arrayOfImages.removeAll()
+        arrayOfTitles.removeAll()
+        arrayOfExperiences.removeAll()
+        GlobalExperienceSnapshots.removeAll()
+        
         // Assign unqiue user id from FireaseAuth to global variable
         GlobalUserID = uid
         
@@ -123,7 +128,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         // Listen for any add child node events in the database and update collection view
         userRef.observe(.childAdded, with: { (snapshot) -> Void in
-            // Store Id in newly creatd experience object
+            // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
 
@@ -145,13 +150,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                             exp?.addPanorama(newImage: UIImage(data: data)!)
                             
                             //Append the data to our array
-                            arrayOfExperiences += [exp!]
+                            arrayOfExperiences.append(exp!)
                             GlobalExperienceSnapshots.append(snapshot)
                             
-                            //DispatchQueue.main.async(execute: {
-                                self.collectionView.insertItems(at: [IndexPath(row: (exp?.numPanorama())!-1, section: 0)])
-                            //})
-                            
+                            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
                         }
                     }
                 }
@@ -160,7 +162,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         }, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
-        userRef.observe(.childRemoved, with: { (snapshot) -> Void in
+        ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
             //guard let selectedIndexPaths = self.collectionView?.indexPathsForSelectedItems else { return }
             
             let index = self.indexOfMessage(snapshot)
@@ -174,6 +176,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             })
             
         }, withCancel: nil)
+        
     }
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
@@ -234,26 +237,34 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? CollectionViewCell else { return }
 
-        let experienceSnapshot = GlobalExperienceSnapshots[indexPath.item]
-        guard let exp = experienceSnapshot.value as? [String : AnyObject] else { return }
+//        let experienceSnapshot = GlobalExperienceSnapshots[indexPath.item]
+//        guard let exp = experienceSnapshot.value as? [String : AnyObject] else { return }
+//        let title = cell.title
+//        title!.text = exp["name"] as! String
+//
+//        let imageView = cell.previewImage
+//
+//        for childsnap in experienceSnapshot.children.allObjects as! [DataSnapshot] {
+//
+//            if let snapObject = childsnap.value as? [String: String] {
+//                if let image = snapObject["image"] {
+//                    // Convert Url to UIImage
+//                    let url = URL(string:image)
+//                    let data = try? Data(contentsOf: url!)
+//                    if let image: UIImage = UIImage(data: data!) {
+//                        imageView!.image = image
+//                    }
+//                }
+//            }
+//        }
+        
+        let cellExperiences = arrayOfExperiences[indexPath.row]
+        print(cellExperiences.getId())
         let title = cell.title
-        title!.text = exp["name"] as! String
+        title!.text = cellExperiences.getTitle()
 
         let imageView = cell.previewImage
-        
-        for childsnap in experienceSnapshot.children.allObjects as! [DataSnapshot] {
-
-            if let snapObject = childsnap.value as? [String: String] {
-                if let image = snapObject["image"] {
-                    // Convert Url to UIImage
-                    let url = URL(string:image)
-                    let data = try? Data(contentsOf: url!)
-                    if let image: UIImage = UIImage(data: data!) {
-                        imageView!.image = image
-                    }
-                }
-            }
-        }
+        imageView!.image = cellExperiences.getPanorama(index: 0)
         
         // Add Style
         //let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
@@ -278,6 +289,26 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
         //self.navigationController?.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController!, animated: true)
+    }
+    @IBAction func uploadPreMades(_ sender: UIButton) {
+        
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            
+            let ExperienceID = ref.child(uid).childByAutoId().key
+            let PanID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            
+            let imgObjInfo = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
+            
+            
+            let userObjInfo = ["name": "Out at night",
+                               "description": "Strolling through the city centre at night",
+                               PanID : imgObjInfo
+                ] as [String : Any]
+            
+            ref.child("user").child(uid).child(ExperienceID).setValue(userObjInfo)
+            
+        }
     }
     
     @objc func longPress(press:UILongPressGestureRecognizer)
