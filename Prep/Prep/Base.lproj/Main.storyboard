@@ -160,6 +160,7 @@
                     <connections>
                         <outlet property="addButton" destination="aZh-ou-EQ8" id="M77-Av-mTy"/>
                         <outlet property="collectionView" destination="NcZ-cG-YgM" id="JMr-xl-QqM"/>
+                        <segue destination="4Bf-up-AFb" kind="show" identifier="HomePageToEditorStartPage" id="ytS-St-Bpf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecM-dE-1hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -307,7 +308,7 @@
                         <outlet property="saveButtonOutlet" destination="ZbO-cS-oRd" id="bBz-DP-5v6"/>
                         <outlet property="trashButtonOutlet" destination="bEt-bp-Wis" id="esY-NT-gtT"/>
                         <outlet property="urlTextView" destination="9hW-Sy-Tda" id="m0S-1p-nEG"/>
-                        <segue destination="ILP-Ib-Gy2" kind="show" identifier="SaveAndGoToHomePage" id="VO9-bZ-EBk"/>
+                        <segue destination="ILP-Ib-Gy2" kind="show" identifier="EditorStartPageToHomePage" id="VO9-bZ-EBk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -459,6 +460,6 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VO9-bZ-EBk"/>
+        <segue reference="qJE-tH-mdn"/>
     </inferredMetricsTieBreakers>
 </document>

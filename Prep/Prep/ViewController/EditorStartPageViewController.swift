@@ -62,6 +62,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         } else {
             // new experience
             trashButtonOutlet.isEnabled = false
+            saveButtonOutlet.isEnabled = false
             ExperienceID = ref.child(GlobalUserID!).childByAutoId().key
             currentExperience = Experience(Name: "", Description: "", Id: ExperienceID);
         }
@@ -118,7 +119,10 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 if let data = try? Data(contentsOf: url!) {
                     self.currentExperience?.addPanorama(newImage: UIImage(data: data)!)
                     
-                    let num = self.currentExperience?.numPanorama()
+                    if self.currentExperience!.numPanorama() > 0 {
+                        self.saveButtonOutlet.isEnabled = true
+                    }
+                    
                     DispatchQueue.main.async(execute: {
                         // Reloads table view
                         self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
@@ -178,7 +182,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         } else {
             ref.child("user").child(GlobalUserID!).child(ExperienceID).removeValue()
         }
-        self.performSegue(withIdentifier: "SaveAndGoToHomePage", sender: self)
+        self.performSegue(withIdentifier: "EditorStartPageToHomePage", sender: self)
     }
     
     @IBAction func saveAndUploadButton(_ sender: UIButton) {
@@ -192,7 +196,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 ]
             //ref.child("user").child(uid).child(ExperienceID).child(PanoramaID).setValue(["image":fileURL])
             ref.child("user/\(uid)/\(ExperienceID)").updateChildValues(object)
-            self.performSegue(withIdentifier: "SaveAndGoToHomePage", sender: self)
+            self.performSegue(withIdentifier: "EditorStartPageToHomePage", sender: self)
         }
     }
     

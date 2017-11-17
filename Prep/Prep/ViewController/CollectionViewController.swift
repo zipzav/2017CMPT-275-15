@@ -270,8 +270,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 GlobalcurrentExperienceIndex = indexPath!.row
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
                 GlobalCurrentExperienceID = GlobalCurrentExperience?.key // get experience id
-                let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                self.navigationController?.pushViewController(viewController!, animated: true)
+                
+                performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                //let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
+                //self.navigationController?.pushViewController(viewController!, animated: true)
                 
             }
         }
@@ -289,8 +291,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             button in
             // Did Tap Button
             GlobalcurrentExperienceIndex = -1 // -1 for new experience
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-            self.navigationController?.pushViewController(viewController!, animated: true)
+            self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+//            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
+//            self.navigationController?.pushViewController(viewController!, animated: true)
         }
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
