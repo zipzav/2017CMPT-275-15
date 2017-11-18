@@ -248,10 +248,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         if let uid = Auth.auth().currentUser?.uid {
             let ExperienceID = ref.child(uid).childByAutoId().key
             let PanID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            
-            let img = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
-            let object = ["name": "Out at night",
-                               "description": "Strolling through the city centre at night",
+            let numPanoramas = 4;
+            let img = ["panorama1": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c"]
+            let object = ["name": "Day in the City",
+                               "description": "We'll be riding a train to the city, ",
                                PanID : img
                 ] as [String : Any]
             
