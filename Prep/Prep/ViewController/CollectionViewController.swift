@@ -247,15 +247,28 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         if let uid = Auth.auth().currentUser?.uid {
             let ExperienceID = ref.child(uid).childByAutoId().key
-            let PanID = ref.child(uid).child(ExperienceID).childByAutoId().key
             
-            let img = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
-            let object = ["name": "Out at night",
-                               "description": "Strolling through the city centre at night",
-                               PanID : img
-                ] as [String : Any]
+            let panNightID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let panCoffeeID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let panTrainID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let panTownID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            //test to see if next panorama works
+            let nightImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c"]
+            let coffeeImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience2.jpg?alt=media&token=20b85093-1ed5-4fee-9014-64cf394c19d6"]
+            let trainImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience9.jpg?alt=media&token=6b16efef-00d8-4be5-b058-d74970131324"]
+            let townImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience4.jpg?alt=media&token=026b35e4-e01c-413f-92db-fd433a3a113c"]
             
-            ref.child("user").child(uid).child(ExperienceID).setValue(object)
+            let premadeObject = ["name": "stuff", "description": "stuff", panNightID : nightImg, panCoffeeID : coffeeImg, panTrainID : trainImg, panTownID : townImg  ] as [String : Any]
+            
+            //let PanID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            
+            //let img = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
+            //let object = ["name": "Out at night",
+                               //"description": "Strolling through the city centre at night",
+                              // PanID : img
+                //] as [String : Any]
+            
+            ref.child("user").child(uid).child(ExperienceID).setValue(premadeObject)
             
         }
     }

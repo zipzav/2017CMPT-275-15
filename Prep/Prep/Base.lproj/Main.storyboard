@@ -460,6 +460,7 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="ytS-St-Bpf"/>
         <segue reference="VO9-bZ-EBk"/>
     </inferredMetricsTieBreakers>
 </document>
