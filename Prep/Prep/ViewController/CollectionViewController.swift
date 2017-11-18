@@ -78,6 +78,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         //initializePreMades()
         floatingButton()
+        navigationItem.hidesBackButton = true
         addButton.isEnabled = false
         
         // Set the Firebase reference
