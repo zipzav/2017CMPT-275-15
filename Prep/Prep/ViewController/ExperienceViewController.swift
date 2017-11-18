@@ -25,7 +25,10 @@ class ExperienceViewController: UIViewController {
         if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){//If the user is at the last panorama, send a congratulations
             let alert = UIAlertController(title: "Congratulations", message: "You have finished the experience. Congratulations", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .`default`, handler: { _ in
-                self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                //self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "homepage")
+                self.navigationController?.pushViewController(viewController!, animated: true)
+                
             }))
             
             var topController = UIApplication.shared.keyWindow?.rootViewController
