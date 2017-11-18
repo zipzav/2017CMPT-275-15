@@ -123,10 +123,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                         self.saveButtonOutlet.isEnabled = true
                     }
                     
-                    DispatchQueue.main.async(execute: {
-                        // Reloads table view
-                        self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
-                    })
+                    // Reloads table view
+                    self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                 }
             }
         }, withCancel: nil)
@@ -134,12 +132,11 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationItem.setHidesBackButton(true, animated: false)
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        if let refHandle = _refHandle {
-//            ref.child("user").child((Auth.auth().currentUser?.uid)!).removeObserver(withHandle: refHandle)
-//        }
         experienceRef.removeAllObservers()
     }
     
@@ -156,7 +153,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cellIdentifier = "UITableViewCell"
-        //let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
             fatalError("The dequeued cell is not an instance of PanoramaTableViewCell.")
@@ -194,7 +190,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             let object = ["name": name ?? "default name",
                           "description": description ?? "default description"
                 ]
-            //ref.child("user").child(uid).child(ExperienceID).child(PanoramaID).setValue(["image":fileURL])
             ref.child("user/\(uid)/\(ExperienceID)").updateChildValues(object)
             self.performSegue(withIdentifier: "EditorStartPageToHomePage", sender: self)
         }
@@ -233,7 +228,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                     self?.uploadSuccess(fileURL!)
                 })
             }
-//        }
     }
     
     func uploadSuccess(_ fileURL: URL) {

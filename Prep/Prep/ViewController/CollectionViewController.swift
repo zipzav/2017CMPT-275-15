@@ -128,16 +128,16 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         let url = URL(string:image)
                         if let data = try? Data(contentsOf: url!) {
                             exp?.addPanorama(newImage: UIImage(data: data)!)
-                            
-                            //Append the data to our array
-                            arrayOfExperiences.append(exp!)
-                            GlobalExperienceSnapshots.append(snapshot)
-                            
-                            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
                         }
                     }
                 }
             }
+            //Append the data to our array
+            arrayOfExperiences.append(exp!)
+            GlobalExperienceSnapshots.append(snapshot)
+            
+            // Update collection view
+            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
             
         }, withCancel: nil)
         
