@@ -60,6 +60,11 @@
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
+		<key>OpenCV.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
 		<key>Pods-Prep.xcscheme</key>
 		<dict>
 			<key>isShown</key>
