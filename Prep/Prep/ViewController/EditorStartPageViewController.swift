@@ -259,7 +259,10 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         // Hide keyboard when user tap screen
         experienceTitle.resignFirstResponder()
         experienceDescription.resignFirstResponder()
+        
     }
+    
+    
     
 }
 

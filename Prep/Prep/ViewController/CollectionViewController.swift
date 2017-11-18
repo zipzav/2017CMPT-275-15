@@ -270,8 +270,37 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 GlobalcurrentExperienceIndex = indexPath!.row
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
                 GlobalCurrentExperienceID = GlobalCurrentExperience?.key // get experience id
+                let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
+                let goToEditor = UIAlertAction(title: "Edit", style: .default) { (action) in
+                    //GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
+                    //GlobalcurrentExperienceIndex = indexPath!.row
+                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
+                    self.navigationController?.pushViewController(viewController!, animated: true)
+                }
+                let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
+                    //var data: EditorStartPageController()
+                    if GlobalcurrentExperienceIndex != -1 {
+                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+                    } else {
+                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+                    }
+                }
                 
-                performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                sheet.addAction(goToEditor)
+                sheet.addAction(deleteExp)
+                sheet.addAction(backToHome)
+                
+                let popOver = sheet.popoverPresentationController
+                popOver?.sourceView = collectionView.cellForItem(at: indexPath!)
+                popOver?.sourceRect = (collectionView.cellForItem(at: indexPath!)?.bounds)!
+                popOver?.permittedArrowDirections = UIPopoverArrowDirection.any
+                
+                present(sheet, animated: true, completion: nil)
+                
+                //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+                //self.navigationController?.pushViewController(viewController!, animated: true)
+                //performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 //let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
                 //self.navigationController?.pushViewController(viewController!, animated: true)
                 
