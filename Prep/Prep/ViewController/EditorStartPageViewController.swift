@@ -36,6 +36,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     @IBOutlet weak var saveButtonOutlet: UIButton!
     
     @IBOutlet weak var urlTextView: UITextField!
+    
     // Create a storage reference from our storage service
     var storageRef: StorageReference!
     
@@ -51,20 +52,22 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         // configure storage
         storageRef = Storage.storage().reference()
         
-        // Setup TextView
         if GlobalcurrentExperienceIndex != -1 {
-            // Setup textfield when user selects existing experience
+            // Setup TextView when existing experience have been selected
             currentExperience = arrayOfExperiences[GlobalcurrentExperienceIndex]
             experienceTitle.text = currentExperience?.getTitle()
             experienceDescription.text = currentExperience?.getDescription()
+            // Setup identifier 
             ExperienceID = GlobalCurrentExperienceID!
             PanoramaID = ref.child(ExperienceID).childByAutoId().key
         } else {
-            // new experience
-            trashButtonOutlet.isEnabled = false
-            saveButtonOutlet.isEnabled = false
+            // Create an object for New experience
             ExperienceID = ref.child(GlobalUserID!).childByAutoId().key
             currentExperience = Experience(Name: "", Description: "", Id: ExperienceID);
+            // Disable save and trash button because we have not create a child node that is 
+            // named after ExperienceID in database
+            trashButtonOutlet.isEnabled = false 
+            saveButtonOutlet.isEnabled = false
         }
 
         fetchPanoramas()
@@ -102,13 +105,16 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             return
         }
         
+        // array will only be clear when scene is being initialized
         currentExperience?.panoramas.removeAll()
+        
+        // Create a Reference to particular child node in database
         experienceRef = ref.child("user").child(uid).child(ExperienceID)
 
+        // Load Panoramas and listen for any new child node being added to database
         _refHandle = experienceRef.observe(.childAdded, with: { (snapshot) -> Void in
             
             // TODO: Perhaps use snapshot.children to improve loading speed
-                
             let snapObject = snapshot.value as? [String: AnyObject]
             if let image = snapObject?["image"] {
                 
@@ -119,10 +125,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 if let data = try? Data(contentsOf: url!) {
                     self.currentExperience?.addPanorama(newImage: UIImage(data: data)!)
                     
-                    if self.currentExperience!.numPanorama() > 0 {
-                        self.saveButtonOutlet.isEnabled = true
-                    }
-                    
                     // Reloads table view
                     self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                 }
@@ -132,9 +134,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         
         
     }
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationItem.setHidesBackButton(true, animated: false)
-    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         experienceRef.removeAllObservers()
@@ -157,7 +157,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
             fatalError("The dequeued cell is not an instance of PanoramaTableViewCell.")
         }
-        
             let panorama = currentExperience?.panoramas[indexPath.row]
             cell.imageView?.image = panorama?.getImage()
             cell.imageView?.frame = CGRect(x: 0,y: 0,width: 401,height: 150)
@@ -168,11 +167,11 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Go to ExperienceEditor
+        // TODO: Go to ExperienceEditor
     }
     
     @IBAction func trashButton(_ sender: UIButton) {
-        
+        // Remove child node and its subfields from database
         if GlobalcurrentExperienceIndex != -1 {
             ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
         } else {
@@ -183,13 +182,15 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     @IBAction func saveAndUploadButton(_ sender: UIButton) {
         if let uid = Auth.auth().currentUser?.uid {
-            // Store experience object along with image to database
+            // Note that the node that is named after the ExperienceID already contain all
+            // the panorama uploaded to storage and database
             let name = experienceTitle.text
             let description = experienceDescription.text
 
             let object = ["name": name ?? "default name",
                           "description": description ?? "default description"
                 ]
+            // Store name and description
             ref.child("user/\(uid)/\(ExperienceID)").updateChildValues(object)
             self.performSegue(withIdentifier: "EditorStartPageToHomePage", sender: self)
         }
@@ -199,7 +200,9 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     @IBAction func didTapTakPicture(_ sender: AnyObject) {
         let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app
+        
+        // Configure ImagePickerController
+        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't use .camera
         picker.delegate = self
         picker.allowsEditing = false
         picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
@@ -210,7 +213,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion:nil)
         
-        urlTextView.text = "Beginning Upload"
+        urlTextView.text = "Beginning Upload" // TODO: Use UI Framework to notify user about the upload status
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage
             {
                 var imageUploadManager = UploadManager()
@@ -232,11 +235,19 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     func uploadSuccess(_ fileURL: URL) {
         if let uid = Auth.auth().currentUser?.uid {
+             // Photo uploaded to firebase storage, nowa add image URL to realtime database
             print("Upload Succeeded!")
-            trashButtonOutlet.isEnabled = true
+            
             // Generate a unique ID for the panorama object and store it to realtime database
             PanoramaID = ref.child(ExperienceID).childByAutoId().key
             ref.child("user/\(uid)/\(ExperienceID)").child(PanoramaID).setValue(["image":"\(fileURL.absoluteString)"])
+            
+            // Enable save and trash button because a child node that is named after ExperienceID have been
+            // added to the database so there is stuff the delete
+            // for the same reason, back button must be disabled
+            trashButtonOutlet.isEnabled = true
+            saveButtonOutlet.isEnabled = true
+            self.navigationItem.setHidesBackButton(true, animated: true)
         }
     }
     
@@ -245,6 +256,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?){
+        // Hide keyboard when user tap screen
         experienceTitle.resignFirstResponder()
         experienceDescription.resignFirstResponder()
     }
