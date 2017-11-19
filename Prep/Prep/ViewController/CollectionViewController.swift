@@ -28,6 +28,16 @@ var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
 var ref: DatabaseReference!
+var firstload = false
+extension UIRefreshControl {
+    func refreshManually() {
+        if let scrollView = superview as? UIScrollView {
+            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - frame.height), animated: false)
+        }
+        beginRefreshing()
+        sendActions(for: .valueChanged)
+    }
+}
 
 class CollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -55,17 +65,22 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         floatingButton()
         navigationItem.hidesBackButton = true
         addButton.isEnabled = false
+        self.collectionView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         // Set the Firebase reference
         ref = Database.database().reference()
         // Listen for new experience in the Firebase database
+        //DispatchQueue.main.async {
+            self.refreshControl.beginRefreshing()
+        //}
+        //if(firstload == false){
         fetchExperience()
-        self.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+        //   firstload = true;
+        //}
+        //self.collectionView.reloadData()
         //self.collectionView.reloadData()
         //fetchprogress.text = "Done Retrieving Data"
+        
     }
 
     @objc private func refreshExperienceData(_ sender: Any) {
@@ -146,10 +161,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             arrayOfExperiences.append(exp!)
             GlobalExperienceSnapshots.append(snapshot)
             
-            // Update collection view
-            //self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
+            //ß Update collection view
+            //DispatchQueue.main.async {
+                self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
+            self.refreshControl.endRefreshing()
+            //}
+
             
-        //}, withCancel: nil)
+        }, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
         //ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
@@ -160,7 +179,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //        self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
         //    })
         //
-        }, withCancel: nil)
+        //}, withCancel: nil)
             
         
     }
@@ -248,9 +267,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         GlobalCurrentExperience = arrayOfExperiences[indexPath.row]
         GlobalcurrentExperienceIndex = indexPath.row
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
+        //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
         //self.navigationController?.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(viewController!, animated: true)
+        //self.navigationController?.pushViewController(viewController!, animated: true)
+        //performSegue(withIdentifier: "HomeToViewer", sender: self)
+        
     }
     
     @IBAction func uploadPreMades(_ sender: UIButton) {
@@ -319,8 +340,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                 let goToEditor = UIAlertAction(title: "Edit", style: .default) { (action) in
                     GlobalcurrentExperienceIndex = indexPath!.row
-                    let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                    self.navigationController?.pushViewController(viewController!, animated: true)
+                    //let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
+                    //self.navigationController?.pushViewController(viewController!, animated: true)
+                    self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)

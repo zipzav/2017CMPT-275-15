@@ -47,6 +47,7 @@ class LogInViewController: UIViewController {
         SignInButton.layer.cornerRadius = 5
         SignInButton.layer.borderWidth = 1
         SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
+        var firstload = false
    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

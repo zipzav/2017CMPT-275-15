@@ -39,7 +39,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8GC-Wk-tqb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-687" y="1102"/>
+            <point key="canvasLocation" x="-854" y="1393"/>
         </scene>
         <!--Panorama Capture View Controller-->
         <scene sceneID="1gL-2v-sDi">
@@ -120,6 +120,7 @@
                                         <connections>
                                             <outlet property="previewImage" destination="T2D-X5-0Sp" id="xnm-Kg-Q2m"/>
                                             <outlet property="title" destination="CxO-l5-Nrm" id="4Fv-e5-eDh"/>
+                                            <segue destination="1iv-r4-FCH" kind="show" identifier="HomeToViewer" id="EA6-sL-iS9"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -165,7 +166,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecM-dE-1hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-687.3046875" y="409.375"/>
+            <point key="canvasLocation" x="-881" y="538"/>
         </scene>
         <!--Setting View Controller-->
         <scene sceneID="ibX-DS-glX">
@@ -463,6 +464,7 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qJE-tH-mdn"/>
+        <segue reference="ytS-St-Bpf"/>
+        <segue reference="VO9-bZ-EBk"/>
     </inferredMetricsTieBreakers>
 </document>
