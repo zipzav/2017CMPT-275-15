@@ -29,8 +29,8 @@ class Experience{
     func addPanorama(newPanorama:Panorama){
         panoramas.append(newPanorama)
     }
-    func addPanorama(newImage:UIImage){
-        var newPanorama:Panorama = Panorama(Image:newImage)
+    func addPanorama(newImage:UIImage,Id:String) {
+        let newPanorama:Panorama = Panorama(Image:newImage, Id: Id)
         panoramas.append(newPanorama)
     }
     func getPanorama(index:Int)->UIImage{
@@ -65,13 +65,15 @@ class Panorama{
     var buttonObject : [String?]
     var buttonsPressed : Int //A counter? You could probably check how many buttons there are in buttonObect Array and compare against this value
     var nextPanoramaButtonLocation: SCNVector3
+    var key :String
     
-    init(Image:UIImage){
+    init(Image:UIImage, Id:String){
         image = Image
         buttonsPressed = 0
         buttonLocation = [SCNVector3]()
         buttonObject = [String?]()
         nextPanoramaButtonLocation = SCNVector3Make(0, 0, 0)
+        key = Id
     }
     func addButton(newButtonLocation:SCNVector3,newObject:String?){
         buttonLocation.append(newButtonLocation)
@@ -82,5 +84,11 @@ class Panorama{
     }
     func getImage()->UIImage{
         return image
+    }
+    func setId(newId: String){
+        key = newId
+    }
+    func getId()->String{
+        return key
     }
 }

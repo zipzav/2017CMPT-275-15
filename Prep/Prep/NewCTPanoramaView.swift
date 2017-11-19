@@ -159,8 +159,8 @@ extension ExperienceViewController {
                     if (buttonNodes[index] == node){
                         buttonPressedFlag[index] = true
                         let urlStr = buttonActions[index]
-                        let url = NSURL(fileURLWithPath: urlStr!)
-                        ExperienceViewController().Video(movieUrl: url as URL)
+                        let url = NSURL(string: urlStr!)
+                        ExperienceViewController().Video(movieUrl: url as! URL)
                     }
                 }
             }

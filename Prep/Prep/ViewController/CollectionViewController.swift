@@ -37,6 +37,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
+    private let refreshControl = UIRefreshControl()
     var cellSelected:IndexPath?
     
     var userRef: DatabaseReference!
@@ -45,34 +46,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     var arrayOfSnapshotKeys = [String]()
     
-//    func initializePreMades(){
-//        var Experience1: Experience = Experience(Name: "Day at the Park", Description: "A whole day trip around London. We'll ride the train in the moring . We'll go shopping at the city centre, eat lunch at the park");
-//
-//        //add Panorama
-//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience2"))
-//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience9"))
-//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience4"))
-//        Experience1.addPanorama(newImage: #imageLiteral(resourceName: "Experience5"))
-//
-//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "waitinginline", ofType: "mp4")!)
-//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "outdoor-crowd-noise", ofType: "wav")!)
-//        Experience1.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "baristainteraction", ofType: "mp4")!)
-//        Experience1.panoramas[0].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
-//
-//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
-//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: -5 , y: 0 ,z: -5), newObject: Bundle.main.path(forResource: "car-pass", ofType: "wav")!)
-//        Experience1.panoramas[1].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
-//        Experience1.panoramas[1].addNextPanoramaButton(nextButtonLocation: SCNVector3(x: 3 , y: 1 ,z: 5))
-//        arrayOfExperiences += [Experience1]
-//
-//        var Experience2: Experience = Experience(Name: "Out at night", Description: "Strolling through the city centre at night")
-//        Experience2.addPanorama(newImage: #imageLiteral(resourceName: "Experience8"))
-//        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 5 , y: 0 ,z: 5), newObject: Bundle.main.path(forResource: "car_honk", ofType: "wav")!)
-//        Experience2.panoramas[0].addButton(newButtonLocation: SCNVector3(x: 7 , y: 1 ,z: 5), newObject: Bundle.main.path(forResource: "dogs-barking", ofType: "wav")!)
-//        arrayOfExperiences += [Experience2];
-//
-//    }
-
+    @IBOutlet weak var fetchprogress: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,16 +55,28 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         floatingButton()
         navigationItem.hidesBackButton = true
         addButton.isEnabled = false
-        
         // Set the Firebase reference
         ref = Database.database().reference()
-        
         // Listen for new experience in the Firebase database
         fetchExperience()
-        
-        arrayOfColors = [UIColor.blue,UIColor.purple,UIColor.cyan,UIColor.brown,UIColor.gray,UIColor.yellow,UIColor.orange]
+        self.collectionView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        //self.collectionView.reloadData()
+        //fetchprogress.text = "Done Retrieving Data"
     }
 
+    @objc private func refreshExperienceData(_ sender: Any) {
+        // Fetch Weather Data
+        //fetchExperience()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        self.refreshControl.endRefreshing()
+        //self.activityIndicatorView.stopAnimating()
+    }
     func fetchExperience() {
         var exp: Experience?
         
@@ -120,38 +107,61 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 
             }
             
+            
+            
+            var panoindex = 0 //each snap Object is one panorama
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
                 self.arrayOfSnapshotKeys.append(snap.key)
-                if let snapObject = snap.value as? [String: String] {
-                    
+                if let snapObject = snap.value as? [String: AnyObject] {
                     if let image = snapObject ["image"] {
                         //Convert Url to UIImage
-                        let url = URL(string:image)
+                        let url = URL(string:image as! String)
                         if let data = try? Data(contentsOf: url!) {
-                            exp?.addPanorama(newImage: UIImage(data: data)!)
+                            exp?.addPanorama(newImage: UIImage(data: data)!, Id: snap.key)
+                        }
+                        if let buttons = snapObject["button"]{
+                            for button in buttons as! NSMutableArray{
+                                let temp = button as! [String : AnyObject]
+                                let x = temp["locationx"] as! Int
+                                let y = temp["locationy"] as! Int
+                                let z = temp["locationz"] as! Int
+                            
+                                let actionurl = temp["action"] as! String
+                                if let data = try? Data(contentsOf: url!) {
+                                    exp?.panoramas[panoindex].addButton(
+                                    newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
+                                        newObject: actionurl)
+                            }
                         }
                     }
+                    
                 }
+                
+                panoindex += 1
             }
+            }
+            
+            
             //Append the data to our array
             arrayOfExperiences.append(exp!)
             GlobalExperienceSnapshots.append(snapshot)
             
             // Update collection view
-            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
+            //self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
             
-        }, withCancel: nil)
+        //}, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
-        ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
-            let index = self.indexOfMessage(snapshot)
-            GlobalExperienceSnapshots.remove(at: index)
-            arrayOfExperiences.remove(at: index)
-            DispatchQueue.main.async(execute: {
-                self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
-            })
-            
+        //ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
+        //    let index = self.indexOfMessage(snapshot)
+        //    GlobalExperienceSnapshots.remove(at: index)
+        //    arrayOfExperiences.remove(at: index)
+        //    DispatchQueue.main.async(execute: {
+        //        self.collectionView.deleteItems(at: [IndexPath(row: index, section: 0)])
+        //    })
+        //
         }, withCancel: nil)
+            
         
     }
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
@@ -247,30 +257,52 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         
         if let uid = Auth.auth().currentUser?.uid {
+            //First Pre-made Experience
             let ExperienceID = ref.child(uid).childByAutoId().key
             
-            let panNightID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            
             let panCoffeeID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTrainID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTownID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            //test to see if next panorama works
-            let nightImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c"]
-            let coffeeImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience2.jpg?alt=media&token=20b85093-1ed5-4fee-9014-64cf394c19d6"]
+            let panparkID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            
+
+            let button1ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let button2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let button3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+
+            
+            let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/waitinginline.mp4?alt=media&token=e9bf2128-26db-4327-8ed8-a486f1efecda", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
+            let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
+            let button3 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/baristainteraction.mp4?alt=media&token=76c3911a-fdcf-45df-be2f-9e8846a989ef", "locationx": 7, "locationy": 1, "locationz": 5] as [String : Any]
+            let buttonall = [button1, button2, button3]
+            let coffeeImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience2.jpg?alt=media&token=20b85093-1ed5-4fee-9014-64cf394c19d6", "button" : buttonall] as [String : Any]
+            let parkImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience5.jpg?alt=media&token=24420a39-9526-42c6-ba73-1f142fa3c834"]
             let trainImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience9.jpg?alt=media&token=6b16efef-00d8-4be5-b058-d74970131324"]
             let townImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience4.jpg?alt=media&token=026b35e4-e01c-413f-92db-fd433a3a113c"]
             
-            let premadeObject = ["name": "stuff", "description": "stuff", panNightID : nightImg, panCoffeeID : coffeeImg, panTrainID : trainImg, panTownID : townImg  ] as [String : Any]
-            
-            //let PanID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            
-            //let img = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/cylindrical.jpg?alt=media&token=7b78da27-160f-4150-9479-81ad93e462bf"]
-            //let object = ["name": "Out at night",
-                               //"description": "Strolling through the city centre at night",
-                              // PanID : img
-                //] as [String : Any]
+            let premadeObject = ["name": "Day in London", "description": "We'll be riding the train into London. Maybe some tea and biscuits with 'Nan. We'll head off to shop for knick-knacks and have a jolly good time by Big Ben",  panTrainID : trainImg, panCoffeeID : coffeeImg,  panTownID : townImg, panparkID : parkImg ] as [String : Any]
             
             ref.child("user").child(uid).child(ExperienceID).setValue(premadeObject)
+            //End First Pre-made Experience
+            //Second Pre-made Experience
+            let Experience2ID = ref.child(uid).childByAutoId().key
             
+            
+            let CityafterdarkID = ref.child(uid).child(Experience2ID).childByAutoId().key
+            
+            
+            let E2_button1ID = ref.child(uid).child(Experience2ID).childByAutoId().key
+            let E2_button2ID = ref.child(uid).child(Experience2ID).childByAutoId().key
+        
+            let E2_button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car-pass.wav?alt=media&token=39f3ef28-bf27-4708-9f92-ecd61982b193", "locationx": 2, "locationy": 0, "locationz": -2 ] as [String : Any]
+            let E2_button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car_honk.wav?alt=media&token=d046dca0-4008-477c-9b18-ff5b1f28b0dc", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
+            let E2_buttonall = [E2_button1, E2_button2]
+            let CityafterdarkImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c", "button" : E2_buttonall] as [String : Any]
+            
+            let E2_premadeObject = ["name": "Night at the city center", "description": "Downtown's noisy, ain't it? Let's be sure to look both ways when crossing the street",  CityafterdarkID : CityafterdarkImg ] as [String : Any]
+            
+            ref.child("user").child(uid).child(Experience2ID).setValue(E2_premadeObject)
         }
     }
     
@@ -286,20 +318,23 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 GlobalCurrentExperienceID = GlobalCurrentExperience?.key // get experience id
                 let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                 let goToEditor = UIAlertAction(title: "Edit", style: .default) { (action) in
-                    //GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
-                    //GlobalcurrentExperienceIndex = indexPath!.row
+                    GlobalcurrentExperienceIndex = indexPath!.row
                     let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
                     self.navigationController?.pushViewController(viewController!, animated: true)
                 }
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
-                    //var data: EditorStartPageController()
+                    //arrayOfExperiences.remove(at: indexPath!.row)
                     if GlobalcurrentExperienceIndex != -1 {
                         ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
                     } else {
                         ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
                     }
+                    GlobalExperienceSnapshots.remove(at: indexPath!.row)
+                    arrayOfExperiences.remove(at: indexPath!.row)
+                        DispatchQueue.main.async(execute: {
+                            self.collectionView.deleteItems(at: [indexPath!])
+                        })
                 }
-                
                 let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 sheet.addAction(goToEditor)
                 sheet.addAction(deleteExp)

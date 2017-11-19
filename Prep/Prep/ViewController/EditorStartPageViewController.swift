@@ -20,10 +20,10 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     convenience init(){
         self.init(frame:CGRect(x: 74, y: 232, width: 401, height: 482), style: UITableViewStyle.plain)
     }
+
 }
 
 //var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
-
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
   //  @IBOutlet weak var panoramatableview: PanoramaTableView!
     var panoramatableview: PanoramaTableView!
@@ -46,10 +46,14 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     var ExperienceID = ""
     var PanoramaID = ""
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // configure storage
+        //Swipe left to delete//
+        // During startup (-viewDidLoad or in storyboard) do:
+        //self.panoramatableview.allowsMultipleSelectionDuringEditing = false;
+
         storageRef = Storage.storage().reference()
         
         if GlobalcurrentExperienceIndex != -1 {
@@ -123,12 +127,13 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 // Convert Url to UIImage
                 let url = URL(string:image as! String)
                 if let data = try? Data(contentsOf: url!) {
-                    self.currentExperience?.addPanorama(newImage: UIImage(data: data)!)
-                    
+                    self.currentExperience?.addPanorama(newImage: UIImage(data: data)!, Id:
+                    snapshot.key)
                     // Reloads table view
                     self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                 }
             }
+            GlobalExperienceSnapshots.append(snapshot)
         }, withCancel: nil)
         
         
@@ -170,6 +175,39 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         // TODO: Go to ExperienceEditor
     }
     
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            // handle delete (by removing the data from your array and updating the tableview)
+            
+            let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this Panorama?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete action"), style: .`default`, handler: { _ in
+                if GlobalcurrentExperienceIndex != -1 {
+                    ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
+                } else {
+                    ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
+                }
+                //GlobalExperienceSnapshots.remove(at: indexPath!.row)
+                self.currentExperience?.panoramas.remove(at: indexPath.row)
+                DispatchQueue.main.async(execute: {
+                    self.panoramatableview.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                })
+            }
+            ))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Canel", comment: "Cancel action"), style: .`default`, handler: { _ in
+                //do nothing
+            }))
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(alert, animated: true, completion: nil)
+        }
+    }
     @IBAction func trashButton(_ sender: UIButton) {
         // Remove child node and its subfields from database
         if GlobalcurrentExperienceIndex != -1 {
