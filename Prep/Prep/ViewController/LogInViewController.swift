@@ -83,7 +83,7 @@ class LogInViewController: UIViewController {
                     }
                     else {
                         //Error
-                        
+                        self.showMessagePrompt("Email or password is incorrect.")
                     }
                 })
                 // ...
@@ -96,7 +96,10 @@ class LogInViewController: UIViewController {
                     }
                     else{
                         // TODO: Mandy, Please refer to this website for adding spinner and error message. https://github.com/firebase/quickstart-ios/blob/master/authentication/AuthenticationExampleSwift/EmailViewController.swift
-                        self.showMessagePrompt("email/password can't be empty")
+                        if (password.count < 6){
+                                self.showMessagePrompt("Password has to be at least length 6.")
+                        }
+                        self.showMessagePrompt("Email or password can't be empty.")
                     }
                 })
             }
