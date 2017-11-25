@@ -13,31 +13,44 @@
 import UIKit
 import AVFoundation
 import AVKit
+import SceneKit
 
+func round(val: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: round(val.x), y: round(val.y), z: round(val.z))
+}
+
+func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
+}
+
+func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
+}
+
+func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
+    return CGFloat(left.x * right.x + left.y * right.y + left.z * right.z)
+}
+
+
+func * (left: SCNVector3, right: Float) -> SCNVector3 {
+    return SCNVector3(x: left.x * right, y: left.y * right, z: left.z * right)
+}
+
+func * (left: Float, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left * right.x, y: left * right.y, z: left * right.z)
+}
 
 class ExperienceEditorViewController: UIViewController {
+    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
     var playerController = AVPlayerViewController()
     var avPlayer : AVPlayer?
-    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
-    @IBAction func next_panorama(_ sender: UIBarButtonItem) {
-        if(currentPanoramaIndex ==  (currentExperience?.panoramas.count)!-1){
-            currentPanoramaIndex = 0
-            loadImage()
-            experience_viewer_panorama.addButtons()
-        }
-        else{
-            currentPanoramaIndex += 1
-            loadImage()
-            experience_viewer_panorama.addButtons()
-        }
-        
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentPanoramaIndex = 0;
+        currentPanoramaIndex = GlobalCurrentPanoramaIndex_Edit;
         //currentExperience = initializeFirstExperience() we have to obtain the Experience from the Collection
         currentExperience = GlobalCurrentExperience
         loadImage()
@@ -55,11 +68,8 @@ class ExperienceEditorViewController: UIViewController {
     }
     
     func updateControlMethod(_ isTouch: Bool) {
-        if(isTouch) {
+        //Editor is always through touch
             experience_viewer_panorama.controlMethod = .touch
-        } else {
-            experience_viewer_panorama.controlMethod = .motion
-        }
     }
     
     //loads Panorama Image with the current currentPanoramaIndex, also sets the button locations and object

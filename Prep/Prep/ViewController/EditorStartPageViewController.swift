@@ -11,6 +11,7 @@ import Photos
 import FirebaseStorage
 import FirebaseAuth
 import FirebaseDatabase
+import SceneKit
 
 class PanoramaTableViewCell : UITableViewCell{
     var previewImage = UIImageView()
@@ -22,7 +23,7 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     }
 
 }
-
+var GlobalCurrentPanoramaIndex_Edit = 0
 //var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
   //  @IBOutlet weak var panoramatableview: PanoramaTableView!
@@ -129,6 +130,22 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 if let data = try? Data(contentsOf: url!) {
                     self.currentExperience?.addPanorama(newImage: UIImage(data: data)!, Id:
                     snapshot.key)
+                    if let buttons = snapObject?["button"]{
+                        for button in buttons as! NSMutableArray{
+                            let temp = button as! [String : AnyObject]
+                            let x = temp["locationx"] as! Int
+                            let y = temp["locationy"] as! Int
+                            let z = temp["locationz"] as! Int
+                            
+                            let actionurl = temp["action"] as! String
+                            if let data = try? Data(contentsOf: url!) {
+                                self.currentExperience?.panoramas[(self.currentExperience?.panoramas.count)!-1].addButton(
+                                    newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
+                                    newObject: actionurl)
+                            }
+                        }
+                    }
+
                     // Reloads table view
                     self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                 }
@@ -147,7 +164,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -173,6 +189,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Go to ExperienceEditor
+        GlobalCurrentPanoramaIndex_Edit = indexPath.row
+        self.performSegue(withIdentifier: "EditorStarttoEditor", sender: self)
     }
     
     

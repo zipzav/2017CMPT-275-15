@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */; };
 		3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */; };
+		364526241FCA01A000E90118 /* NewCTPanoramaView_Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364526231FCA01A000E90118 /* NewCTPanoramaView_Editor.swift */; };
 		3688DD391FAF9465000BBA38 /* video1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD381FAF93F7000BBA38 /* video1.mp4 */; };
 		3688DD3B1FAFB0C4000BBA38 /* video2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */; };
 		3688DD3D1FAFC265000BBA38 /* baristainteraction.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */; };
@@ -64,6 +65,7 @@
 		316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrepTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperienceObject.swift; sourceTree = "<group>"; };
 		3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCTPanoramaView.swift; sourceTree = "<group>"; };
+		364526231FCA01A000E90118 /* NewCTPanoramaView_Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCTPanoramaView_Editor.swift; sourceTree = "<group>"; };
 		3688DD381FAF93F7000BBA38 /* video1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video1.mp4; sourceTree = "<group>"; };
 		3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video2.mp4; sourceTree = "<group>"; };
 		3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = baristainteraction.mp4; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				40869FC81FBA3C800047C7F7 /* Model */,
 				40869FC71FBA3C760047C7F7 /* Style */,
 				3611E32D1FA52B93005F9A5F /* NewCTPanoramaView.swift */,
+				364526231FCA01A000E90118 /* NewCTPanoramaView_Editor.swift */,
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
 				36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */,
 				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
@@ -602,6 +605,7 @@
 				36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */,
 				40BF4A5A1FBA8E7200596CA5 /* UploadManager.swift in Sources */,
 				877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */,
+				364526241FCA01A000E90118 /* NewCTPanoramaView_Editor.swift in Sources */,
 				40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
 				36F197BC1FB787680009E34C /* ExperienceEditorViewController.swift in Sources */,
