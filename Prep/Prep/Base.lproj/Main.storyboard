@@ -39,7 +39,32 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8GC-Wk-tqb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-854" y="1393"/>
+            <point key="canvasLocation" x="-881" y="1423"/>
+        </scene>
+        <!--Experience Editor View Controller-->
+        <scene sceneID="t1W-Tf-m6n">
+            <objects>
+                <viewController id="cO1-1V-55L" customClass="ExperienceEditorViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hVe-KI-okO">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o4J-FP-kq7" customClass="NewCTPanoramaView_Editor" customModule="Prep" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="1024" height="704"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="88g-63-1ff"/>
+                    </view>
+                    <connections>
+                        <outlet property="experience_viewer_panorama" destination="o4J-FP-kq7" id="eri-YO-KG3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IoZ-Nb-6Dt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-468.16406249999994" y="2215.625"/>
         </scene>
         <!--Panorama Capture View Controller-->
         <scene sceneID="1gL-2v-sDi">
@@ -50,7 +75,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gf6-AU-1ya">
-                                <rect key="frame" x="0.0" y="64" width="1024" height="704"/>
+                                <rect key="frame" x="0.0" y="95" width="1024" height="704"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -64,7 +89,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rtx-uF-xQ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-369.140625" y="1860.9375"/>
+            <point key="canvasLocation" x="231" y="1934"/>
         </scene>
         <!--Collection View Controller-->
         <scene sceneID="F5s-7U-hsS">
@@ -329,11 +354,13 @@
                         <outlet property="trashButtonOutlet" destination="bEt-bp-Wis" id="esY-NT-gtT"/>
                         <outlet property="urlTextView" destination="9hW-Sy-Tda" id="m0S-1p-nEG"/>
                         <segue destination="ILP-Ib-Gy2" kind="show" identifier="EditorStartPageToHomePage" id="VO9-bZ-EBk"/>
+                        <segue destination="pzw-vy-RnL" kind="show" identifier="" id="80S-6C-IM3"/>
+                        <segue destination="cO1-1V-55L" kind="show" identifier="EditorStarttoEditor" id="MXL-tz-mfO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25.1953125" y="1110.9375"/>
+            <point key="canvasLocation" x="231" y="1180"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">
