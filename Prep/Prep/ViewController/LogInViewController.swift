@@ -32,22 +32,32 @@ class LogInViewController: UIViewController {
 
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        //Set the segnmented slection to match the color of the theme
-        SignInSelection.tintColor = UIColor.PrepGreen
+        let currentUser = Auth.auth().currentUser
+        if currentUser != nil
+        {
+            self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+            //let userID : String = (Auth.auth().currentUser?.uid)!
+            //self.showMessagePrompt("Current user ID is" + userID)
+        }
+        else
+        {
+            super.viewDidLoad()
+            //Set the segnmented slection to match the color of the theme
+            SignInSelection.tintColor = UIColor.PrepGreen
         
-        //Set the segnmented slection text (font size) to match the theme
-        let font = UIFont.systemFont(ofSize: 18)
-        SignInSelection.setTitleTextAttributes([NSAttributedStringKey.font: font], for: .normal)
+            //Set the segnmented slection text (font size) to match the theme
+            let font = UIFont.systemFont(ofSize: 18)
+            SignInSelection.setTitleTextAttributes([NSAttributedStringKey.font: font], for: .normal)
         
-        //Setting the background color of the button
-        SignInButton.backgroundColor = UIColor.PrepPurple
+            //Setting the background color of the button
+            SignInButton.backgroundColor = UIColor.PrepPurple
         
-        //Making the corners of the sign-in button rounded to match the style of the page
-        SignInButton.layer.cornerRadius = 5
-        SignInButton.layer.borderWidth = 1
-        SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
-        var firstload = false
+            //Making the corners of the sign-in button rounded to match the style of the page
+            SignInButton.layer.cornerRadius = 5
+            SignInButton.layer.borderWidth = 1
+            SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
+            var firstload = false
+        }
    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
