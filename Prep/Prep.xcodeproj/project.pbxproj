@@ -30,6 +30,7 @@
 		36F197BE1FB78AC00009E34C /* PanoramaEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */; };
 		400252601FB2A09C00653D7B /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */; };
 		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
+		404492F01FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404492EF1FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift */; };
 		40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */; };
 		40869FC61FBA3C700047C7F7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40869FC51FBA3C700047C7F7 /* UIColorExtension.swift */; };
 		40BF4A5A1FBA8E7200596CA5 /* UploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BF4A591FBA8E7200596CA5 /* UploadManager.swift */; };
@@ -91,6 +92,7 @@
 		36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaEditView.swift; sourceTree = "<group>"; };
 		4002525F1FB2A09C00653D7B /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		400B64951FA837990023FA63 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		404492EF1FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedExperienceViewController.swift; sourceTree = "<group>"; };
 		40606CC71FB8F3B9002737C6 /* Prep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prep-Bridging-Header.h"; sourceTree = "<group>"; };
 		40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Alerts.h"; sourceTree = "<group>"; };
 		40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Alerts.m"; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			isa = PBXGroup;
 			children = (
 				877540311FB667ED0014CF99 /* LogInViewController.swift */,
+				404492EF1FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift */,
 				400B64951FA837990023FA63 /* CollectionViewController.swift */,
 				40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */,
 				36F197BB1FB787680009E34C /* ExperienceEditorViewController.swift */,
@@ -605,6 +608,7 @@
 				40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */,
 				36EEC1461F7C663A0043A02F /* AppDelegate.swift in Sources */,
 				36F197BC1FB787680009E34C /* ExperienceEditorViewController.swift in Sources */,
+				404492F01FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift in Sources */,
 				400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */,
 				40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */,
 			);

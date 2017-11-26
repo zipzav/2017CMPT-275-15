@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,7 +39,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8GC-Wk-tqb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-854" y="1393"/>
+            <point key="canvasLocation" x="-1631" y="1332"/>
         </scene>
         <!--Panorama Capture View Controller-->
         <scene sceneID="1gL-2v-sDi">
@@ -64,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rtx-uF-xQ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-369.140625" y="1860.9375"/>
+            <point key="canvasLocation" x="-687" y="1997"/>
         </scene>
         <!--Collection View Controller-->
         <scene sceneID="F5s-7U-hsS">
@@ -314,7 +314,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-25.1953125" y="1110.9375"/>
+            <point key="canvasLocation" x="-38" y="1330"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">
@@ -450,12 +450,103 @@
                         <outlet property="PrepLogo" destination="blF-VU-bXf" id="ji9-IX-BGX"/>
                         <outlet property="SignInButton" destination="nDY-63-fAA" id="Dyg-c2-Q9K"/>
                         <outlet property="SignInSelection" destination="PXS-Et-yuQ" id="F6u-My-V19"/>
-                        <segue destination="ILP-Ib-Gy2" kind="show" identifier="GoToHomePage" id="qJE-tH-mdn"/>
+                        <segue destination="vZQ-fK-1s5" kind="show" identifier="GoToHomePage" id="iRM-Rq-Ywr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qay-OL-Vem" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-8.203125" y="-325"/>
+        </scene>
+        <!--Shared Experience View Controller-->
+        <scene sceneID="2gW-mn-IG3">
+            <objects>
+                <viewController id="vZQ-fK-1s5" customClass="SharedExperienceViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5sE-Q6-z2b">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="51e-oU-0d7" customClass="ScalingCarouselView" customModule="ScalingCarousel">
+                                <rect key="frame" x="46" y="70" width="932" height="629"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qJZ-LM-1BU">
+                                    <size key="itemSize" width="210" height="319"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="J1K-l0-kXb" customClass="Cell" customModule="Prep" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="210" height="319"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="210" height="319"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f5N-Cl-acS">
+                                                    <rect key="frame" x="0.0" y="0.0" width="210" height="319"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nJc-yv-8Gh">
+                                                            <rect key="frame" x="0.0" y="0.0" width="210" height="319"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0b5-eu-KyF">
+                                                            <rect key="frame" x="0.0" y="222" width="210" height="97"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="xdo-lF-UmV">
+                                                                <rect key="frame" x="0.0" y="0.0" width="210" height="97"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tBF-PM-prP">
+                                                                        <rect key="frame" x="8" y="17" width="194" height="72"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </view>
+                                                            <blurEffect style="light"/>
+                                                        </visualEffectView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                        <connections>
+                                            <outlet property="cellImage" destination="nJc-yv-8Gh" id="8pC-Kz-nG8"/>
+                                            <outlet property="cellTitle" destination="tBF-PM-prP" id="2TB-wf-7GA"/>
+                                            <outlet property="mainView" destination="f5N-Cl-acS" id="Wwf-4b-sBa"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="vZQ-fK-1s5" id="dwA-C2-d5O"/>
+                                    <outlet property="delegate" destination="vZQ-fK-1s5" id="m6d-Qi-bi3"/>
+                                </connections>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEs-30-sxy">
+                                <rect key="frame" x="386" y="718" width="253" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Go To My Collection"/>
+                                <connections>
+                                    <segue destination="ILP-Ib-Gy2" kind="show" id="cCc-vB-9d0"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="6nT-2u-CKX"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="7Kl-Tv-wHV"/>
+                    <connections>
+                        <outlet property="carousel" destination="51e-oU-0d7" id="rwm-CS-2V3"/>
+                        <segue destination="1iv-r4-FCH" kind="show" identifier="ShareToViewer" id="Izw-f1-Gyb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yUP-ES-2A9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1631.25" y="537.5"/>
         </scene>
     </scenes>
     <resources>
@@ -464,7 +555,7 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ytS-St-Bpf"/>
-        <segue reference="VO9-bZ-EBk"/>
+        <segue reference="cCc-vB-9d0"/>
+        <segue reference="Izw-f1-Gyb"/>
     </inferredMetricsTieBreakers>
 </document>
