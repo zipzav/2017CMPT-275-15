@@ -11,10 +11,10 @@ import Photos
 import FirebaseStorage
 import FirebaseAuth
 import FirebaseDatabase
+import SceneKit
 
 class PanoramaTableViewCell : UITableViewCell{
     var previewImage = UIImageView()
-    
 }
 class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     convenience init(){
@@ -22,15 +22,16 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     }
 
 }
-
+var GlobalCurrentPanoramaIndex_Edit = 0
 //var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
-  //  @IBOutlet weak var panoramatableview: PanoramaTableView!
+   //@IBOutlet weak var panoramatableview: PanoramaTableView!
     var panoramatableview: PanoramaTableView!
     var currentExperience: Experience? = nil
     
+    @IBOutlet weak var addPanorama: UIButton!
     @IBOutlet weak var experienceTitle: UITextField!
-    @IBOutlet weak var experienceDescription: UITextView!
+    @IBOutlet weak var experienceDescription: UITextField!
     
     @IBOutlet weak var trashButtonOutlet: UIButton!
     @IBOutlet weak var saveButtonOutlet: UIButton!
@@ -83,23 +84,23 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         panoramatableview.delegate = self
         panoramatableview.rowHeight = 150
         self.view.addSubview(panoramatableview)
-        
+        self.panoramatableview.separatorStyle = UITableViewCellSeparatorStyle.none
         // Configuring the TextView
-        //experienceTitle.backgroundColor = UIColor.PrepPurple
-        experienceTitle.attributedPlaceholder = NSAttributedString(string:"Experience needs a title", attributes: [NSAttributedStringKey.foregroundColor: UIColor.black])
-        experienceDescription.isEditable = true
-        experienceDescription.backgroundColor = UIColor.lightGray
-        
+        /*experienceTitle.attributedPlaceholder = NSAttributedString(string:"Experience needs a title", attributes: [NSAttributedStringKey.foregroundColor: UIColor.black])*/
+        experienceTitle.layer.borderColor = UIColor.lightGray.cgColor
+        experienceDescription.layer.borderWidth = 1
+        experienceDescription.layer.cornerRadius = 5
+        experienceDescription.layer.borderColor = UIColor.PrepGrey.cgColor
         // Configuring the Button
-        trashButtonOutlet.tintColor = UIColor.white
         trashButtonOutlet.backgroundColor = UIColor.PrepPurple
-        saveButtonOutlet.tintColor = UIColor.white
         saveButtonOutlet.backgroundColor = UIColor.PrepPurple
         trashButtonOutlet.layer.cornerRadius = 10
         trashButtonOutlet.clipsToBounds = true
         saveButtonOutlet.layer.cornerRadius = 10
         saveButtonOutlet.clipsToBounds = true
-        
+        addPanorama.backgroundColor = UIColor.PrepGreen
+        addPanorama.layer.cornerRadius = 10
+        addPanorama.clipsToBounds = true
     }
     
     func fetchPanoramas() {
@@ -129,6 +130,22 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                 if let data = try? Data(contentsOf: url!) {
                     self.currentExperience?.addPanorama(newImage: UIImage(data: data)!, Id:
                     snapshot.key)
+                    if let buttons = snapObject?["button"]{
+                        for button in buttons as! NSMutableArray{
+                            let temp = button as! [String : AnyObject]
+                            let x = temp["locationx"] as! Int
+                            let y = temp["locationy"] as! Int
+                            let z = temp["locationz"] as! Int
+                            
+                            let actionurl = temp["action"] as! String
+                            if let data = try? Data(contentsOf: url!) {
+                                self.currentExperience?.panoramas[(self.currentExperience?.panoramas.count)!-1].addButton(
+                                    newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
+                                    newObject: actionurl)
+                            }
+                        }
+                    }
+
                     // Reloads table view
                     self.panoramatableview.insertRows(at: [IndexPath(row: (self.currentExperience?.panoramas.count)!-1, section: 0)], with: UITableViewRowAnimation.automatic)
                 }
@@ -147,7 +164,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -173,6 +189,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Go to ExperienceEditor
+        GlobalCurrentPanoramaIndex_Edit = indexPath.row
+        self.performSegue(withIdentifier: "EditorStarttoEditor", sender: self)
     }
     
     
@@ -236,6 +254,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     // MARK: - Image Picker
     
+
     @IBAction func didTapTakPicture(_ sender: AnyObject) {
         let picker = UIImagePickerController()
         
@@ -251,7 +270,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion:nil)
         
-        urlTextView.text = "Beginning Upload" // TODO: Use UI Framework to notify user about the upload status
+        //urlTextView.text = "Beginning Upload" // TODO: Use UI Framework to notify user about the upload status
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage
             {
                 var imageUploadManager = UploadManager()

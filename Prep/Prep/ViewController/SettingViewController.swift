@@ -11,6 +11,7 @@
 //  Copyright © 2017 Zavier Patrick David Aguila. All rights reserved.
 
 import UIKit
+import FirebaseAuth
 extension NewCTPanoramaView {
     func ChangeNavigationSettings(swipe: Bool)
     {
@@ -132,5 +133,14 @@ class SettingViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    @IBAction func onSignOutTapped(_ sender: Any) {
+        do {
+            try! Auth.auth().signOut()
+            performSegue(withIdentifier:"SignOutSegue", sender: nil)
+        } catch {
+            print (error)
+        }
+    }
+    
 }

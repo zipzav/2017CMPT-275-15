@@ -147,9 +147,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                     exp?.panoramas[panoindex].addButton(
                                     newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
                                         newObject: actionurl)
+                                }
                             }
                         }
-                    }
                     
                 }
                 
