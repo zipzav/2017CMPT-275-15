@@ -33,6 +33,7 @@ class LogInViewController: UIViewController {
     
     override func viewDidLoad() {
         let currentUser = Auth.auth().currentUser
+        navigationItem.hidesBackButton = true
         if currentUser != nil
         {
             self.performSegue(withIdentifier: "GoToHomePage", sender: self)
