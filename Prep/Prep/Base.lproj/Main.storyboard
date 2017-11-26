@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -287,27 +287,31 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZbO-cS-oRd">
                                 <rect key="frame" x="586" y="599" width="223" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Save"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="saveAndUploadButton:" destination="4Bf-up-AFb" eventType="touchUpInside" id="vWZ-7z-rVA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oWu-jA-bmi">
-                                <rect key="frame" x="74" y="112" width="401" height="112"/>
+                                <rect key="frame" x="74" y="112" width="401" height="74"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Add Panorama"/>
+                                <state key="normal" title="Add Panorama">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapTakPicture:" destination="4Bf-up-AFb" eventType="touchUpInside" id="P2N-te-eh8"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="my title" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LOP-SL-sp1">
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LOP-SL-sp1">
                                 <rect key="frame" x="586" y="154" width="378" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="my desc" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hsl-IM-PJA">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hsl-IM-PJA">
                                 <rect key="frame" x="586" y="255" width="378" height="290"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -317,18 +321,13 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEt-bp-Wis">
                                 <rect key="frame" x="817" y="599" width="147" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Delete"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="trashButton:" destination="4Bf-up-AFb" eventType="touchUpInside" id="k5y-Rd-nc1"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9hW-Sy-Tda">
-                                <rect key="frame" x="74" y="88" width="401" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k4w-Sh-haB">
                                 <rect key="frame" x="586" y="125" width="34" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -348,11 +347,11 @@
                         <viewLayoutGuide key="safeArea" id="FoX-Gn-OsT"/>
                     </view>
                     <connections>
+                        <outlet property="addPanorama" destination="oWu-jA-bmi" id="lnR-wR-eMz"/>
                         <outlet property="experienceDescription" destination="hsl-IM-PJA" id="ycO-Ir-s4U"/>
                         <outlet property="experienceTitle" destination="LOP-SL-sp1" id="yVr-4Z-T3D"/>
                         <outlet property="saveButtonOutlet" destination="ZbO-cS-oRd" id="bBz-DP-5v6"/>
                         <outlet property="trashButtonOutlet" destination="bEt-bp-Wis" id="esY-NT-gtT"/>
-                        <outlet property="urlTextView" destination="9hW-Sy-Tda" id="m0S-1p-nEG"/>
                         <segue destination="ILP-Ib-Gy2" kind="show" identifier="EditorStartPageToHomePage" id="VO9-bZ-EBk"/>
                         <segue destination="pzw-vy-RnL" kind="show" identifier="" id="80S-6C-IM3"/>
                         <segue destination="cO1-1V-55L" kind="show" identifier="EditorStarttoEditor" id="MXL-tz-mfO"/>
@@ -360,7 +359,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="231" y="1180"/>
+            <point key="canvasLocation" x="230.85937499999997" y="1179.6875"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">
@@ -394,7 +393,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="caY-pg-Wve">
-                                <rect key="frame" x="0.0" y="70" width="1024" height="584"/>
+                                <rect key="frame" x="0.0" y="70" width="1024" height="540"/>
                                 <subviews>
                                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="preplogo" translatesAutoresizingMaskIntoConstraints="NO" id="blF-VU-bXf">
                                         <rect key="frame" x="212" y="-180" width="600" height="180"/>
@@ -404,10 +403,10 @@
                                         </constraints>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="preplogo" translatesAutoresizingMaskIntoConstraints="NO" id="GOI-tL-hda">
-                                        <rect key="frame" x="187" y="0.0" width="650" height="184"/>
+                                        <rect key="frame" x="187" y="0.0" width="650" height="140"/>
                                     </imageView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PXS-Et-yuQ">
-                                        <rect key="frame" x="211.5" y="234" width="601" height="51"/>
+                                        <rect key="frame" x="211.5" y="190" width="601" height="51"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="UUD-9h-tE4"/>
                                         </constraints>
@@ -421,7 +420,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Nza-Zx-kJ2">
-                                        <rect key="frame" x="212" y="334" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="290" width="600" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvN-PB-OiH">
                                                 <rect key="frame" x="0.0" y="0.0" width="42.5" height="50"/>
@@ -442,7 +441,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TEB-Nc-Yr2">
-                                        <rect key="frame" x="212" y="434" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="390" width="600" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9w8-l6-AeZ">
                                                 <rect key="frame" x="0.0" y="0.0" width="77" height="50"/>
@@ -463,7 +462,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDY-63-fAA">
-                                        <rect key="frame" x="212" y="534" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="490" width="600" height="50"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                         <constraints>
@@ -511,6 +510,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="1S4-84-iuN"/>
-        <segue reference="qJE-tH-mdn"/>
+        <segue reference="VO9-bZ-EBk"/>
     </inferredMetricsTieBreakers>
 </document>
