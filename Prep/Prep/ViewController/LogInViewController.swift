@@ -79,39 +79,51 @@ class LogInViewController: UIViewController {
         }
     }
     
-    @IBAction func SignInButtonTapped(_ sender: UIButton) {
+        @IBAction func SignInButtonTapped(_ sender: UIButton) {
         //Checking email and password
     if let email = EmailTextField.text, let password = PasswordTextField.text {
             //Check if it's signin or register
             if isSignIn {
+                self.showSpinner{
                 //Signin the user with Firebase
                 Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
                     //Check that user is not null
                     if let u = user{
                         //User is found. Take to home screen
+                        self.hideSpinner{
                         self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        }
                     }
                     else {
                         //Error
+                        self.hideSpinner{
                         self.showMessagePrompt("Email or password is incorrect.")
+                        }
                     }
                 })
                 // ...
+                }
             }
             else{
+                self.showSpinner{
                 //Register the user with Firebase
                 Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                     if let u = user {
+                        self.hideSpinner{
                         self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        }
                     }
                     else{
                         // TODO: Mandy, Please refer to this website for adding spinner and error message. https://github.com/firebase/quickstart-ios/blob/master/authentication/AuthenticationExampleSwift/EmailViewController.swift
+                        self.hideSpinner{
                         if (password.count < 6){
                                 self.showMessagePrompt("Password has to be at least length 6.")
                         }
                         self.showMessagePrompt("Email or password can't be empty.")
+                        }
                     }
                 })
+                }
             }
         }
     }
