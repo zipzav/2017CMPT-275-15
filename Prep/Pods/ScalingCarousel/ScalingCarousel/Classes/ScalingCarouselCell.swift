@@ -21,6 +21,8 @@ import UIKit
 open class ScalingCarouselCell: UICollectionViewCell {
     
     // MARK: - IBOutlets
+    @IBOutlet public var cellTitle: UILabel!
+    @IBOutlet public var cellImage: UIImageView!
     
     // This property should be connected to the main cell subview
     @IBOutlet public var mainView: UIView!

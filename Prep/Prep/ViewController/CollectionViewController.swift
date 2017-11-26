@@ -61,9 +61,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.title = "My Collection"
         //initializePreMades()
         floatingButton()
-        navigationItem.hidesBackButton = true
+        //navigationItem.hidesBackButton = true
         addButton.isEnabled = false
         self.collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
@@ -243,7 +244,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         let title = cell.title
         title!.text = cellExperiences.getTitle()
-
+        
         let imageView = cell.previewImage
         imageView!.image = cellExperiences.getPanorama(index: 0)
         
@@ -344,7 +345,20 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     //self.navigationController?.pushViewController(viewController!, animated: true)
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
-                let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
+                let deleteExp = UIAlertAction(title: "Share", style: .default) { (action) in
+//                    //arrayOfExperiences.remove(at: indexPath!.row)
+//                    if GlobalcurrentExperienceIndex != -1 {
+//                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+//                    } else {
+//                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+//                    }
+//                    GlobalExperienceSnapshots.remove(at: indexPath!.row)
+//                    arrayOfExperiences.remove(at: indexPath!.row)
+//                    DispatchQueue.main.async(execute: {
+//                        self.collectionView.deleteItems(at: [indexPath!])
+//                    })
+                }
+                let shareExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
                     if GlobalcurrentExperienceIndex != -1 {
                         ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
@@ -358,6 +372,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         })
                 }
                 let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                sheet.addAction(shareExp)
                 sheet.addAction(goToEditor)
                 sheet.addAction(deleteExp)
                 sheet.addAction(backToHome)
