@@ -92,7 +92,7 @@ class SharedExperienceViewController: UIViewController {
         //sharedExperienceRef = Ref.child("user").child(uid)
         
         // Listen for any add child node events in the database and update collection view
-        rref.child("shared").observe(.childAdded, with: { (snapshot) -> Void in
+        rref.child("shared").queryLimited(toLast: 10).observe(.childAdded, with: { (snapshot) -> Void in
             // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
