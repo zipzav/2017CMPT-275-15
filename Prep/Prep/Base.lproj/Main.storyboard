@@ -182,7 +182,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <sections>
-                            <tableViewSection headerTitle="Experience Viewer Settings" id="zIN-PH-hTK">
+                            <tableViewSection headerTitle="Settings" id="zIN-PH-hTK">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ViI-bN-xg0">
                                         <rect key="frame" x="0.0" y="28" width="1024" height="44"/>
@@ -224,9 +224,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yu6-EM-iMH">
-                                                    <rect key="frame" x="26" y="6" width="60" height="30"/>
+                                                    <rect key="frame" x="930" y="8" width="86" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Sign Out"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Sign Out">
+                                                        <color key="titleColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="onSignOutTapped:" destination="rpV-h7-rj8" eventType="touchUpInside" id="Wbh-7T-bBu"/>
                                                     </connections>
