@@ -54,8 +54,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var _refHandle: DatabaseHandle!
     var kSection = 1
     
-    var arrayOfSnapshotKeys = [String]()
-    
     @IBOutlet weak var fetchprogress: UILabel!
     
     
@@ -120,14 +118,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     exp?.setTitle(newtitle: snapName as! String)
                     exp?.setDescription(newDescription: snapDescription as! String)
                 }
-                
             }
-            
-            
-            
             var panoindex = 0 //each snap Object is one panorama
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
-                self.arrayOfSnapshotKeys.append(snap.key)
                 if let snapObject = snap.value as? [String: AnyObject] {
                     if let image = snapObject ["image"] {
                         //Convert Url to UIImage
@@ -150,9 +143,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                 }
                             }
                         }
-                    
                 }
-                
                 panoindex += 1
             }
             }
@@ -347,24 +338,48 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 }
                 let shareExp = UIAlertAction(title: "Share", style: .default) { (action) in
                     var snapshot = GlobalExperienceSnapshots[indexPath!.row]
+                    print("-----------------\(GlobalExperienceSnapshots.count)---------------------\(indexPath!.row)")
                     
+                    var data: [String: Any] = [
+                        "title": "example title",
+                        "description": "example description"
+                    ]
+                    
+
+//
+//                    // get existing items, or create new array if doesn't exist
+//                    var existingItems = data["items"] as? [[String: Any]] ?? [[String: Any]]()
+//
+//                    // append the item
+//                    existingItems.append(item)
+//
+//                    // replace back into `data`
+//                    data["items"] = existingItems
+                    
+                    
+                    var experienceID = snapshot.key // get experience id
                     if let snapshotObject = snapshot.value as? [String: AnyObject] {
                         
                         if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
-                            //exp?.setTitle(newtitle: snapName as! String)
-                            //exp?.setDescription(newDescription: snapDescription as! String)
+                            data["title"] = snapName
+                            data["description"] = snapDescription
                         }
                     }
                     var panoindex = 0 //each snap Object is one panorama
                     for snap in snapshot.children.allObjects as! [DataSnapshot] {
-                        self.arrayOfSnapshotKeys.append(snap.key)
+                        
+                        var panoramaID = snap.key
+                        //data = data + ["key": ()]
+//                        let item: [String: Any] = [
+//                            "key": "new value"
+//                        ]
+//
+//                        var existingItems = data["items"] as? [[String: Any]] ?? [[String: Any]]()
                         if let snapObject = snap.value as? [String: AnyObject] {
                             if let image = snapObject ["image"] {
-                                //Convert Url to UIImage
-                                let url = URL(string:image as! String)
-                                if let data = try? Data(contentsOf: url!) {
-                                    //exp?.addPanorama(newImage: UIImage(data: data)!, Id: snap.key)
-                                }
+                                
+                                print("\(image)")
+                                
                                 if let buttons = snapObject["button"]{
                                     for button in buttons as! NSMutableArray{
                                         let temp = button as! [String : AnyObject]
@@ -372,21 +387,17 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                         let y = temp["locationy"] as! Int
                                         let z = temp["locationz"] as! Int
                                         
-                                        let actionurl = temp["action"] as! String
-                                        if let data = try? Data(contentsOf: url!) {
-                                            //exp?.panoramas[panoindex].addButton(
-                                                //newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
-                                                //newObject: actionurl)
-                                        }
+                                        print("\(x)")
+                                        
+                                        print("\(y)")
+                                        print("\(z)")
                                     }
                                 }
-                                
                             }
-                            
                             panoindex += 1
                         }
                     }
-                    
+                    print("--------------------------------------\(indexPath!.row)")
                 }
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)

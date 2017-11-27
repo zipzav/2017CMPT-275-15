@@ -37,10 +37,10 @@ class SharedExperienceViewController: UIViewController {
         super.viewDidLoad()
         
         // UI Config
-        addCarousel()
         floatingButton()
         self.title = "Shared Experiences"
         
+        self.navigationItem.setHidesBackButton(true, animated: false)
         
         // Database
         rref = Database.database().reference()
@@ -66,36 +66,7 @@ class SharedExperienceViewController: UIViewController {
     }
     
     // MARK: - Configuration
-    
-    private func addCarousel() {
-        //
-        //
-        //        let iframe = CGRect(x: 0, y: 0, width: 961, height: 619)
-        //        let iinset =  CGFloat(300)
-        //
-        
-        
-        //let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        //carousel = ScalingCarouselView(withFrame: frame, andInset: 20)
-        //        carousel.dataSource = self
-        //        carousel.delegate = self
-        //        carousel.translatesAutoresizingMaskIntoConstraints = false
-        //        carousel.backgroundColor = .white
-        //
-        //        carousel.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        
-        //view.addSubview(carousel)
-        
-        //        let frame = CGRect(x: 0, y: 0, width: 961, height: 619)
-        //        carousel = ScalingCarouselView(withFrame: frame, andInset: view.bounds.size.width/3.0)
-        
-        // Constraints
-        //        carousel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-        //        carousel.heightAnchor.constraint(equalToConstant: 500).isActive = true
-        //
-        //        carousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        //        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180).isActive = true
-    }
+
     
     @objc private func refreshExperienceData(_ sender: Any) {
         // Fetch Weather Data
