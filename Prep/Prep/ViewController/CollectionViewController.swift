@@ -167,6 +167,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         return -1
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.refreshControl.endRefreshing()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         userRef.removeAllObservers()
     }
@@ -232,7 +237,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         // Add guesture recognizer
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
-        longPressGestureRecong.minimumPressDuration = 1.5
+        longPressGestureRecong.minimumPressDuration = 1.3
         cell.addGestureRecognizer(longPressGestureRecong)
         
     }
@@ -384,9 +389,19 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         actionButton.handler = {
             button in
             // Did Tap Button
-            GlobalcurrentExperienceIndex = -1 // -1 for new experience
-            self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+            if arrayOfExperiences.count >= 10{
+                self.showMessagePrompt("You can create up to 10 experiences")
+            } else {
+                GlobalcurrentExperienceIndex = -1 // -1 for new experience
+                self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+            }
         }
+        
+        actionButton.layer.shadowColor = UIColor.darkGray.cgColor
+        actionButton.layer.shadowOffset = CGSize(width: 3, height: 3)
+        actionButton.layer.shadowRadius = 3
+        actionButton.layer.shadowOpacity = 0.3
+        actionButton.buttonColor = UIColor.PrepPurple
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
     }
