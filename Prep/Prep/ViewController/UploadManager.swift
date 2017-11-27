@@ -12,20 +12,18 @@ import FirebaseAuth
 
 struct Constants {
     struct Exp {
-        static let imagesFolder = Auth.auth().currentUser!.uid
+        static let userPath = "user/\(Auth.auth().currentUser!.uid)"
     }
 }
 
 class UploadManager: NSObject {
 
-    func uploadImage(_ image: UIImage, progressBlock: @escaping (_ percentage: Double)-> Void, completionBlock: @escaping (_ url: URL?, _ errorMessage: String?) -> Void) {
+    func uploadImage(_ image: UIImage, path: String, progressBlock: @escaping (_ percentage: Double)-> Void, completionBlock: @escaping (_ url: URL?, _ errorMessage: String?) -> Void) {
         let storage = Storage.storage()
         let storageReference = storage.reference()
         
-        // storage/{user id}/{pan id}
-        let imageName = ".jpeg"
-        let imagesReference = storageReference.child(Constants.Exp.imagesFolder + "/\(Int(Date.timeIntervalSinceReferenceDate * 1000)).jpg").child(imageName)
-
+        // storage/user/{user id}/{experience id}/image.jpeg
+        let imagesReference = storageReference.child(path)
         if let imageData = UIImageJPEGRepresentation(image, 0.0) {
             let metaData = StorageMetadata()
             metaData.contentType = "images/jpeg"

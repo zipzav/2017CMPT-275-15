@@ -37,21 +37,12 @@ class SharedExperienceViewController: UIViewController {
         super.viewDidLoad()
         
         // UI Config
-        floatingButton() // upload premade experiences for development purpose
+        //floatingButton() // upload premade experiences for development purpose
         self.title = "Shared Experiences"
-        
         self.navigationItem.setHidesBackButton(true, animated: false)
         
         // Database
         rref = Database.database().reference()
-        fetchSharedExperience()
-        
-        
-        //        carousel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-        //        carousel.heightAnchor.constraint(equalToConstant: 500).isActive = true
-        //
-        //        carousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        //        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180).isActive = true
         
     }
     
@@ -63,10 +54,11 @@ class SharedExperienceViewController: UIViewController {
         //        carousel.refreshControl = refreshControl
         //        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         //        self.refreshControl.beginRefreshing()
+        fetchSharedExperience()
     }
     
     // MARK: - Configuration
-
+    
     
     @objc private func refreshExperienceData(_ sender: Any) {
         // Fetch Weather Data
@@ -159,7 +151,7 @@ class SharedExperienceViewController: UIViewController {
             DispatchQueue.main.async(execute: {
                 self.carousel.deleteItems(at: [IndexPath(row: index, section: 0)])
             })
-        
+            
         }, withCancel: nil)
         
     }

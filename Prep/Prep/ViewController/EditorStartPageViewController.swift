@@ -68,6 +68,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         } else {
             // Create an object for New experience
             ExperienceID = ref.child(GlobalUserID!).childByAutoId().key
+            PanoramaID = ref.child(ExperienceID).childByAutoId().key
             currentExperience = Experience(Name: "", Description: "", Id: ExperienceID);
             // Disable save and trash button because we have not create a child node that is 
             // named after ExperienceID in database
@@ -274,7 +275,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage
             {
                 var imageUploadManager = UploadManager()
-                imageUploadManager.uploadImage(image, progressBlock: { (percentage) in
+                var imagePath = Constants.Exp.userPath + "\(ExperienceID)/\(Int(Date.timeIntervalSinceReferenceDate * 1000)).jpeg"
+                imageUploadManager.uploadImage(image, path: imagePath, progressBlock: { (percentage) in
                     print(percentage)
                 }, completionBlock: { [weak self] (fileURL, errorMessage) in
                     guard let strongself = self else {return}
