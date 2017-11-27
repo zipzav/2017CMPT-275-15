@@ -35,7 +35,10 @@ class LogInViewController: UIViewController {
         let currentUser = Auth.auth().currentUser
         if currentUser != nil
         {
+            
+            self.navigationItem.setHidesBackButton(true, animated: false)
             self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+            
             //let userID : String = (Auth.auth().currentUser?.uid)!
             //self.showMessagePrompt("Current user ID is" + userID)
         }

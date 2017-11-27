@@ -16,7 +16,10 @@ import FirebaseDatabase
 import DTZFloatingActionButton
 
 var rref: DatabaseReference!
-class Cell: ScalingCarouselCell {}
+class Cell: ScalingCarouselCell {
+    
+    
+}
 
 class SharedExperienceViewController: UIViewController {
     
@@ -32,23 +35,66 @@ class SharedExperienceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // UI Config
+        addCarousel()
+        floatingButton()
         self.title = "Shared Experiences"
         
-        rref = Database.database().reference()
-        navigationItem.hidesBackButton = true
         
-        carousel.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
-        self.refreshControl.beginRefreshing()
+        // Database
+        rref = Database.database().reference()
         fetchSharedExperience()
         
-        floatingButton()
-//        carousel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
-//        carousel.heightAnchor.constraint(equalToConstant: 500).isActive = true
-//
-//        carousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180).isActive = true
         
+        //        carousel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+        //        carousel.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        //
+        //        carousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        //        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180).isActive = true
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        //navigationItem.hidesBackButton = true
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        
+        //        carousel.refreshControl = refreshControl
+        //        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
+        //        self.refreshControl.beginRefreshing()
+    }
+    
+    // MARK: - Configuration
+    
+    private func addCarousel() {
+        //
+        //
+        //        let iframe = CGRect(x: 0, y: 0, width: 961, height: 619)
+        //        let iinset =  CGFloat(300)
+        //
+        
+        
+        //let frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        //carousel = ScalingCarouselView(withFrame: frame, andInset: 20)
+        //        carousel.dataSource = self
+        //        carousel.delegate = self
+        //        carousel.translatesAutoresizingMaskIntoConstraints = false
+        //        carousel.backgroundColor = .white
+        //
+        //        carousel.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        
+        //view.addSubview(carousel)
+        
+        //        let frame = CGRect(x: 0, y: 0, width: 961, height: 619)
+        //        carousel = ScalingCarouselView(withFrame: frame, andInset: view.bounds.size.width/3.0)
+        
+        // Constraints
+        //        carousel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+        //        carousel.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        //
+        //        carousel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        //        carousel.topAnchor.constraint(equalTo: view.topAnchor, constant: 180).isActive = true
     }
     
     @objc private func refreshExperienceData(_ sender: Any) {
@@ -87,7 +133,7 @@ class SharedExperienceViewController: UIViewController {
             // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
-
+                
                 if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
                     exp?.setTitle(newtitle: snapName as! String)
                     exp?.setDescription(newDescription: snapDescription as! String)
@@ -108,7 +154,7 @@ class SharedExperienceViewController: UIViewController {
                                 let x = temp["locationx"] as! Int
                                 let y = temp["locationy"] as! Int
                                 let z = temp["locationz"] as! Int
-
+                                
                                 let actionurl = temp["action"] as! String
                                 if let data = try? Data(contentsOf: url!) {
                                     exp?.panoramas[panoindex].addButton(
@@ -117,26 +163,26 @@ class SharedExperienceViewController: UIViewController {
                                 }
                             }
                         }
-
+                        
                     }
-
+                    
                     panoindex += 1
                 }
             }
-
+            
             //Append the data to our array
             self.arrayOfSharedExperiences.append(exp!)
             self.arrayOfExperienceSnapshots.append(snapshot)
-
+            
             //Update collection view
-
+            
             self.carousel.insertItems(at: [IndexPath(row: self.arrayOfSharedExperiences.count-1, section: 0)])
-            self.carousel.refreshControl?.endRefreshing()
-
+            //self.carousel.refreshControl?.endRefreshing()
+            
         }, withCancel: nil)
         
     }
-
+    
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
         for  snap in arrayOfExperienceSnapshots {
@@ -147,7 +193,7 @@ class SharedExperienceViewController: UIViewController {
         }
         return -1
     }
-
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         rref.child("shared").removeAllObservers()
@@ -189,6 +235,24 @@ class SharedExperienceViewController: UIViewController {
                 let premadeObject = ["name": "Day in London", "description": "We'll be riding the train into London. Maybe some tea and biscuits with 'Nan. We'll head off to shop for knick-knacks and have a jolly good time by Big Ben",  panTrainID : trainImg, panCoffeeID : coffeeImg,  panTownID : townImg, panparkID : parkImg ] as [String : Any]
                 
                 rref.child("shared").child(ExperienceID).setValue(premadeObject)
+                
+                //Second Pre-made Experience
+                let Experience2ID = rref.child(Node).childByAutoId().key
+                
+                let CityafterdarkID = rref.child(Node).child(Experience2ID).childByAutoId().key
+                
+                let E2_button1ID = rref.child(Node).child(Experience2ID).childByAutoId().key
+                let E2_button2ID = rref.child(Node).child(Experience2ID).childByAutoId().key
+                
+                let E2_button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car-pass.wav?alt=media&token=39f3ef28-bf27-4708-9f92-ecd61982b193", "locationx": 2, "locationy": 0, "locationz": -2 ] as [String : Any]
+                let E2_button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car_honk.wav?alt=media&token=d046dca0-4008-477c-9b18-ff5b1f28b0dc", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
+                let E2_buttonall = [E2_button1, E2_button2]
+                let CityafterdarkImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c", "button" : E2_buttonall] as [String : Any]
+                
+                let E2_premadeObject = ["name": "Night at the city center", "description": "Downtown's noisy, ain't it? Let's be sure to look both ways when crossing the street",  CityafterdarkID : CityafterdarkImg ] as [String : Any]
+                
+                rref.child("shared").child(Experience2ID).setValue(E2_premadeObject)
+                
             }
         }
         actionButton.isScrollView = true
@@ -223,13 +287,15 @@ extension CarouselDatasource: UICollectionViewDataSource {
         
         if let scalingCell = cell as? ScalingCarouselCell {
             let cellExperiences = arrayOfSharedExperiences[indexPath.row]
-            //scalingCell.mainView.backgroundColor = .red
             scalingCell.cellImage.image = cellExperiences.getPanorama(index: 0)
             scalingCell.cellTitle.text = cellExperiences.getTitle()
             
             // Add style
             scalingCell.clipsToBounds = true
-            scalingCell.layer.cornerRadius = 10
+            scalingCell.mainView.clipsToBounds = true
+            scalingCell.layer.cornerRadius = 20
+            scalingCell.mainView.layer.cornerRadius = 20
+            scalingCell.mainView.backgroundColor = .red
         }
         return cell
     }
@@ -242,14 +308,7 @@ extension SharedExperienceViewController: UICollectionViewDelegate, UICollection
         carousel.didScroll()
         
         //guard let currentCenterIndex = carousel.currentCenterCellIndex?.row else { return }
-        
     }
-
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: 300, height: 450)
-//    }
-
-    
 }
 
 

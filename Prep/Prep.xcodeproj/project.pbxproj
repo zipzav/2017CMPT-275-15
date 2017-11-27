@@ -196,6 +196,7 @@
 				364526231FCA01A000E90118 /* NewCTPanoramaView_Editor.swift */,
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
 				36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */,
+				40C162C11FCB88AA003490ED /* Storyboard */,
 				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
 				3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */,
 				3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */,
@@ -205,7 +206,6 @@
 				36D682F61FABCDF0009E7803 /* car-pass.wav */,
 				36D682F31FABCDEE009E7803 /* dogs-barking.wav */,
 				36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */,
-				36EEC1491F7C663A0043A02F /* Main.storyboard */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
@@ -266,6 +266,14 @@
 				3611E3251FA4FEDB005F9A5F /* ExperienceObject.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		40C162C11FCB88AA003490ED /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				36EEC1491F7C663A0043A02F /* Main.storyboard */,
+			);
+			path = Storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

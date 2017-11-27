@@ -345,20 +345,50 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     //self.navigationController?.pushViewController(viewController!, animated: true)
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
-                let deleteExp = UIAlertAction(title: "Share", style: .default) { (action) in
-//                    //arrayOfExperiences.remove(at: indexPath!.row)
-//                    if GlobalcurrentExperienceIndex != -1 {
-//                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
-//                    } else {
-//                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
-//                    }
-//                    GlobalExperienceSnapshots.remove(at: indexPath!.row)
-//                    arrayOfExperiences.remove(at: indexPath!.row)
-//                    DispatchQueue.main.async(execute: {
-//                        self.collectionView.deleteItems(at: [indexPath!])
-//                    })
+                let shareExp = UIAlertAction(title: "Share", style: .default) { (action) in
+                    var snapshot = GlobalExperienceSnapshots[indexPath!.row]
+                    
+                    if let snapshotObject = snapshot.value as? [String: AnyObject] {
+                        
+                        if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
+                            //exp?.setTitle(newtitle: snapName as! String)
+                            //exp?.setDescription(newDescription: snapDescription as! String)
+                        }
+                    }
+                    var panoindex = 0 //each snap Object is one panorama
+                    for snap in snapshot.children.allObjects as! [DataSnapshot] {
+                        self.arrayOfSnapshotKeys.append(snap.key)
+                        if let snapObject = snap.value as? [String: AnyObject] {
+                            if let image = snapObject ["image"] {
+                                //Convert Url to UIImage
+                                let url = URL(string:image as! String)
+                                if let data = try? Data(contentsOf: url!) {
+                                    //exp?.addPanorama(newImage: UIImage(data: data)!, Id: snap.key)
+                                }
+                                if let buttons = snapObject["button"]{
+                                    for button in buttons as! NSMutableArray{
+                                        let temp = button as! [String : AnyObject]
+                                        let x = temp["locationx"] as! Int
+                                        let y = temp["locationy"] as! Int
+                                        let z = temp["locationz"] as! Int
+                                        
+                                        let actionurl = temp["action"] as! String
+                                        if let data = try? Data(contentsOf: url!) {
+                                            //exp?.panoramas[panoindex].addButton(
+                                                //newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
+                                                //newObject: actionurl)
+                                        }
+                                    }
+                                }
+                                
+                            }
+                            
+                            panoindex += 1
+                        }
+                    }
+                    
                 }
-                let shareExp = UIAlertAction(title: "Delete", style: .default) { (action) in
+                let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
                     if GlobalcurrentExperienceIndex != -1 {
                         ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
@@ -372,8 +402,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         })
                 }
                 let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                sheet.addAction(shareExp)
                 sheet.addAction(goToEditor)
+                sheet.addAction(shareExp)
                 sheet.addAction(deleteExp)
                 sheet.addAction(backToHome)
                 
