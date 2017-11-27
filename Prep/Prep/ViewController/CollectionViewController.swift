@@ -141,7 +141,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             
             //Update collection view
             self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
-            self.refreshControl.endRefreshing()
+            DispatchQueue.main.async(execute: {
+                self.refreshControl.endRefreshing()
+            })
         }, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
@@ -165,11 +167,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             index += 1
         }
         return -1
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.refreshControl.endRefreshing()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
