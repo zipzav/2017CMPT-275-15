@@ -37,7 +37,7 @@ class SharedExperienceViewController: UIViewController {
         super.viewDidLoad()
         
         // UI Config
-        floatingButton()
+        floatingButton() // upload premade experiences for development purpose
         self.title = "Shared Experiences"
         
         self.navigationItem.setHidesBackButton(true, animated: false)
@@ -150,6 +150,16 @@ class SharedExperienceViewController: UIViewController {
             self.carousel.insertItems(at: [IndexPath(row: self.arrayOfSharedExperiences.count-1, section: 0)])
             //self.carousel.refreshControl?.endRefreshing()
             
+        }, withCancel: nil)
+        
+        //Listen for any remove child node events in the database and update collection view
+        rref.child("shared").observe(.childRemoved, with: { (snapshot) -> Void in
+            let index = self.indexOfMessage(snapshot)
+            self.arrayOfExperienceSnapshots.remove(at: index)
+            DispatchQueue.main.async(execute: {
+                self.carousel.deleteItems(at: [IndexPath(row: index, section: 0)])
+            })
+        
         }, withCancel: nil)
         
     }

@@ -292,7 +292,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     func uploadSuccess(_ fileURL: URL) {
         if let uid = Auth.auth().currentUser?.uid {
-             // Photo uploaded to firebase storage, nowa add image URL to realtime database
+             // Photo uploaded to firebase storage, now add image URL to realtime database
             print("Upload Succeeded!")
             
             // Generate a unique ID for the panorama object and store it to realtime database

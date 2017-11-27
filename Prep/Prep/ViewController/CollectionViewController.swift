@@ -28,7 +28,6 @@ var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
 var ref: DatabaseReference!
-var firstload = false
 extension UIRefreshControl {
     func refreshManually() {
         if let scrollView = superview as? UIScrollView {
@@ -69,22 +68,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Set the Firebase reference
         ref = Database.database().reference()
         // Listen for new experience in the Firebase database
-        //DispatchQueue.main.async {
-            self.refreshControl.beginRefreshing()
-        //}
-        //if(firstload == false){
+        self.refreshControl.beginRefreshing()
         fetchExperience()
-        //   firstload = true;
-        //}
-        //self.collectionView.reloadData()
-        //self.collectionView.reloadData()
-        //fetchprogress.text = "Done Retrieving Data"
-        
     }
 
     @objc private func refreshExperienceData(_ sender: Any) {
-        // Fetch Weather Data
-        //fetchExperience()
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -147,19 +135,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 panoindex += 1
             }
             }
-            
-            
             //Append the data to our array
             arrayOfExperiences.append(exp!)
             GlobalExperienceSnapshots.append(snapshot)
             
-            //ß Update collection view
-            //DispatchQueue.main.async {
-                self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
+            //Update collection view
+            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
             self.refreshControl.endRefreshing()
-            //}
-
-            
         }, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
@@ -172,9 +154,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //    })
         //
         //}, withCancel: nil)
-            
-        
     }
+    
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
         for  snap in GlobalExperienceSnapshots {
@@ -188,6 +169,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewWillDisappear(_ animated: Bool) {
          userRef.removeAllObservers()
+         dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -259,32 +241,24 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         GlobalCurrentExperience = arrayOfExperiences[indexPath.row]
         GlobalcurrentExperienceIndex = indexPath.row
-        //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
-        //self.navigationController?.hidesBottomBarWhenPushed = true
-        //self.navigationController?.pushViewController(viewController!, animated: true)
         //performSegue(withIdentifier: "HomeToViewer", sender: self)
-        
     }
     
     @IBAction func uploadPreMades(_ sender: UIButton) {
         
-        
         if let uid = Auth.auth().currentUser?.uid {
             //First Pre-made Experience
             let ExperienceID = ref.child(uid).childByAutoId().key
-            
             
             let panCoffeeID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTrainID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTownID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panparkID = ref.child(uid).child(ExperienceID).childByAutoId().key
             
-
             let button1ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
 
-            
             let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/waitinginline.mp4?alt=media&token=e9bf2128-26db-4327-8ed8-a486f1efecda", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
             let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
             let button3 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/baristainteraction.mp4?alt=media&token=76c3911a-fdcf-45df-be2f-9e8846a989ef", "locationx": 7, "locationy": 1, "locationz": 5] as [String : Any]
@@ -300,10 +274,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             //End First Pre-made Experience
             //Second Pre-made Experience
             let Experience2ID = ref.child(uid).childByAutoId().key
-            
-            
             let CityafterdarkID = ref.child(uid).child(Experience2ID).childByAutoId().key
-            
             
             let E2_button1ID = ref.child(uid).child(Experience2ID).childByAutoId().key
             let E2_button2ID = ref.child(uid).child(Experience2ID).childByAutoId().key
@@ -332,72 +303,44 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                 let goToEditor = UIAlertAction(title: "Edit", style: .default) { (action) in
                     GlobalcurrentExperienceIndex = indexPath!.row
-                    //let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                    //self.navigationController?.pushViewController(viewController!, animated: true)
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
                 let shareExp = UIAlertAction(title: "Share", style: .default) { (action) in
-                    var snapshot = GlobalExperienceSnapshots[indexPath!.row]
-                    print("-----------------\(GlobalExperienceSnapshots.count)---------------------\(indexPath!.row)")
-                    
-                    var data: [String: Any] = [
-                        "title": "example title",
-                        "description": "example description"
-                    ]
-                    
-
-//
-//                    // get existing items, or create new array if doesn't exist
-//                    var existingItems = data["items"] as? [[String: Any]] ?? [[String: Any]]()
-//
-//                    // append the item
-//                    existingItems.append(item)
-//
-//                    // replace back into `data`
-//                    data["items"] = existingItems
-                    
-                    
+                    var snapshot = GlobalExperienceSnapshots[indexPath!.row] // get snapshot object for particular index
                     var experienceID = snapshot.key // get experience id
                     if let snapshotObject = snapshot.value as? [String: AnyObject] {
                         
                         if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
-                            data["title"] = snapName
-                            data["description"] = snapDescription
+                            // Add title and description field to database
+                            ref.child("shared/\(experienceID)/title").setValue("\(snapName)")
+                            ref.child("shared/\(experienceID)/description").setValue("\(snapDescription)")
                         }
                     }
-                    var panoindex = 0 //each snap Object is one panorama
                     for snap in snapshot.children.allObjects as! [DataSnapshot] {
-                        
-                        var panoramaID = snap.key
-                        //data = data + ["key": ()]
-//                        let item: [String: Any] = [
-//                            "key": "new value"
-//                        ]
-//
-//                        var existingItems = data["items"] as? [[String: Any]] ?? [[String: Any]]()
+                        let panoramaID = snap.key
                         if let snapObject = snap.value as? [String: AnyObject] {
                             if let image = snapObject ["image"] {
-                                
-                                print("\(image)")
-                                
+                                // Add image to database
+                                ref.child("shared/\(experienceID)/\(panoramaID)/image").setValue("\(image)")
+                                var i = 0
                                 if let buttons = snapObject["button"]{
                                     for button in buttons as! NSMutableArray{
                                         let temp = button as! [String : AnyObject]
+                                        let a = temp["action"] as! String
                                         let x = temp["locationx"] as! Int
                                         let y = temp["locationy"] as! Int
                                         let z = temp["locationz"] as! Int
-                                        
-                                        print("\(x)")
-                                        
-                                        print("\(y)")
-                                        print("\(z)")
+                                        // Add button data to database
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["action":"\(a)"])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationx":"\(x)"])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationy":"\(y)"])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationz":"\(z)"])
+                                        i += 1
                                     }
                                 }
                             }
-                            panoindex += 1
                         }
                     }
-                    print("--------------------------------------\(indexPath!.row)")
                 }
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
@@ -424,16 +367,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 popOver?.permittedArrowDirections = UIPopoverArrowDirection.any
                 
                 present(sheet, animated: true, completion: nil)
-                
-                //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
-                //self.navigationController?.pushViewController(viewController!, animated: true)
-                //performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
-                //let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                //self.navigationController?.pushViewController(viewController!, animated: true)
-                
             }
         }
-        
     }
     
     // Add button
@@ -448,11 +383,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             // Did Tap Button
             GlobalcurrentExperienceIndex = -1 // -1 for new experience
             self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
-//            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-//            self.navigationController?.pushViewController(viewController!, animated: true)
         }
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
-
     }
 }
