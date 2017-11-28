@@ -16,4 +16,7 @@ extension UIColor {
     static var PrepPurple: UIColor {
         return UIColor(red: 159/255, green: 110/255, blue: 228/255, alpha: 1)
     }
+    static var PrepGrey: UIColor {
+        return UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    }
 }

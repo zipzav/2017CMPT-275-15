@@ -21,6 +21,8 @@ import UIKit
 open class ScalingCarouselCell: UICollectionViewCell {
     
     // MARK: - IBOutlets
+    @IBOutlet public var cellTitle: UILabel!
+    @IBOutlet public var cellImage: UIImageView!
     
     // This property should be connected to the main cell subview
     @IBOutlet public var mainView: UIView!
@@ -83,6 +85,6 @@ open class ScalingCarouselCell: UICollectionViewCell {
         mainView.alpha = alphaValue
         
         // ..also..round the corners
-        mainView.layer.cornerRadius = 20
+        //mainView.layer.cornerRadius = 20
     }
 }

@@ -91,4 +91,5 @@ class Panorama{
     func getId()->String{
         return key
     }
+    
 }

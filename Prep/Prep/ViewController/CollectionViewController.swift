@@ -28,7 +28,6 @@ var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
 var ref: DatabaseReference!
-var firstload = false
 extension UIRefreshControl {
     func refreshManually() {
         if let scrollView = superview as? UIScrollView {
@@ -54,38 +53,26 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var _refHandle: DatabaseHandle!
     var kSection = 1
     
-    var arrayOfSnapshotKeys = [String]()
-    
     @IBOutlet weak var fetchprogress: UILabel!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.title = "My Collection"
         //initializePreMades()
         floatingButton()
-        navigationItem.hidesBackButton = true
+        //navigationItem.hidesBackButton = true
         addButton.isEnabled = false
         self.collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         // Set the Firebase reference
         ref = Database.database().reference()
         // Listen for new experience in the Firebase database
-        //DispatchQueue.main.async {
-            self.refreshControl.beginRefreshing()
-        //}
-        //if(firstload == false){
+        self.refreshControl.beginRefreshing()
         fetchExperience()
-        //   firstload = true;
-        //}
-        //self.collectionView.reloadData()
-        //self.collectionView.reloadData()
-        //fetchprogress.text = "Done Retrieving Data"
-        
     }
-
+    
     @objc private func refreshExperienceData(_ sender: Any) {
-        // Fetch Weather Data
-        //fetchExperience()
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -114,19 +101,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
-
+                
                 if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
                     exp?.setTitle(newtitle: snapName as! String)
                     exp?.setDescription(newDescription: snapDescription as! String)
                 }
-                
             }
-            
-            
-            
             var panoindex = 0 //each snap Object is one panorama
             for snap in snapshot.children.allObjects as! [DataSnapshot] {
-                self.arrayOfSnapshotKeys.append(snap.key)
                 if let snapObject = snap.value as? [String: AnyObject] {
                     if let image = snapObject ["image"] {
                         //Convert Url to UIImage
@@ -140,34 +122,28 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                 let x = temp["locationx"] as! Int
                                 let y = temp["locationy"] as! Int
                                 let z = temp["locationz"] as! Int
-                            
+                                
                                 let actionurl = temp["action"] as! String
                                 if let data = try? Data(contentsOf: url!) {
                                     exp?.panoramas[panoindex].addButton(
-                                    newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
+                                        newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
                                         newObject: actionurl)
                                 }
                             }
                         }
-                    
+                    }
+                    panoindex += 1
                 }
-                
-                panoindex += 1
             }
-            }
-            
-            
             //Append the data to our array
             arrayOfExperiences.append(exp!)
             GlobalExperienceSnapshots.append(snapshot)
             
-            //ß Update collection view
-            //DispatchQueue.main.async {
-                self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
-            self.refreshControl.endRefreshing()
-            //}
-
-            
+            //Update collection view
+            self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
+            DispatchQueue.main.async(execute: {
+                self.refreshControl.endRefreshing()
+            })
         }, withCancel: nil)
         
         // Listen for any remove child node events in the database and update collection view
@@ -180,9 +156,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //    })
         //
         //}, withCancel: nil)
-            
-        
     }
+    
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
         for  snap in GlobalExperienceSnapshots {
@@ -195,14 +170,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-         userRef.removeAllObservers()
+        userRef.removeAllObservers()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // Getting the Size of Items
     // Note: For Collection View Box, Width: 942, Height: 656
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -235,7 +210,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         return CGSize(width: 0, height: leftAndRightPaddings * 3)
     }
-
+    
     // Cell Customization
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let cell = cell as? CollectionViewCell else { return }
@@ -243,7 +218,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         let title = cell.title
         title!.text = cellExperiences.getTitle()
-
+        
+        let desc = cell.desc
+        desc?.text = cellExperiences.getDescription()
+        desc?.sizeToFit()
+        
         let imageView = cell.previewImage
         imageView!.image = cellExperiences.getPanorama(index: 0)
         
@@ -255,7 +234,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         
         // Add guesture recognizer
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
-        longPressGestureRecong.minimumPressDuration = 1.5
+        longPressGestureRecong.minimumPressDuration = 1.3
         cell.addGestureRecognizer(longPressGestureRecong)
         
     }
@@ -267,31 +246,23 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         GlobalCurrentExperience = arrayOfExperiences[indexPath.row]
         GlobalcurrentExperienceIndex = indexPath.row
-        //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
-        //self.navigationController?.hidesBottomBarWhenPushed = true
-        //self.navigationController?.pushViewController(viewController!, animated: true)
         //performSegue(withIdentifier: "HomeToViewer", sender: self)
-        
     }
     
     @IBAction func uploadPreMades(_ sender: UIButton) {
         
-        
         if let uid = Auth.auth().currentUser?.uid {
             //First Pre-made Experience
             let ExperienceID = ref.child(uid).childByAutoId().key
-            
             
             let panCoffeeID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTrainID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panTownID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let panparkID = ref.child(uid).child(ExperienceID).childByAutoId().key
             
-
             let button1ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
-
             
             let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/waitinginline.mp4?alt=media&token=e9bf2128-26db-4327-8ed8-a486f1efecda", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
             let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
@@ -308,14 +279,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             //End First Pre-made Experience
             //Second Pre-made Experience
             let Experience2ID = ref.child(uid).childByAutoId().key
-            
-            
             let CityafterdarkID = ref.child(uid).child(Experience2ID).childByAutoId().key
-            
             
             let E2_button1ID = ref.child(uid).child(Experience2ID).childByAutoId().key
             let E2_button2ID = ref.child(uid).child(Experience2ID).childByAutoId().key
-        
+            
             let E2_button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car-pass.wav?alt=media&token=39f3ef28-bf27-4708-9f92-ecd61982b193", "locationx": 2, "locationy": 0, "locationz": -2 ] as [String : Any]
             let E2_button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car_honk.wav?alt=media&token=d046dca0-4008-477c-9b18-ff5b1f28b0dc", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
             let E2_buttonall = [E2_button1, E2_button2]
@@ -340,9 +308,44 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                 let goToEditor = UIAlertAction(title: "Edit", style: .default) { (action) in
                     GlobalcurrentExperienceIndex = indexPath!.row
-                    //let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                    //self.navigationController?.pushViewController(viewController!, animated: true)
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                }
+                let shareExp = UIAlertAction(title: "Share", style: .default) { (action) in
+                    var snapshot = GlobalExperienceSnapshots[indexPath!.row] // get snapshot object for particular index
+                    var experienceID = snapshot.key // get experience id
+                    if let snapshotObject = snapshot.value as? [String: AnyObject] {
+                        
+                        if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
+                            // Add title and description field to database
+                            ref.child("shared/\(experienceID)/name").setValue("\(snapName)")
+                            ref.child("shared/\(experienceID)/description").setValue("\(snapDescription)")
+                        }
+                    }
+                    for snap in snapshot.children.allObjects as! [DataSnapshot] {
+                        let panoramaID = snap.key
+                        if let snapObject = snap.value as? [String: AnyObject] {
+                            if let image = snapObject ["image"] {
+                                // Add image to database
+                                ref.child("shared/\(experienceID)/\(panoramaID)/image").setValue("\(image)")
+                                var i = 0
+                                if let buttons = snapObject["button"]{
+                                    for button in buttons as! NSMutableArray{
+                                        let temp = button as! [String : AnyObject]
+                                        let a = temp["action"] as! String
+                                        let x = temp["locationx"] as! Int
+                                        let y = temp["locationy"] as! Int
+                                        let z = temp["locationz"] as! Int
+                                        // Add button data to database
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["action":a])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationx":x])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationy":y])
+                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationz":z])
+                                        i += 1
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
@@ -353,12 +356,13 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     }
                     GlobalExperienceSnapshots.remove(at: indexPath!.row)
                     arrayOfExperiences.remove(at: indexPath!.row)
-                        DispatchQueue.main.async(execute: {
-                            self.collectionView.deleteItems(at: [indexPath!])
-                        })
+                    DispatchQueue.main.async(execute: {
+                        self.collectionView.deleteItems(at: [indexPath!])
+                    })
                 }
                 let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 sheet.addAction(goToEditor)
+                sheet.addAction(shareExp)
                 sheet.addAction(deleteExp)
                 sheet.addAction(backToHome)
                 
@@ -368,16 +372,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 popOver?.permittedArrowDirections = UIPopoverArrowDirection.any
                 
                 present(sheet, animated: true, completion: nil)
-                
-                //let viewController = storyboard?.instantiateViewController(withIdentifier: "viewer")
-                //self.navigationController?.pushViewController(viewController!, animated: true)
-                //performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
-                //let viewController = storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-                //self.navigationController?.pushViewController(viewController!, animated: true)
-                
             }
         }
-        
     }
     
     // Add button
@@ -390,13 +386,26 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         actionButton.handler = {
             button in
             // Did Tap Button
-            GlobalcurrentExperienceIndex = -1 // -1 for new experience
-            self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
-//            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "editorStartPage")
-//            self.navigationController?.pushViewController(viewController!, animated: true)
+            if arrayOfExperiences.count >= 10{
+                self.showMessagePrompt("You can create up to 10 experiences")
+            } else {
+                GlobalcurrentExperienceIndex = -1 // -1 for new experience
+                self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+            }
         }
+        
+        actionButton.layer.shadowColor = UIColor.darkGray.cgColor
+        actionButton.layer.shadowOffset = CGSize(width: 3, height: 3)
+        actionButton.layer.shadowRadius = 3
+        actionButton.layer.shadowOpacity = 0.3
+        actionButton.buttonColor = UIColor.PrepPurple
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
-
     }
+    @IBAction func GoToSharedExperiences(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "HomePageToSharedExperiences", sender: self)
+    }
+    
+    
 }
+
