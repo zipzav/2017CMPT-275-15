@@ -31,7 +31,6 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let currentUser = Auth.auth().currentUser
         navigationItem.hidesBackButton = true
         
         //Set the segnmented slection to match the color of the theme
@@ -53,7 +52,9 @@ class LogInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if Auth.auth().currentUser != nil {
-            self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+            Timer.scheduledTimer(withTimeInterval: 2, repeats: false, block: { (timer) in
+                self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
+            })
         }
     }
     override func didReceiveMemoryWarning() {
@@ -81,20 +82,20 @@ class LogInViewController: UIViewController {
             if isSignIn {
                 //Signin the user with Firebase
                 Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
-                        guard let authError = error else { return }
-                        guard let errorCode = (authError as NSError).code as Int? else { return }
-                        switch errorCode {
-                            case AuthErrorCode.userNotFound.rawValue:
-                                self.showMessagePrompt("the user account was not found. This could happen if the user account has been deleted.")
-                            case AuthErrorCode.networkError.rawValue:
-                                self.showMessagePrompt("A network error occurred during the operation")
-                            default:
-                                self.showMessagePrompt("An internal error occurred. Please report the error")
-                        }
+//                        guard let authError = error else { return }
+//                        guard let errorCode = (authError as NSError).code as Int? else { return }
+//                        switch errorCode {
+//                            case AuthErrorCode.userNotFound.rawValue:
+//                                self.showMessagePrompt("the user account was not found. This could happen if the user account has been deleted.")
+//                            case AuthErrorCode.networkError.rawValue:
+//                                self.showMessagePrompt("A network error occurred during the operation")
+//                            default:
+//                                self.showMessagePrompt("An internal error occurred. Please report the error")
+//                        }
                     //Check that user is not null
                     if let u = user{
                         //User is found. Take to home screen
-                        self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
                     }
                     else {
                         //Error
@@ -107,7 +108,7 @@ class LogInViewController: UIViewController {
                 //Register the user with Firebase
                 Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                     if let u = user {
-                        self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
                     }
                     else{
                         // TODO: Mandy, Please refer to this website for adding spinner and error message. https://github.com/firebase/quickstart-ios/blob/master/authentication/AuthenticationExampleSwift/EmailViewController.swift
