@@ -44,6 +44,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     // Database
     var _refHandle: DatabaseHandle!
     var experienceRef : DatabaseReference!
+    var ref: DatabaseReference!
     
     var ExperienceID = ""
     var PanoramaID = ""
@@ -55,6 +56,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         // During startup (-viewDidLoad or in storyboard) do:
         //self.panoramatableview.allowsMultipleSelectionDuringEditing = false;
 
+        // Set the Firebase reference
+        ref = Database.database().reference()
         storageRef = Storage.storage().reference()
         
         if GlobalcurrentExperienceIndex != -1 {
@@ -206,9 +209,9 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             let alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this Panorama?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Delete", comment: "Delete action"), style: .`default`, handler: { _ in
                 if GlobalcurrentExperienceIndex != -1 {
-                    ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
+                    self.ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
                 } else {
-                    ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
+                    self.ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((self.currentExperience?.panoramas[indexPath.row].key)!).removeValue()
                 }
                 //GlobalExperienceSnapshots.remove(at: indexPath!.row)
                 self.currentExperience?.panoramas.remove(at: indexPath.row)

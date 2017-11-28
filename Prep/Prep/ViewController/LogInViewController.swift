@@ -30,7 +30,7 @@ class LogInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        network().checkConnection()
         navigationItem.hidesBackButton = true
         
         //Set the segnmented slection to match the color of the theme
@@ -47,13 +47,18 @@ class LogInViewController: UIViewController {
         SignInButton.layer.cornerRadius = 5
         SignInButton.layer.borderWidth = 1
         SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
+        
+        // Monitor Connection to Wifi
+        Reach().monitorReachabilityChanges()
    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if Auth.auth().currentUser != nil {
             Timer.scheduledTimer(withTimeInterval: 2, repeats: false, block: { (timer) in
-                self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
+                if(hasConnection == true) {
+                    self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
+                }
             })
         }
     }
@@ -76,6 +81,12 @@ class LogInViewController: UIViewController {
     }
     
     @IBAction func SignInButtonTapped(_ sender: UIButton) {
+        network().checkConnection()
+        if (hasConnection == false) {
+            self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
+            return
+        }
+        
         //Checking email and password
     if let email = EmailTextField.text, let password = PasswordTextField.text {
             //Check if it's signin or register

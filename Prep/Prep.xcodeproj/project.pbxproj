@@ -198,6 +198,7 @@
 				364526231FCA01A000E90118 /* NewCTPanoramaView_Editor.swift */,
 				36EEC1451F7C663A0043A02F /* AppDelegate.swift */,
 				36F197BD1FB78AC00009E34C /* PanoramaEditView.swift */,
+				40699EAE1FCDEEA400888744 /* Reach.swift */,
 				40C162C11FCB88AA003490ED /* Storyboard */,
 				3688DD381FAF93F7000BBA38 /* video1.mp4 */,
 				3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */,
@@ -215,7 +216,6 @@
 				40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */,
 				40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */,
 				877540341FB680460014CF99 /* GoogleService-Info.plist */,
-				40699EAE1FCDEEA400888744 /* Reach.swift */,
 			);
 			path = Prep;
 			sourceTree = "<group>";

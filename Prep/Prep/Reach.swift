@@ -27,6 +27,27 @@ import SystemConfiguration
 
 let ReachabilityStatusChangedNotification = "ReachabilityStatusChangedNotification"
 
+// Global variable
+var hasConnection = true
+
+public class network {
+    func checkConnection() -> Void{
+        let status = Reach().connectionStatus()
+        //print("--------------------------------------")
+        switch status {
+        case .unknown, .offline:
+            //print("Not connected")
+            hasConnection = false
+        case .online(.wwan):
+            //print("Connected via WWAN")
+            hasConnection = true
+        case .online(.wiFi):
+            //print("Connected via WiFi")
+            hasConnection = true
+        }
+    }
+}
+
 enum ReachabilityType: CustomStringConvertible {
     case wwan
     case wiFi
@@ -78,7 +99,8 @@ public class Reach {
     
     
     func monitorReachabilityChanges() {
-        let host = "google.com"
+        //let host = "google.com"
+        let host = "https://cmpt-275-group11-8d3c8.firebaseio.com"
         var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
         let reachability = SCNetworkReachabilityCreateWithName(nil, host)!
         
