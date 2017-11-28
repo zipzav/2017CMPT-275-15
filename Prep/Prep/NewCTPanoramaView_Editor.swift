@@ -17,10 +17,25 @@ import ImageIO
 import AVFoundation
 import AVKit
 import SpriteKit
+//import SCNSceneRenderer
+func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
+}
 
+func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
+}
+
+func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
+    return CGFloat(left.x * right.x + left.y * right.y + left.z * right.z)
+}
 
 @objc public class NewCTPanoramaView_Editor: UIView {
     var move_Flag = false
+    var mark : SCNNode? = nil
+    var selection:SCNHitTestResult? = nil
+    var hitOld = SCNVector3Zero
+    
     // MARK: Public properties
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
     public var image: UIImage? {
@@ -61,6 +76,7 @@ import SpriteKit
     public var buttonPressedFlag:[Bool] = [Bool]()
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
+    private var prevLocation_move: SCNVector3 = SCNVector3Make(0, 0, 0)
     private lazy var cameraNode: SCNNode? = {
         let node = SCNNode()
         let camera = SCNCamera()
@@ -112,9 +128,8 @@ import SpriteKit
                     if (buttonNodes[index] == node){
                         let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                         let MoveButton = UIAlertAction(title: "Move", style: .default) { (action) in
-                            //TODO:Set back nav to false
                             self.move_Flag = true
-
+                            self.selection = result
                         }
                         let PlayButton = UIAlertAction(title: "Play", style: .default) { (action) in
                             self.move_Flag = false
@@ -156,7 +171,9 @@ import SpriteKit
         buttonNodes = [SCNNode]()
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
-            let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+            let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+            
+           
             
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
@@ -164,8 +181,11 @@ import SpriteKit
             let newNode:SCNNode = SCNNode()
             newNode.geometry = geometry
             newNode.position = buttonLocations[index]
+            let it = SCNLookAtConstraint(target: cameraNode)
+            it.isGimbalLockEnabled = true
+            newNode.constraints = [it]
             buttonNodes += [newNode]
-            
+
             scene.rootNode.addChildNode(newNode)
             buttonPressedFlag += [false]
         }
@@ -209,7 +229,6 @@ import SpriteKit
     
     //Creats the panoramic sphere/cylinder of the current panorama
     private func createGeometryNode() {
-        
         guard let image = image else {return}
         //delete buttons and panorama from scene
         for node in buttonNodes{
@@ -335,6 +354,60 @@ import SpriteKit
                 prevLocation = location
             
                 reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians())
+            }
+        }
+        else{ //When we are moving the buttons
+            if panRec.state == .began {
+                let location = panRec.translation(in: sceneView)
+                let projectedOrigin = self.sceneView.projectPoint(SCNVector3Make(selection!.node.position.x, selection!.node.position.y, selection!.node.position.z))
+                let locationWithz   = SCNVector3Make(Float(location.x), Float(location.y), projectedOrigin.z)
+                prevLocation_move = locationWithz
+                mark = selection!.node.clone()
+                let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+                
+                geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
+                geometry.firstMaterial?.isDoubleSided = true;
+                
+                mark!.geometry = geometry
+                mark!.opacity = 0.80
+                mark!.position = selection!.node.position
+                print(mark!.position)
+                print(selection!.node.position)
+            
+                scene.rootNode.addChildNode(mark!)
+            }
+            else if (panRec.state == .changed){
+                //change mark!.position here
+                let mouse   = panRec.translation(in:sceneView)
+                var unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.0))
+                let p1      = selection!.node.parent!.convertPosition(unPoint, from: nil)
+                unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 1.0))
+                let p2      = selection!.node.parent!.convertPosition(unPoint, from: nil)
+                let m       = p2 - p1
+                
+                let e       = selection!.localCoordinates
+                let n       = selection!.localNormal
+                
+                //let t       = ((e * n) - (p1 * n)) / (m * n)
+                let t       = 0.038
+                var hit     = SCNVector3(x: p1.x + Float(t) * m.x, y: p1.y + Float(t) * m.y, z: p1.z + Float(t) * m.z)
+                let offset  = hit - hitOld
+                hitOld      =  hit
+                mark!.position = mark!.position + offset
+                print("offset: ")
+                print(offset)
+                
+                print("mark.position: ")
+                print(mark!.position)
+                
+            }
+            else if (panRec.state == .ended){
+                selection!.node.position = mark!.position
+                //selection!.node.convertPosition(mark!.position, from: selection!.node)
+                mark!.removeFromParentNode()
+                selection = nil
+                mark = nil
+                move_Flag = false
             }
         }
     }

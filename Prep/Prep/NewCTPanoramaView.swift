@@ -173,7 +173,7 @@ extension ExperienceViewController {
         buttonNodes = [SCNNode]()
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
-            let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+            let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
 
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
@@ -181,6 +181,9 @@ extension ExperienceViewController {
             let newNode:SCNNode = SCNNode()
             newNode.geometry = geometry
             newNode.position = buttonLocations[index]
+            let it = SCNLookAtConstraint(target: cameraNode)
+            it.isGimbalLockEnabled = true
+            newNode.constraints = [it]
             buttonNodes += [newNode]
             
             scene.rootNode.addChildNode(newNode)

@@ -15,33 +15,8 @@ import AVFoundation
 import AVKit
 import SceneKit
 
-func round(val: SCNVector3) -> SCNVector3 {
-    return SCNVector3(x: round(val.x), y: round(val.y), z: round(val.z))
-}
-
-func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
-    return SCNVector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
-}
-
-func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
-    return SCNVector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
-}
-
-func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
-    return CGFloat(left.x * right.x + left.y * right.y + left.z * right.z)
-}
-
-
-func * (left: SCNVector3, right: Float) -> SCNVector3 {
-    return SCNVector3(x: left.x * right, y: left.y * right, z: left.z * right)
-}
-
-func * (left: Float, right: SCNVector3) -> SCNVector3 {
-    return SCNVector3(x: left * right.x, y: left * right.y, z: left * right.z)
-}
-
 class ExperienceEditorViewController: UIViewController {
-    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView!
+    @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView_Editor!
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
     var playerController = AVPlayerViewController()
