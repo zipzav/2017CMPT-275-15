@@ -52,6 +52,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     var userRef: DatabaseReference!
     var _refHandle: DatabaseHandle!
     var kSection = 1
+    var hasConnection = true
     
     @IBOutlet weak var fetchprogress: UILabel!
     
@@ -60,24 +61,58 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         //self.title = "My Collection"
         //initializePreMades()
-        floatingButton()
         //navigationItem.hidesBackButton = true
+        
         addButton.isEnabled = false
-        self.collectionView.refreshControl = refreshControl
-//        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         // Set the Firebase reference
         ref = Database.database().reference()
         
+        // Loading Icon
+        self.collectionView.refreshControl = refreshControl
         self.refreshControl.beginRefreshing()
+        
+        // Monitor Connection
+        NotificationCenter.default.addObserver(self, selector: #selector(CollectionViewController.networkStatusChanged(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+        Reach().monitorReachabilityChanges()
     }
-//
-//    @objc private func refreshExperienceData(_ sender: Any) {
-//        DispatchQueue.main.async {
-//            self.collectionView.reloadData()
-//        }
-//        self.refreshControl.endRefreshing()
-//        //self.activityIndicatorView.stopAnimating()
-//    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.refreshControl.beginRefreshing()
+        floatingButton()
+        // Listen for new experience in the Firebase database
+        fetchExperience()
+        // Reload data after 'Back' button is clicked on Experience viewer page
+        collectionView.reloadData()
+        // Stop spinner when no data to show on home page
+        Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
+            self.refreshControl.endRefreshing()
+        })
+        checkConnection()
+    }
+    
+    @objc func networkStatusChanged(_ notification: Notification) {
+        let userInfo = (notification as NSNotification).userInfo
+        print("--------------------------------------")
+        print(userInfo)
+    }
+    
+    func checkConnection() {
+        let status = Reach().connectionStatus()
+        print("--------------------------------------")
+        switch status {
+        case .unknown, .offline:
+            print("Not connected")
+            hasConnection = false
+        case .online(.wwan):
+            print("Connected via WWAN")
+            hasConnection = true
+        case .online(.wiFi):
+            print("Connected via WiFi")
+            hasConnection = true
+        }
+    }
+    
     func fetchExperience() {
         var exp: Experience?
         
@@ -176,30 +211,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillDisappear(_ animated: Bool) {
         userRef.removeAllObservers()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.refreshControl.beginRefreshing()
-        // Listen for new experience in the Firebase database
-        fetchExperience()
-        // Reload data after 'Back' button is clicked on Experience viewer page
-        collectionView.reloadData()
-        // Stop spinner when no data to show on home page
-        Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
-            self.refreshControl.endRefreshing()
-        })
-    }
-//
-//    func usedTimerForEndRefreshing()  {
-//        Timer.scheduledTimer(timeInterval: 10,// stop spining after 10 seconds
-//                             target: self,
-//                             selector: #selector(self.endRefreshing(_:)),
-//                             userInfo: nil,
-//                             repeats: false)
-//    }
-//    
-//    @objc func endRefreshing(_ timer: AnyObject) {
-//    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -414,11 +426,16 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         actionButton.handler = {
             button in
             // Did Tap Button
-            if arrayOfExperiences.count >= 10{
-                self.showMessagePrompt("You can create up to 10 experiences")
+            self.checkConnection()
+            if self.hasConnection == true {
+                if arrayOfExperiences.count >= 10{
+                    self.showMessagePrompt("You can create up to 10 experiences")
+                } else {
+                    GlobalcurrentExperienceIndex = -1 // -1 for new experience
+                    self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                }
             } else {
-                GlobalcurrentExperienceIndex = -1 // -1 for new experience
-                self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                self.showMessagePrompt("No internet connection. Try again later")
             }
         }
         
