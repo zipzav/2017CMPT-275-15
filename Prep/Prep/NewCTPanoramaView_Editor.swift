@@ -18,6 +18,12 @@ import AVFoundation
 import AVKit
 import SpriteKit
 //import SCNSceneRenderer
+func CGPointToSCNVector3(view: SCNView, depth: Float, point: CGPoint) -> SCNVector3 {
+    let projectedOrigin = view.projectPoint(SCNVector3Make(0, 0, depth))
+    let locationWithz   = SCNVector3Make(Float(point.x), Float(point.y), projectedOrigin.z)
+    return view.unprojectPoint(locationWithz)
+}
+
 func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
     return SCNVector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
 }
@@ -29,6 +35,8 @@ func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
 func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
     return CGFloat(left.x * right.x + left.y * right.y + left.z * right.z)
 }
+
+let radius: CGFloat = 20
 
 @objc public class NewCTPanoramaView_Editor: UIView {
     var move_Flag = false
@@ -64,7 +72,7 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
     public var movementHandler: ((_ rotationAngle: CGFloat, _ fieldOfViewAngle: CGFloat) -> ())?
     
     // MARK: Private properties
-    private let radius: CGFloat = 10
+
     private let sceneView = SCNView()
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
@@ -77,6 +85,7 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
     private var prevLocation_move: SCNVector3 = SCNVector3Make(0, 0, 0)
+    private var oldpoint = SCNVector3Make(0, 0, 0)
     private lazy var cameraNode: SCNNode? = {
         let node = SCNNode()
         let camera = SCNCamera()
@@ -86,7 +95,7 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
     }()
     private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
-        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
+        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * radius
     }()
     
     private var xFov: CGFloat {
@@ -358,10 +367,8 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
         }
         else{ //When we are moving the buttons
             if panRec.state == .began {
-                let location = panRec.translation(in: sceneView)
-                let projectedOrigin = self.sceneView.projectPoint(SCNVector3Make(selection!.node.position.x, selection!.node.position.y, selection!.node.position.z))
-                let locationWithz   = SCNVector3Make(Float(location.x), Float(location.y), projectedOrigin.z)
-                prevLocation_move = locationWithz
+                let mouse   = panRec.translation(in:sceneView)
+                var oldoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
                 mark = selection!.node.clone()
                 let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
                 
@@ -375,31 +382,34 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
                 print(selection!.node.position)
             
                 scene.rootNode.addChildNode(mark!)
+                print("Initial points:")
+                print(panRec.translation(in:sceneView))
             }
             else if (panRec.state == .changed){
+                //let location = panRec.translation(in: self)
+                //let translation = panRec.translation(in: sceneView)
+                //var result : SCNVector3 = CGPointToSCNVector3(view: sceneView, depth: mark!.position.z, point: translation)
+                //mark!.position = result
+                
                 //change mark!.position here
                 let mouse   = panRec.translation(in:sceneView)
-                var unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.0))
-                let p1      = selection!.node.parent!.convertPosition(unPoint, from: nil)
-                unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 1.0))
-                let p2      = selection!.node.parent!.convertPosition(unPoint, from: nil)
-                let m       = p2 - p1
+                var point = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
+                let offset = point - oldpoint;
+                //unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 1.0))
+                //let p2      = selection!.node.parent!.convertPosition(unPoint, from: nil)
+                //let m       = p2 - p1
                 
-                let e       = selection!.localCoordinates
-                let n       = selection!.localNormal
-                
-                //let t       = ((e * n) - (p1 * n)) / (m * n)
-                let t       = 0.038
-                var hit     = SCNVector3(x: p1.x + Float(t) * m.x, y: p1.y + Float(t) * m.y, z: p1.z + Float(t) * m.z)
-                let offset  = hit - hitOld
-                hitOld      =  hit
+                //let e       = selection!.localCoordinates
+                //let n       = selection!.localNormal
+
+                //let t       = (((e * n) - (p1 * n)) / (m * n)) * -5
+                //let t       = 0.038
+                //var hit     = SCNVector3(x: p1.x + Float(t) * m.x, y: p1.y + Float(t) * m.y, z: p1.z + Float(t) * m.z)
+                //let offset  = hit - hitOld
+                //hitOld      =  hit
                 mark!.position = mark!.position + offset
-                print("offset: ")
-                print(offset)
-                
-                print("mark.position: ")
-                print(mark!.position)
-                
+                //print("offset: ")
+                //print(offset)
             }
             else if (panRec.state == .ended){
                 selection!.node.position = mark!.position

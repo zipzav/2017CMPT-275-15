@@ -96,7 +96,6 @@ extension ExperienceViewController {
     public var movementHandler: ((_ rotationAngle: CGFloat, _ fieldOfViewAngle: CGFloat) -> ())?
     
     // MARK: Private properties
-    private let radius: CGFloat = 10
     private let sceneView = SCNView()
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
@@ -117,7 +116,7 @@ extension ExperienceViewController {
     }()
     private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
-        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
+        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * radius
     }()
     
     private var xFov: CGFloat {
