@@ -96,7 +96,6 @@ extension ExperienceViewController {
     public var movementHandler: ((_ rotationAngle: CGFloat, _ fieldOfViewAngle: CGFloat) -> ())?
     
     // MARK: Private properties
-    private let radius: CGFloat = 10
     private let sceneView = SCNView()
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
@@ -117,7 +116,7 @@ extension ExperienceViewController {
     }()
     private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
-        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
+        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * radius
     }()
     
     private var xFov: CGFloat {
@@ -173,7 +172,7 @@ extension ExperienceViewController {
         buttonNodes = [SCNNode]()
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
-            let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+            let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
 
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
@@ -181,6 +180,9 @@ extension ExperienceViewController {
             let newNode:SCNNode = SCNNode()
             newNode.geometry = geometry
             newNode.position = buttonLocations[index]
+            let it = SCNLookAtConstraint(target: cameraNode)
+            it.isGimbalLockEnabled = true
+            newNode.constraints = [it]
             buttonNodes += [newNode]
             
             scene.rootNode.addChildNode(newNode)

@@ -17,10 +17,33 @@ import ImageIO
 import AVFoundation
 import AVKit
 import SpriteKit
+//import SCNSceneRenderer
+func CGPointToSCNVector3(view: SCNView, depth: Float, point: CGPoint) -> SCNVector3 {
+    let projectedOrigin = view.projectPoint(SCNVector3Make(0, 0, depth))
+    let locationWithz   = SCNVector3Make(Float(point.x), Float(point.y), projectedOrigin.z)
+    return view.unprojectPoint(locationWithz)
+}
 
+func + (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x + right.x, y: left.y + right.y, z: left.z + right.z)
+}
+
+func - (left: SCNVector3, right: SCNVector3) -> SCNVector3 {
+    return SCNVector3(x: left.x - right.x, y: left.y - right.y, z: left.z - right.z)
+}
+
+func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
+    return CGFloat(left.x * right.x + left.y * right.y + left.z * right.z)
+}
+
+let radius: CGFloat = 20
 
 @objc public class NewCTPanoramaView_Editor: UIView {
     var move_Flag = false
+    var mark : SCNNode? = nil
+    var selection:SCNHitTestResult? = nil
+    var hitOld = SCNVector3Zero
+    
     // MARK: Public properties
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
     public var image: UIImage? {
@@ -49,7 +72,7 @@ import SpriteKit
     public var movementHandler: ((_ rotationAngle: CGFloat, _ fieldOfViewAngle: CGFloat) -> ())?
     
     // MARK: Private properties
-    private let radius: CGFloat = 10
+
     private let sceneView = SCNView()
     private let scene = SCNScene()
     private let motionManager = CMMotionManager()
@@ -61,6 +84,8 @@ import SpriteKit
     public var buttonPressedFlag:[Bool] = [Bool]()
     private var prevLocation = CGPoint.zero
     private var prevBounds = CGRect.zero
+    private var prevLocation_move: SCNVector3 = SCNVector3Make(0, 0, 0)
+    private var oldpoint = SCNVector3Make(0, 0, 0)
     private lazy var cameraNode: SCNNode? = {
         let node = SCNNode()
         let camera = SCNCamera()
@@ -70,7 +95,7 @@ import SpriteKit
     }()
     private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
-        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * self.radius
+        return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * radius
     }()
     
     private var xFov: CGFloat {
@@ -112,9 +137,8 @@ import SpriteKit
                     if (buttonNodes[index] == node){
                         let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                         let MoveButton = UIAlertAction(title: "Move", style: .default) { (action) in
-                            //TODO:Set back nav to false
                             self.move_Flag = true
-
+                            self.selection = result
                         }
                         let PlayButton = UIAlertAction(title: "Play", style: .default) { (action) in
                             self.move_Flag = false
@@ -156,7 +180,9 @@ import SpriteKit
         buttonNodes = [SCNNode]()
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
-            let geometry:SCNPlane = SCNPlane(width: 1.5, height: 1.5)
+            let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+            
+           
             
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
@@ -164,8 +190,11 @@ import SpriteKit
             let newNode:SCNNode = SCNNode()
             newNode.geometry = geometry
             newNode.position = buttonLocations[index]
+            let it = SCNLookAtConstraint(target: cameraNode)
+            it.isGimbalLockEnabled = true
+            newNode.constraints = [it]
             buttonNodes += [newNode]
-            
+
             scene.rootNode.addChildNode(newNode)
             buttonPressedFlag += [false]
         }
@@ -209,7 +238,6 @@ import SpriteKit
     
     //Creats the panoramic sphere/cylinder of the current panorama
     private func createGeometryNode() {
-        
         guard let image = image else {return}
         //delete buttons and panorama from scene
         for node in buttonNodes{
@@ -335,6 +363,61 @@ import SpriteKit
                 prevLocation = location
             
                 reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians())
+            }
+        }
+        else{ //When we are moving the buttons
+            if panRec.state == .began {
+                let mouse   = panRec.translation(in:sceneView)
+                var oldoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
+                mark = selection!.node.clone()
+                let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+                
+                geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
+                geometry.firstMaterial?.isDoubleSided = true;
+                
+                mark!.geometry = geometry
+                mark!.opacity = 0.80
+                mark!.position = selection!.node.position
+                print(mark!.position)
+                print(selection!.node.position)
+            
+                scene.rootNode.addChildNode(mark!)
+                print("Initial points:")
+                print(panRec.translation(in:sceneView))
+            }
+            else if (panRec.state == .changed){
+                //let location = panRec.translation(in: self)
+                //let translation = panRec.translation(in: sceneView)
+                //var result : SCNVector3 = CGPointToSCNVector3(view: sceneView, depth: mark!.position.z, point: translation)
+                //mark!.position = result
+                
+                //change mark!.position here
+                let mouse   = panRec.translation(in:sceneView)
+                var point = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
+                let offset = point - oldpoint;
+                //unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 1.0))
+                //let p2      = selection!.node.parent!.convertPosition(unPoint, from: nil)
+                //let m       = p2 - p1
+                
+                //let e       = selection!.localCoordinates
+                //let n       = selection!.localNormal
+
+                //let t       = (((e * n) - (p1 * n)) / (m * n)) * -5
+                //let t       = 0.038
+                //var hit     = SCNVector3(x: p1.x + Float(t) * m.x, y: p1.y + Float(t) * m.y, z: p1.z + Float(t) * m.z)
+                //let offset  = hit - hitOld
+                //hitOld      =  hit
+                mark!.position = mark!.position + offset
+                //print("offset: ")
+                //print(offset)
+            }
+            else if (panRec.state == .ended){
+                selection!.node.position = mark!.position
+                //selection!.node.convertPosition(mark!.position, from: selection!.node)
+                mark!.removeFromParentNode()
+                selection = nil
+                mark = nil
+                move_Flag = false
             }
         }
     }
