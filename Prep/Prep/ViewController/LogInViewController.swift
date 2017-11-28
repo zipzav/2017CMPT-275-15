@@ -24,18 +24,16 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var PrepLogo: UIImageView!
     
-    
     var isSignIn:Bool = true
-    
     
     //SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
 
-    
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         let currentUser = Auth.auth().currentUser
         navigationItem.hidesBackButton = true
         
-        super.viewDidLoad()
         //Set the segnmented slection to match the color of the theme
         SignInSelection.tintColor = UIColor.PrepGreen
         
@@ -50,11 +48,14 @@ class LogInViewController: UIViewController {
         SignInButton.layer.cornerRadius = 5
         SignInButton.layer.borderWidth = 1
         SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
-        var firstload = false
-        if (currentUser != nil) {
+   }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if Auth.auth().currentUser != nil {
             self.performSegue(withIdentifier: "GoToHomePage", sender: self)
         }
-   }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

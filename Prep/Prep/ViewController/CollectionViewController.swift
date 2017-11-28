@@ -177,22 +177,24 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillDisappear(_ animated: Bool) {
         userRef.removeAllObservers()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        usedTimerForEndRefreshing()
+        Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
+            self.refreshControl.endRefreshing()
+        })
     }
-    
-    func usedTimerForEndRefreshing()  {
-        Timer.scheduledTimer(timeInterval: 10,// stop spining after 10 seconds
-                             target: self,
-                             selector: #selector(self.endRefreshing(_:)),
-                             userInfo: nil,
-                             repeats: false)
-    }
-    
-    @objc func endRefreshing(_ timer: AnyObject) {
-        self.refreshControl.endRefreshing()
-    }
+//
+//    func usedTimerForEndRefreshing()  {
+//        Timer.scheduledTimer(timeInterval: 10,// stop spining after 10 seconds
+//                             target: self,
+//                             selector: #selector(self.endRefreshing(_:)),
+//                             userInfo: nil,
+//                             repeats: false)
+//    }
+//    
+//    @objc func endRefreshing(_ timer: AnyObject) {
+//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

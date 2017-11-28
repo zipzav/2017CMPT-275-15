@@ -16,10 +16,7 @@ import FirebaseDatabase
 import DTZFloatingActionButton
 
 var rref: DatabaseReference!
-class Cell: ScalingCarouselCell {
-    
-    
-}
+//class Cell: ScalingCarouselCell {}
 
 class SharedExperienceViewController: UIViewController {
     
@@ -27,11 +24,8 @@ class SharedExperienceViewController: UIViewController {
     var arrayOfSharedExperiences = [Experience]()
     var sharedExperienceRef: DatabaseReference!
     
-    private let refreshControl = UIRefreshControl()
-    
     // MARK: - IBOutlets
     @IBOutlet weak var carousel: ScalingCarouselView!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,36 +37,19 @@ class SharedExperienceViewController: UIViewController {
         
         // Database
         rref = Database.database().reference()
-        
+        showSpinner()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        //navigationItem.hidesBackButton = true
         self.navigationItem.setHidesBackButton(true, animated: false)
-        
-        //        carousel.refreshControl = refreshControl
-        //        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
-        //        self.refreshControl.beginRefreshing()
         fetchSharedExperience()
+        Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { (timer) in
+            self.hideSpinner()
+        })
     }
     
     // MARK: - Configuration
-    
-    
-    @objc private func refreshExperienceData(_ sender: Any) {
-        // Fetch Weather Data
-        //fetchExperience()
-        DispatchQueue.main.async {
-            self.carousel.reloadData()
-        }
-        self.refreshControl.endRefreshing()
-        //self.activityIndicatorView.stopAnimating()
-    }
-    
-    // MARK: - Button Actions
-    
-    
     
     func fetchSharedExperience() {
         var exp: Experience?
@@ -138,9 +115,7 @@ class SharedExperienceViewController: UIViewController {
             self.arrayOfExperienceSnapshots.append(snapshot)
             
             //Update collection view
-            
             self.carousel.insertItems(at: [IndexPath(row: self.arrayOfSharedExperiences.count-1, section: 0)])
-            //self.carousel.refreshControl?.endRefreshing()
             
         }, withCancel: nil)
         
@@ -158,8 +133,6 @@ class SharedExperienceViewController: UIViewController {
             
             })
         
-        
-        
     }
     
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
@@ -173,12 +146,11 @@ class SharedExperienceViewController: UIViewController {
         return -1
     }
     
-    
     override func viewWillDisappear(_ animated: Bool) {
         rref.child("shared").removeAllObservers()
     }
     
-    
+    // MARK: - Button Actions
     
     // Add button
     func floatingButton() {
