@@ -152,7 +152,13 @@ class SharedExperienceViewController: UIViewController {
                 self.carousel.deleteItems(at: [IndexPath(row: index, section: 0)])
             })
             
-        }, withCancel: nil)
+        }, withCancel: {(err) in
+            
+            print(err) //The cancelBlock will be called if you will no longer receive new events due to no longer having permission.
+            
+            })
+        
+        
         
     }
     

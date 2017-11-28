@@ -142,9 +142,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             //Update collection view
             self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
             DispatchQueue.main.async(execute: {
-                self.refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing() // execute this line once, before leaving .observe
             })
-        }, withCancel: nil)
+        }, withCancel: {(err) in
+            
+            print(err) //The cancelBlock will be called if you will no longer receive new events due to no longer having permission.
+            
+        })
+        
         
         // Listen for any remove child node events in the database and update collection view
         //ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
@@ -171,6 +176,22 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewWillDisappear(_ animated: Bool) {
         userRef.removeAllObservers()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        usedTimerForEndRefreshing()
+    }
+    
+    func usedTimerForEndRefreshing()  {
+        Timer.scheduledTimer(timeInterval: 10,// stop spining after 10 seconds
+                             target: self,
+                             selector: #selector(self.endRefreshing(_:)),
+                             userInfo: nil,
+                             repeats: false)
+    }
+    
+    @objc func endRefreshing(_ timer: AnyObject) {
+        self.refreshControl.endRefreshing()
     }
     
     override func didReceiveMemoryWarning() {
