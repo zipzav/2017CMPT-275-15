@@ -33,6 +33,7 @@
 		400B64961FA837990023FA63 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400B64951FA837990023FA63 /* CollectionViewController.swift */; };
 		404492F01FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404492EF1FCA2DDC00F0E7F0 /* SharedExperienceViewController.swift */; };
 		40606CCA1FB8F3BB002737C6 /* UIViewController+Alerts.m in Sources */ = {isa = PBXBuildFile; fileRef = 40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */; };
+		40699EAF1FCDEEA400888744 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40699EAE1FCDEEA400888744 /* Reach.swift */; };
 		40869FC61FBA3C700047C7F7 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40869FC51FBA3C700047C7F7 /* UIColorExtension.swift */; };
 		40BF4A5A1FBA8E7200596CA5 /* UploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40BF4A591FBA8E7200596CA5 /* UploadManager.swift */; };
 		40D00E9C1FB6658800BF28C1 /* EditorStartPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */; };
@@ -98,6 +99,7 @@
 		40606CC71FB8F3B9002737C6 /* Prep-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Prep-Bridging-Header.h"; sourceTree = "<group>"; };
 		40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Alerts.h"; sourceTree = "<group>"; };
 		40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Alerts.m"; sourceTree = "<group>"; };
+		40699EAE1FCDEEA400888744 /* Reach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		40869FC51FBA3C700047C7F7 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		40BF4A591FBA8E7200596CA5 /* UploadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadManager.swift; sourceTree = "<group>"; };
 		40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStartPageViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 				40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */,
 				40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */,
 				877540341FB680460014CF99 /* GoogleService-Info.plist */,
+				40699EAE1FCDEEA400888744 /* Reach.swift */,
 			);
 			path = Prep;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3611E3261FA4FEDB005F9A5F /* ExperienceObject.swift in Sources */,
+				40699EAF1FCDEEA400888744 /* Reach.swift in Sources */,
 				40869FC61FBA3C700047C7F7 /* UIColorExtension.swift in Sources */,
 				3611E32E1FA52B93005F9A5F /* NewCTPanoramaView.swift in Sources */,
 				36EEC1481F7C663A0043A02F /* ExperienceViewController.swift in Sources */,

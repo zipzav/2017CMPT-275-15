@@ -64,21 +64,20 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //navigationItem.hidesBackButton = true
         addButton.isEnabled = false
         self.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
+//        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         // Set the Firebase reference
         ref = Database.database().reference()
-        // Listen for new experience in the Firebase database
+        
         self.refreshControl.beginRefreshing()
-        fetchExperience()
     }
-    
-    @objc private func refreshExperienceData(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        self.refreshControl.endRefreshing()
-        //self.activityIndicatorView.stopAnimating()
-    }
+//
+//    @objc private func refreshExperienceData(_ sender: Any) {
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadData()
+//        }
+//        self.refreshControl.endRefreshing()
+//        //self.activityIndicatorView.stopAnimating()
+//    }
     func fetchExperience() {
         var exp: Experience?
         
@@ -180,6 +179,12 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        self.refreshControl.beginRefreshing()
+        // Listen for new experience in the Firebase database
+        fetchExperience()
+        // Reload data after 'Back' button is clicked on Experience viewer page
+        collectionView.reloadData()
+        // Stop spinner when no data to show on home page
         Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
             self.refreshControl.endRefreshing()
         })

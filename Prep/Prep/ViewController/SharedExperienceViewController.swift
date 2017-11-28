@@ -37,14 +37,15 @@ class SharedExperienceViewController: UIViewController {
         
         // Database
         rref = Database.database().reference()
-        showSpinner()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         self.navigationItem.setHidesBackButton(true, animated: false)
+        showSpinner()
         fetchSharedExperience()
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: { (timer) in
+        carousel.reloadData()
+        Timer.scheduledTimer(withTimeInterval: 7, repeats: false, block: { (timer) in
             self.hideSpinner()
         })
     }
@@ -249,6 +250,10 @@ extension CarouselDatasource: UICollectionViewDataSource {
             scalingCell.mainView.backgroundColor = .red
         }
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        GlobalCurrentExperience = arrayOfSharedExperiences[indexPath.row]
+        performSegue(withIdentifier: "SharedExperienceToViewer", sender: self)
     }
 }
 

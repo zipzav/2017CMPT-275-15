@@ -162,6 +162,7 @@
                         <barButtonItem key="leftBarButtonItem" title="Shared Experiences" id="fwQ-NV-hfw">
                             <connections>
                                 <action selector="GoToSharedExperiences:" destination="ILP-Ib-Gy2" id="MbV-PQ-2RR"/>
+                                <segue destination="vZQ-fK-1s5" kind="show" identifier="HomePageToSharedExperiences" id="N1p-8i-LMe"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="TabBar-Settings" id="33q-1T-Gga">
@@ -600,7 +601,7 @@
                     <navigationItem key="navigationItem" id="sXl-2p-z2f"/>
                     <connections>
                         <outlet property="carousel" destination="51e-oU-0d7" id="rwm-CS-2V3"/>
-                        <segue destination="1iv-r4-FCH" kind="show" identifier="ShareToViewer" id="Izw-f1-Gyb"/>
+                        <segue destination="1iv-r4-FCH" kind="show" identifier="SharedExperienceToViewer" id="Izw-f1-Gyb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yUP-ES-2A9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -614,6 +615,7 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="N1p-8i-LMe"/>
         <segue reference="cCc-vB-9d0"/>
         <segue reference="Izw-f1-Gyb"/>
     </inferredMetricsTieBreakers>
