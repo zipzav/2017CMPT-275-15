@@ -66,10 +66,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         // Set the Firebase reference
         ref = Database.database().reference()
         
-        // Loading Icon
-        self.collectionView.refreshControl = refreshControl
-        self.refreshControl.beginRefreshing()
-        
         // Monitor Connection to Wifi
         Reach().monitorReachabilityChanges()
     }
@@ -77,6 +73,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         network().checkConnection()
+        // Loading Icon
+        self.collectionView.refreshControl = refreshControl
         self.refreshControl.beginRefreshing()
         floatingButton()
         // Listen for new experience in the Firebase database
@@ -88,6 +86,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             self.refreshControl.endRefreshing()
             if (hasConnection == false) {
                 self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
+            } else {
+                if(GlobalExperienceSnapshots.count == 0) {
+                    self.showMessagePrompt("No experience to show. Select '+' button to create your first experience")
+                }
             }
         })
     }

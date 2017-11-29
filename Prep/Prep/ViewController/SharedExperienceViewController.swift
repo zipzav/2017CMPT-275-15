@@ -30,8 +30,6 @@ class SharedExperienceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showSpinner()
-        
         // UI Config
         //floatingButton() // upload premade experiences for development purpose
         self.title = "Shared Experiences"
@@ -46,6 +44,7 @@ class SharedExperienceViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        showSpinner()
         self.navigationItem.setHidesBackButton(true, animated: false)
         network().checkConnection()
         fetchSharedExperience()

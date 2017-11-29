@@ -317,14 +317,22 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         picker.dismiss(animated: true, completion:nil)
     }
     
+    // Hide keyboard when user tap screen
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?){
-        // Hide keyboard when user tap screen
+        
         experienceTitle.resignFirstResponder()
         experienceDescription.resignFirstResponder()
-        
     }
     
-    
+    // Ask user to fill in title and follow by description
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == experienceTitle {
+            experienceDescription.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+        }
+        return true
+    }
     
 }
 
