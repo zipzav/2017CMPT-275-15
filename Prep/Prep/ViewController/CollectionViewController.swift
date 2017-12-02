@@ -27,7 +27,6 @@ var GlobalcurrentExperienceIndex:Int = 0
 var GlobalExperienceSnapshots: Array<DataSnapshot> = []
 var GlobalCurrentExperienceID: String? = ""
 var GlobalUserID: String? = ""
-var ref: DatabaseReference!
 extension UIRefreshControl {
     func refreshManually() {
         if let scrollView = superview as? UIScrollView {
@@ -49,6 +48,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     private let refreshControl = UIRefreshControl()
     var cellSelected:IndexPath?
     
+    var ref: DatabaseReference!
     var userRef: DatabaseReference!
     var _refHandle: DatabaseHandle!
     var kSection = 1
@@ -60,25 +60,40 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         //self.title = "My Collection"
         //initializePreMades()
-        floatingButton()
         //navigationItem.hidesBackButton = true
+        
         addButton.isEnabled = false
-        self.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
         // Set the Firebase reference
         ref = Database.database().reference()
-        // Listen for new experience in the Firebase database
-        self.refreshControl.beginRefreshing()
-        fetchExperience()
+        
+        // Monitor Connection to Wifi
+        Reach().monitorReachabilityChanges()
     }
     
-    @objc private func refreshExperienceData(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        self.refreshControl.endRefreshing()
-        //self.activityIndicatorView.stopAnimating()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        network().checkConnection()
+        // Loading Icon
+        self.collectionView.refreshControl = refreshControl
+        self.refreshControl.beginRefreshing()
+        floatingButton()
+        // Listen for new experience in the Firebase database
+        fetchExperience()
+        // Reload data after 'Back' button is clicked on Experience viewer page
+        collectionView.reloadData()
+        // Stop spinner when no data to show on home page
+        Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
+            self.refreshControl.endRefreshing()
+            if (hasConnection == false) {
+                self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
+            } else {
+                if(GlobalExperienceSnapshots.count == 0) {
+                    self.showMessagePrompt("No experience to show. Select '+' button to create your first experience")
+                }
+            }
+        })
     }
+    
     func fetchExperience() {
         var exp: Experience?
         
@@ -90,6 +105,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         arrayOfExperiences.removeAll()
         GlobalExperienceSnapshots.removeAll()
         
+        // Do not assign a reference to database when offline
+        guard (hasConnection == true) else {return}
+        
         // Assign unqiue user id from FireaseAuth to global variable
         GlobalUserID = uid
         
@@ -97,7 +115,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         userRef = ref.child("user").child(uid)
         
         // Listen for any add child node events in the database and update collection view
-        userRef.observe(.childAdded, with: { (snapshot) -> Void in
+        userRef.queryLimited(toLast: 10).observe(.childAdded, with: { (snapshot) -> Void in
             // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
@@ -142,9 +160,14 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             //Update collection view
             self.collectionView.insertItems(at: [IndexPath(row: arrayOfExperiences.count-1, section: 0)])
             DispatchQueue.main.async(execute: {
-                self.refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing() // execute this line once, before leaving .observe
             })
-        }, withCancel: nil)
+        }, withCancel: {(err) in
+            
+            print(err) //The cancelBlock will be called if you will no longer receive new events due to no longer having permission.
+            
+        })
+        
         
         // Listen for any remove child node events in the database and update collection view
         //ref.child("user").child(uid).observe(.childRemoved, with: { (snapshot) -> Void in
@@ -170,8 +193,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        userRef.removeAllObservers()
+        if(userRef != nil ) {
+            userRef.removeAllObservers()
+        }
     }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -317,8 +343,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         
                         if let snapName = snapshotObject["name"], let snapDescription = snapshotObject["description"] {
                             // Add title and description field to database
-                            ref.child("shared/\(experienceID)/name").setValue("\(snapName)")
-                            ref.child("shared/\(experienceID)/description").setValue("\(snapDescription)")
+                            self.ref.child("shared/\(experienceID)/name").setValue("\(snapName)")
+                            self.ref.child("shared/\(experienceID)/description").setValue("\(snapDescription)")
                         }
                     }
                     for snap in snapshot.children.allObjects as! [DataSnapshot] {
@@ -326,7 +352,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         if let snapObject = snap.value as? [String: AnyObject] {
                             if let image = snapObject ["image"] {
                                 // Add image to database
-                                ref.child("shared/\(experienceID)/\(panoramaID)/image").setValue("\(image)")
+                                self.self.ref.child("shared/\(experienceID)/\(panoramaID)/image").setValue("\(image)")
                                 var i = 0
                                 if let buttons = snapObject["button"]{
                                     for button in buttons as! NSMutableArray{
@@ -336,10 +362,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                         let y = temp["locationy"] as! Int
                                         let z = temp["locationz"] as! Int
                                         // Add button data to database
-                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["action":a])
-                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationx":x])
-                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationy":y])
-                                        ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationz":z])
+                                        self.ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["action":a])
+                                        self.ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationx":x])
+                                        self.ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationy":y])
+                                        self.ref.child("shared/\(experienceID)/\(panoramaID)/button").child("\(i)").updateChildValues(["locationz":z])
                                         i += 1
                                     }
                                 }
@@ -350,9 +376,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
                     if GlobalcurrentExperienceIndex != -1 {
-                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+                        self.ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
                     } else {
-                        ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+                        self.ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
                     }
                     GlobalExperienceSnapshots.remove(at: indexPath!.row)
                     arrayOfExperiences.remove(at: indexPath!.row)
@@ -386,11 +412,16 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         actionButton.handler = {
             button in
             // Did Tap Button
-            if arrayOfExperiences.count >= 10{
-                self.showMessagePrompt("You can create up to 10 experiences")
+            network().checkConnection()
+            if hasConnection == true {
+                if arrayOfExperiences.count >= 10{
+                    self.showMessagePrompt("You can create up to 10 experiences")
+                } else {
+                    GlobalcurrentExperienceIndex = -1 // -1 for new experience
+                    self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                }
             } else {
-                GlobalcurrentExperienceIndex = -1 // -1 for new experience
-                self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
+                self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
             }
         }
         

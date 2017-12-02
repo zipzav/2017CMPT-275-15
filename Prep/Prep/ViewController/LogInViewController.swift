@@ -24,18 +24,15 @@ class LogInViewController: UIViewController {
     
     @IBOutlet weak var PrepLogo: UIImageView!
     
-    
     var isSignIn:Bool = true
-    
     
     //SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
 
-    
     override func viewDidLoad() {
-        let currentUser = Auth.auth().currentUser
+        super.viewDidLoad()
+        network().checkConnection()
         navigationItem.hidesBackButton = true
         
-        super.viewDidLoad()
         //Set the segnmented slection to match the color of the theme
         SignInSelection.tintColor = UIColor.PrepGreen
         
@@ -50,11 +47,21 @@ class LogInViewController: UIViewController {
         SignInButton.layer.cornerRadius = 5
         SignInButton.layer.borderWidth = 1
         SignInButton.layer.borderColor = UIColor.PrepPurple.cgColor
-        var firstload = false
-        if (currentUser != nil) {
-            self.performSegue(withIdentifier: "GoToHomePage", sender: self)
-        }
+        
+        // Monitor Connection to Wifi
+        Reach().monitorReachabilityChanges()
    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if Auth.auth().currentUser != nil {
+            Timer.scheduledTimer(withTimeInterval: 2, repeats: false, block: { (timer) in
+                if(hasConnection == true) {
+                    self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
+                }
+            })
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -74,16 +81,32 @@ class LogInViewController: UIViewController {
     }
     
     @IBAction func SignInButtonTapped(_ sender: UIButton) {
+        network().checkConnection()
+        if (hasConnection == false) {
+            self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
+            return
+        }
+        
         //Checking email and password
     if let email = EmailTextField.text, let password = PasswordTextField.text {
             //Check if it's signin or register
             if isSignIn {
                 //Signin the user with Firebase
                 Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
+//                        guard let authError = error else { return }
+//                        guard let errorCode = (authError as NSError).code as Int? else { return }
+//                        switch errorCode {
+//                            case AuthErrorCode.userNotFound.rawValue:
+//                                self.showMessagePrompt("the user account was not found. This could happen if the user account has been deleted.")
+//                            case AuthErrorCode.networkError.rawValue:
+//                                self.showMessagePrompt("A network error occurred during the operation")
+//                            default:
+//                                self.showMessagePrompt("An internal error occurred. Please report the error")
+//                        }
                     //Check that user is not null
                     if let u = user{
                         //User is found. Take to home screen
-                        self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
                     }
                     else {
                         //Error
@@ -96,7 +119,7 @@ class LogInViewController: UIViewController {
                 //Register the user with Firebase
                 Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                     if let u = user {
-                        self.performSegue(withIdentifier: "GoToHomePage", sender: self)
+                        self.performSegue(withIdentifier: "LoginToSharedExperience", sender: self)
                     }
                     else{
                         // TODO: Mandy, Please refer to this website for adding spinner and error message. https://github.com/firebase/quickstart-ios/blob/master/authentication/AuthenticationExampleSwift/EmailViewController.swift

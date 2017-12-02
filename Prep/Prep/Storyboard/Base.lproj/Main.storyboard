@@ -104,16 +104,17 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxO-l5-Nrm">
-                                                                <rect key="frame" x="8" y="14" width="292" height="33"/>
+                                                                <rect key="frame" x="8" y="18" width="292" height="33"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
+                                                                <color key="shadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                             </label>
-                                                            <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="justified" lineBreakMode="wordWrap" numberOfLines="4" minimumFontSize="8" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QNG-WR-ecF">
-                                                                <rect key="frame" x="16" y="39" width="277" height="63"/>
+                                                            <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" minimumFontSize="8" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QNG-WR-ecF">
+                                                                <rect key="frame" x="10" y="43" width="277" height="52"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
@@ -162,6 +163,7 @@
                         <barButtonItem key="leftBarButtonItem" title="Shared Experiences" id="fwQ-NV-hfw">
                             <connections>
                                 <action selector="GoToSharedExperiences:" destination="ILP-Ib-Gy2" id="MbV-PQ-2RR"/>
+                                <segue destination="vZQ-fK-1s5" kind="show" identifier="HomePageToSharedExperiences" id="N1p-8i-LMe"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="TabBar-Settings" id="33q-1T-Gga">
@@ -175,12 +177,11 @@
                         <outlet property="addButton" destination="aZh-ou-EQ8" id="M77-Av-mTy"/>
                         <outlet property="collectionView" destination="NcZ-cG-YgM" id="JMr-xl-QqM"/>
                         <segue destination="4Bf-up-AFb" kind="show" identifier="HomePageToEditorStartPage" id="ytS-St-Bpf"/>
-                        <segue destination="vZQ-fK-1s5" kind="show" identifier="HomePageToSharedExperiences" id="AeF-wR-YHP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ecM-dE-1hq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-687" y="1148"/>
+            <point key="canvasLocation" x="-687.3046875" y="1147.65625"/>
         </scene>
         <!--Setting View Controller-->
         <scene sceneID="ibX-DS-glX">
@@ -246,7 +247,7 @@
                                         <rect key="frame" x="0.0" y="188" width="1024" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0pt-ZH-sth" id="wit-m9-5B8">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -258,8 +259,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yu6-EM-iMH">
-                                                    <rect key="frame" x="482" y="6" width="60" height="30"/>
+                                                    <rect key="frame" x="452" y="6" width="121" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <state key="normal" title="Sign Out"/>
                                                     <connections>
                                                         <action selector="onSignOutTapped:" destination="rpV-h7-rj8" eventType="touchUpInside" id="Wbh-7T-bBu"/>
@@ -278,12 +280,11 @@
                     </tableView>
                     <connections>
                         <outlet property="controlSwitch" destination="39l-eg-cm8" id="Ual-iG-X2p"/>
-                        <segue destination="gDe-7I-zhs" kind="show" identifier="SignOutSegue" id="1S4-84-iuN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H3F-9q-gDJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-8" y="429"/>
+            <point key="canvasLocation" x="-8.203125" y="428.90625"/>
         </scene>
         <!--Editor Start Page View Controller-->
         <scene sceneID="R0n-0W-hsn">
@@ -318,14 +319,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="hsl-IM-PJA">
                                 <rect key="frame" x="586" y="255" width="378" height="290"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bEt-bp-Wis">
                                 <rect key="frame" x="817" y="599" width="147" height="79"/>
@@ -427,7 +428,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="caY-pg-Wve">
-                                <rect key="frame" x="0.0" y="70" width="1024" height="584"/>
+                                <rect key="frame" x="0.0" y="114" width="1024" height="540"/>
                                 <subviews>
                                     <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="preplogo" translatesAutoresizingMaskIntoConstraints="NO" id="blF-VU-bXf">
                                         <rect key="frame" x="212" y="-180" width="600" height="180"/>
@@ -437,10 +438,10 @@
                                         </constraints>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="preplogo" translatesAutoresizingMaskIntoConstraints="NO" id="GOI-tL-hda">
-                                        <rect key="frame" x="187" y="0.0" width="650" height="184"/>
+                                        <rect key="frame" x="187" y="0.0" width="650" height="140"/>
                                     </imageView>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="PXS-Et-yuQ">
-                                        <rect key="frame" x="211.5" y="234" width="601" height="51"/>
+                                        <rect key="frame" x="211.5" y="190" width="601" height="51"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="UUD-9h-tE4"/>
                                         </constraints>
@@ -454,7 +455,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Nza-Zx-kJ2">
-                                        <rect key="frame" x="212" y="334" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="290" width="600" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvN-PB-OiH">
                                                 <rect key="frame" x="0.0" y="0.0" width="42.5" height="50"/>
@@ -475,7 +476,7 @@
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TEB-Nc-Yr2">
-                                        <rect key="frame" x="212" y="434" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="390" width="600" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9w8-l6-AeZ">
                                                 <rect key="frame" x="0.0" y="0.0" width="77" height="50"/>
@@ -496,7 +497,7 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDY-63-fAA">
-                                        <rect key="frame" x="212" y="534" width="600" height="50"/>
+                                        <rect key="frame" x="212" y="490" width="600" height="50"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                         <constraints>
@@ -518,7 +519,6 @@
                             <constraint firstItem="gMk-B2-FNs" firstAttribute="bottom" secondItem="caY-pg-Wve" secondAttribute="bottom" constant="114" id="Ecb-ax-VVV"/>
                             <constraint firstItem="caY-pg-Wve" firstAttribute="trailing" secondItem="gMk-B2-FNs" secondAttribute="trailing" id="OQM-Dr-Lxk"/>
                             <constraint firstItem="caY-pg-Wve" firstAttribute="leading" secondItem="gMk-B2-FNs" secondAttribute="leading" id="jPk-YF-Ltt"/>
-                            <constraint firstItem="caY-pg-Wve" firstAttribute="top" secondItem="hdS-64-CI0" secondAttribute="top" constant="114" id="ojb-KB-tCM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gMk-B2-FNs"/>
                     </view>
@@ -529,7 +529,7 @@
                         <outlet property="PrepLogo" destination="blF-VU-bXf" id="ji9-IX-BGX"/>
                         <outlet property="SignInButton" destination="nDY-63-fAA" id="Dyg-c2-Q9K"/>
                         <outlet property="SignInSelection" destination="PXS-Et-yuQ" id="F6u-My-V19"/>
-                        <segue destination="vZQ-fK-1s5" kind="show" identifier="GoToHomePage" id="iRM-Rq-Ywr"/>
+                        <segue destination="vZQ-fK-1s5" kind="show" identifier="LoginToSharedExperience" id="iRM-Rq-Ywr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qay-OL-Vem" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -555,7 +555,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="J1K-l0-kXb" customClass="Cell" customModule="Prep" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="J1K-l0-kXb" customClass="ScalingCarouselCell" customModule="ScalingCarousel">
                                         <rect key="frame" x="0.0" y="0.0" width="330" height="495"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -619,7 +619,7 @@
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="ILP-Ib-Gy2" kind="show" id="cCc-vB-9d0"/>
+                                    <segue destination="ILP-Ib-Gy2" kind="show" identifier="SharedExperienceToHomePage" id="cCc-vB-9d0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -629,7 +629,7 @@
                     <navigationItem key="navigationItem" id="sXl-2p-z2f"/>
                     <connections>
                         <outlet property="carousel" destination="51e-oU-0d7" id="rwm-CS-2V3"/>
-                        <segue destination="1iv-r4-FCH" kind="show" identifier="ShareToViewer" id="Izw-f1-Gyb"/>
+                        <segue destination="1iv-r4-FCH" kind="show" identifier="SharedExperienceToViewer" id="Izw-f1-Gyb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yUP-ES-2A9" userLabel="First Responder" sceneMemberID="firstResponder"/>

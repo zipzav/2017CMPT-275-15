@@ -15,27 +15,21 @@ import FirebaseAuth
 import FirebaseDatabase
 import DTZFloatingActionButton
 
-var rref: DatabaseReference!
-class Cell: ScalingCarouselCell {
-    
-    
-}
+//class Cell: ScalingCarouselCell {}
+
 
 class SharedExperienceViewController: UIViewController {
     
     var arrayOfExperienceSnapshots: Array<DataSnapshot> = []
     var arrayOfSharedExperiences = [Experience]()
     var sharedExperienceRef: DatabaseReference!
-    
-    private let refreshControl = UIRefreshControl()
+    var rref: DatabaseReference!
     
     // MARK: - IBOutlets
     @IBOutlet weak var carousel: ScalingCarouselView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // UI Config
         //floatingButton() // upload premade experiences for development purpose
         self.title = "Shared Experiences"
@@ -44,35 +38,26 @@ class SharedExperienceViewController: UIViewController {
         // Database
         rref = Database.database().reference()
         
+        // Monitor Connection to Wifi
+        Reach().monitorReachabilityChanges()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        //navigationItem.hidesBackButton = true
+        showSpinner()
         self.navigationItem.setHidesBackButton(true, animated: false)
-        
-        //        carousel.refreshControl = refreshControl
-        //        refreshControl.addTarget(self, action: #selector(refreshExperienceData(_:)), for: .valueChanged)
-        //        self.refreshControl.beginRefreshing()
+        network().checkConnection()
         fetchSharedExperience()
+        carousel.reloadData()
+        Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
+            self.hideSpinner()
+            if (hasConnection == false) {
+                self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
+            }
+        })
     }
     
     // MARK: - Configuration
-    
-    
-    @objc private func refreshExperienceData(_ sender: Any) {
-        // Fetch Weather Data
-        //fetchExperience()
-        DispatchQueue.main.async {
-            self.carousel.reloadData()
-        }
-        self.refreshControl.endRefreshing()
-        //self.activityIndicatorView.stopAnimating()
-    }
-    
-    // MARK: - Button Actions
-    
-    
     
     func fetchSharedExperience() {
         var exp: Experience?
@@ -85,14 +70,17 @@ class SharedExperienceViewController: UIViewController {
         arrayOfSharedExperiences.removeAll()
         arrayOfExperienceSnapshots.removeAll()
         
+        // Do not assign a reference to database when offline
+        guard (hasConnection == true) else {return}
+        
         // Assign unqiue user id from FireaseAuth to global variable
         GlobalUserID = uid
         
         // Assign a database reference
-        //sharedExperienceRef = Ref.child("user").child(uid)
+        sharedExperienceRef = rref.child("shared")
         
         // Listen for any add child node events in the database and update collection view
-        rref.child("shared").queryLimited(toLast: 10).observe(.childAdded, with: { (snapshot) -> Void in
+        sharedExperienceRef.queryLimited(toLast: 10).observe(.childAdded, with: { (snapshot) -> Void in
             // Store Id in the newly created experience object
             exp = Experience(Name: "", Description: "", Id: snapshot.key )
             if let snapshotObject = snapshot.value as? [String: AnyObject] {
@@ -138,21 +126,23 @@ class SharedExperienceViewController: UIViewController {
             self.arrayOfExperienceSnapshots.append(snapshot)
             
             //Update collection view
-            
             self.carousel.insertItems(at: [IndexPath(row: self.arrayOfSharedExperiences.count-1, section: 0)])
-            //self.carousel.refreshControl?.endRefreshing()
             
         }, withCancel: nil)
         
         //Listen for any remove child node events in the database and update collection view
-        rref.child("shared").observe(.childRemoved, with: { (snapshot) -> Void in
+        sharedExperienceRef.observe(.childRemoved, with: { (snapshot) -> Void in
             let index = self.indexOfMessage(snapshot)
             self.arrayOfExperienceSnapshots.remove(at: index)
             DispatchQueue.main.async(execute: {
                 self.carousel.deleteItems(at: [IndexPath(row: index, section: 0)])
             })
             
-        }, withCancel: nil)
+        }, withCancel: {(err) in
+            
+            print(err) //The cancelBlock will be called if you will no longer receive new events due to no longer having permission.
+            
+            })
         
     }
     
@@ -167,12 +157,13 @@ class SharedExperienceViewController: UIViewController {
         return -1
     }
     
-    
     override func viewWillDisappear(_ animated: Bool) {
-        rref.child("shared").removeAllObservers()
+        if(sharedExperienceRef != nil) {
+            sharedExperienceRef.removeAllObservers()
+        }
     }
     
-    
+    // MARK: - Button Actions
     
     // Add button
     func floatingButton() {
@@ -189,12 +180,12 @@ class SharedExperienceViewController: UIViewController {
                 
                 //First Pre-made Experience
                 var Node = "shared"
-                let ExperienceID = rref.child(Node).childByAutoId().key
+                let ExperienceID = self.rref.child(Node).childByAutoId().key
                 
-                let panCoffeeID = rref.child(Node).child(ExperienceID).childByAutoId().key
-                let panTrainID = rref.child(Node).child(ExperienceID).childByAutoId().key
-                let panTownID = rref.child(Node).child(ExperienceID).childByAutoId().key
-                let panparkID = rref.child(Node).child(ExperienceID).childByAutoId().key
+                let panCoffeeID = self.rref.child(Node).child(ExperienceID).childByAutoId().key
+                let panTrainID = self.rref.child(Node).child(ExperienceID).childByAutoId().key
+                let panTownID = self.rref.child(Node).child(ExperienceID).childByAutoId().key
+                let panparkID = self.rref.child(Node).child(ExperienceID).childByAutoId().key
                 
                 let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/waitinginline.mp4?alt=media&token=e9bf2128-26db-4327-8ed8-a486f1efecda", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
                 let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
@@ -207,15 +198,15 @@ class SharedExperienceViewController: UIViewController {
                 
                 let premadeObject = ["name": "Day in London", "description": "We'll be riding the train into London. Maybe some tea and biscuits with 'Nan. We'll head off to shop for knick-knacks and have a jolly good time by Big Ben",  panTrainID : trainImg, panCoffeeID : coffeeImg,  panTownID : townImg, panparkID : parkImg ] as [String : Any]
                 
-                rref.child("shared").child(ExperienceID).setValue(premadeObject)
+                self.rref.child("shared").child(ExperienceID).setValue(premadeObject)
                 
                 //Second Pre-made Experience
-                let Experience2ID = rref.child(Node).childByAutoId().key
+                let Experience2ID = self.rref.child(Node).childByAutoId().key
                 
-                let CityafterdarkID = rref.child(Node).child(Experience2ID).childByAutoId().key
+                let CityafterdarkID = self.rref.child(Node).child(Experience2ID).childByAutoId().key
                 
-                let E2_button1ID = rref.child(Node).child(Experience2ID).childByAutoId().key
-                let E2_button2ID = rref.child(Node).child(Experience2ID).childByAutoId().key
+                let E2_button1ID = self.rref.child(Node).child(Experience2ID).childByAutoId().key
+                let E2_button2ID = self.rref.child(Node).child(Experience2ID).childByAutoId().key
                 
                 let E2_button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car-pass.wav?alt=media&token=39f3ef28-bf27-4708-9f92-ecd61982b193", "locationx": 2, "locationy": 0, "locationz": -2 ] as [String : Any]
                 let E2_button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/car_honk.wav?alt=media&token=d046dca0-4008-477c-9b18-ff5b1f28b0dc", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
@@ -224,7 +215,7 @@ class SharedExperienceViewController: UIViewController {
                 
                 let E2_premadeObject = ["name": "Night at the city center", "description": "Downtown's noisy, ain't it? Let's be sure to look both ways when crossing the street",  CityafterdarkID : CityafterdarkImg ] as [String : Any]
                 
-                rref.child("shared").child(Experience2ID).setValue(E2_premadeObject)
+                self.rref.child("shared").child(Experience2ID).setValue(E2_premadeObject)
                 
             }
         }
@@ -271,6 +262,10 @@ extension CarouselDatasource: UICollectionViewDataSource {
             scalingCell.mainView.backgroundColor = .red
         }
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        GlobalCurrentExperience = arrayOfSharedExperiences[indexPath.row]
+        performSegue(withIdentifier: "SharedExperienceToViewer", sender: self)
     }
 }
 
