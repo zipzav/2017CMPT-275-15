@@ -18,6 +18,10 @@ import AVFoundation
 import AVKit
 import SpriteKit
 //import SCNSceneRenderer
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseStorage
+
 func CGPointToSCNVector3(view: SCNView, depth: Float, point: CGPoint) -> SCNVector3 {
     let projectedOrigin = view.projectPoint(SCNVector3Make(0, 0, depth))
     let locationWithz   = SCNVector3Make(Float(point.x), Float(point.y), projectedOrigin.z)
@@ -43,7 +47,7 @@ let radius: CGFloat = 20
     var mark : SCNNode? = nil
     var selection:SCNHitTestResult? = nil
     var hitOld = SCNVector3Zero
-    
+    var buttonToEditIndex = 0
     // MARK: Public properties
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
     public var image: UIImage? {
@@ -135,6 +139,7 @@ let radius: CGFloat = 20
             if(node != geometryNode && node != nextButton){
                 for index in 0...buttonNodes.count-1{
                     if (buttonNodes[index] == node){
+                        buttonToEditIndex = index
                         let sheet = UIAlertController(title: "Options", message: "Please Choose an Option", preferredStyle: .actionSheet)
                         let MoveButton = UIAlertAction(title: "Move", style: .default) { (action) in
                             self.move_Flag = true
@@ -368,56 +373,50 @@ let radius: CGFloat = 20
         else{ //When we are moving the buttons
             if panRec.state == .began {
                 let mouse   = panRec.translation(in:sceneView)
-                var oldoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
                 mark = selection!.node.clone()
-                let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
                 
+                let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
                 geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
                 geometry.firstMaterial?.isDoubleSided = true;
                 
                 mark!.geometry = geometry
                 mark!.opacity = 0.80
-                mark!.position = selection!.node.position
+                //mark!.position = selection!.node.position
+                mark!.position = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x*1.4), y: Float(mouse.y*1.4), z: 0.8))
                 print(mark!.position)
                 print(selection!.node.position)
             
                 scene.rootNode.addChildNode(mark!)
                 print("Initial points:")
-                print(panRec.translation(in:sceneView))
+                print(mark!.position)
             }
             else if (panRec.state == .changed){
-                //let location = panRec.translation(in: self)
-                //let translation = panRec.translation(in: sceneView)
-                //var result : SCNVector3 = CGPointToSCNVector3(view: sceneView, depth: mark!.position.z, point: translation)
-                //mark!.position = result
-                
-                //change mark!.position here
-                let mouse   = panRec.translation(in:sceneView)
-                var point = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 0.5))
-                let offset = point - oldpoint;
-                //unPoint = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x), y: Float(mouse.y), z: 1.0))
-                //let p2      = selection!.node.parent!.convertPosition(unPoint, from: nil)
-                //let m       = p2 - p1
-                
-                //let e       = selection!.localCoordinates
-                //let n       = selection!.localNormal
 
-                //let t       = (((e * n) - (p1 * n)) / (m * n)) * -5
-                //let t       = 0.038
-                //var hit     = SCNVector3(x: p1.x + Float(t) * m.x, y: p1.y + Float(t) * m.y, z: p1.z + Float(t) * m.z)
-                //let offset  = hit - hitOld
-                //hitOld      =  hit
-                mark!.position = mark!.position + offset
-                //print("offset: ")
-                //print(offset)
+                let mouse   = panRec.translation(in:sceneView)
+                var point = sceneView.unprojectPoint(SCNVector3(x: Float(mouse.x*1.4), y: Float(mouse.y*1.4), z: 0.8))
+                mark!.position = point
+                print("New Point: ")
+                print( mark!.position)
             }
             else if (panRec.state == .ended){
                 selection!.node.position = mark!.position
+                buttonLocations[buttonToEditIndex].x = selection!.node.position.x
+                buttonLocations[buttonToEditIndex].y = selection!.node.position.y
+                buttonLocations[buttonToEditIndex].z = selection!.node.position.z
                 //selection!.node.convertPosition(mark!.position, from: selection!.node)
                 mark!.removeFromParentNode()
                 selection = nil
                 mark = nil
                 move_Flag = false
+
+                
+                //Remove Old Button
+                let E2_button1 = ["action" : buttonActions[buttonToEditIndex], "locationx": buttonLocations[buttonToEditIndex].x, "locationy": buttonLocations[buttonToEditIndex].y, "locationz": buttonLocations[buttonToEditIndex].z ] as [String : Any]
+                ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.key)!).child("button").child(String(buttonToEditIndex)).updateChildValues(E2_button1)
+                //ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.key)!).child("button").child(String(buttonToEditIndex)).removeValue()
+                //Add New Button
+                //Add New Button
+
             }
         }
     }

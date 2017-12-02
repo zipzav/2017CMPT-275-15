@@ -119,9 +119,9 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         if let buttons = snapObject["button"]{
                             for button in buttons as! NSMutableArray{
                                 let temp = button as! [String : AnyObject]
-                                let x = temp["locationx"] as! Int
-                                let y = temp["locationy"] as! Int
-                                let z = temp["locationz"] as! Int
+                                let x = temp["locationx"] as! Float
+                                let y = temp["locationy"] as! Float
+                                let z = temp["locationz"] as! Float
                                 
                                 let actionurl = temp["action"] as! String
                                 if let data = try? Data(contentsOf: url!) {

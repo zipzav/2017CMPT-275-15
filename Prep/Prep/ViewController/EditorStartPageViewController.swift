@@ -23,6 +23,7 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
 
 }
 var GlobalCurrentPanoramaIndex_Edit = 0
+var GlobalCurrentPanorama: Panorama? = nil
 //var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
    //@IBOutlet weak var panoramatableview: PanoramaTableView!
@@ -134,9 +135,9 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
                     if let buttons = snapObject?["button"]{
                         for button in buttons as! NSMutableArray{
                             let temp = button as! [String : AnyObject]
-                            let x = temp["locationx"] as! Int
-                            let y = temp["locationy"] as! Int
-                            let z = temp["locationz"] as! Int
+                            let x = temp["locationx"] as! Float
+                            let y = temp["locationy"] as! Float
+                            let z = temp["locationz"] as! Float
                             
                             let actionurl = temp["action"] as! String
                             if let data = try? Data(contentsOf: url!) {
@@ -191,6 +192,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Go to ExperienceEditor
         GlobalCurrentPanoramaIndex_Edit = indexPath.row
+        GlobalCurrentPanorama = GlobalCurrentExperience?.panoramas[indexPath.row]
         self.performSegue(withIdentifier: "EditorStarttoEditor", sender: self)
     }
     

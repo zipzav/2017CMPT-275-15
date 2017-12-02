@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -363,11 +363,37 @@
                         <outlet property="trashButtonOutlet" destination="bEt-bp-Wis" id="esY-NT-gtT"/>
                         <segue destination="ILP-Ib-Gy2" kind="show" identifier="EditorStartPageToHomePage" id="VO9-bZ-EBk"/>
                         <segue destination="pzw-vy-RnL" kind="show" identifier="" id="80S-6C-IM3"/>
+                        <segue destination="uve-XL-IaV" kind="show" identifier="EditorStarttoEditor" id="JOB-Zn-vKj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G8i-ho-hF1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-8" y="1148"/>
+        </scene>
+        <!--Experience Editor View Controller-->
+        <scene sceneID="E3J-b0-PHY">
+            <objects>
+                <viewController id="uve-XL-IaV" customClass="ExperienceEditorViewController" customModule="Prep" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ia4-Cc-5zB">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GHc-AL-WXI" customClass="NewCTPanoramaView_Editor" customModule="Prep" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="1024" height="704"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="Uc2-Wu-qzj"/>
+                    </view>
+                    <connections>
+                        <outlet property="experience_viewer_panorama" destination="GHc-AL-WXI" id="htT-cQ-7nz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T1A-S6-KPx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="682.6171875" y="1147.65625"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gC0-eV-ye0">
@@ -619,7 +645,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="AeF-wR-YHP"/>
         <segue reference="1S4-84-iuN"/>
-        <segue reference="cCc-vB-9d0"/>
-        <segue reference="EA6-sL-iS9"/>
+        <segue reference="VO9-bZ-EBk"/>
+        <segue reference="Izw-f1-Gyb"/>
     </inferredMetricsTieBreakers>
 </document>

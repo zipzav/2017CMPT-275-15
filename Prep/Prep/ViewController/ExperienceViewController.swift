@@ -13,7 +13,9 @@
 import UIKit
 import AVFoundation
 import AVKit
-
+import FirebaseStorage
+import FirebaseAuth
+import FirebaseDatabase
 
 class ExperienceViewController: UIViewController {
     var currentPanoramaIndex:Int = 0;

@@ -21,13 +21,13 @@ class ExperienceEditorViewController: UIViewController {
     var currentExperience:Experience? = nil
     var playerController = AVPlayerViewController()
     var avPlayer : AVPlayer?
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         currentPanoramaIndex = GlobalCurrentPanoramaIndex_Edit;
         //currentExperience = initializeFirstExperience() we have to obtain the Experience from the Collection
         currentExperience = GlobalCurrentExperience
+
         loadImage()
         if(experience_viewer_panorama != nil){
             experience_viewer_panorama.initialize_tap()
