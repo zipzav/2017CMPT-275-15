@@ -21,7 +21,7 @@ import FirebaseStorage
 // Global Variables
 var GlobalCurrentExperience:Experience? = nil
 var arrayOfExperiences = [Experience]()
-
+var GlobalRef: DatabaseReference? = nil
 var GlobalcurrentExperienceIndex:Int = 0
 
 var GlobalExperienceSnapshots: Array<DataSnapshot> = []
@@ -65,7 +65,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         addButton.isEnabled = false
         // Set the Firebase reference
         ref = Database.database().reference()
-        
+        GlobalRef = ref
         // Monitor Connection to Wifi
         Reach().monitorReachabilityChanges()
     }

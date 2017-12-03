@@ -22,6 +22,9 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
+import MobileCoreServices
+import AssetsLibrary
+
 func CGPointToSCNVector3(view: SCNView, depth: Float, point: CGPoint) -> SCNVector3 {
     let projectedOrigin = view.projectPoint(SCNVector3Make(0, 0, depth))
     let locationWithz   = SCNVector3Make(Float(point.x), Float(point.y), projectedOrigin.z)
@@ -42,13 +45,14 @@ func * (left: SCNVector3, right: SCNVector3) -> CGFloat {
 
 let radius: CGFloat = 20
 
-@objc public class NewCTPanoramaView_Editor: UIView {
+@objc public class NewCTPanoramaView_Editor: UIView, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var move_Flag = false
     var mark : SCNNode? = nil
     var selection:SCNHitTestResult? = nil
     var hitOld = SCNVector3Zero
     var buttonToEditIndex = 0
     // MARK: Public properties
+    
     public var panSpeed = CGPoint(x: 0.005, y: 0.005)
     public var image: UIImage? {
         didSet {
@@ -97,6 +101,7 @@ let radius: CGFloat = 20
         node.camera = camera
         return node
     }()
+    private var recordVideo = false
     private var nextButton: SCNNode? = nil
     private lazy var fovHeight: CGFloat = {
         return CGFloat(tan(self.cameraNode!.camera!.yFov/2 * .pi / 180.0)) * 2 * radius
@@ -186,8 +191,6 @@ let radius: CGFloat = 20
         for index in 0..<buttonLocations.count{
             //let newNode: SCNNode = SCNNode(buttonLocations[index])
             let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
-            
-           
             
             geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
             geometry.firstMaterial?.isDoubleSided = true;
@@ -412,7 +415,7 @@ let radius: CGFloat = 20
                 
                 //Remove Old Button
                 let E2_button1 = ["action" : buttonActions[buttonToEditIndex], "locationx": buttonLocations[buttonToEditIndex].x, "locationy": buttonLocations[buttonToEditIndex].y, "locationz": buttonLocations[buttonToEditIndex].z ] as [String : Any]
-                ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.key)!).child("button").child(String(buttonToEditIndex)).updateChildValues(E2_button1)
+                GlobalRef?.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.key)!).child("button").child(String(buttonToEditIndex)).updateChildValues(E2_button1)
                 //ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.key)!).child("button").child(String(buttonToEditIndex)).removeValue()
                 //Add New Button
                 //Add New Button
@@ -427,6 +430,136 @@ let radius: CGFloat = 20
             sceneView.setNeedsDisplay()
             reportMovement(CGFloat(-cameraNode!.eulerAngles.y), xFov.toRadians(), callHandler: false)
         }
+    }
+    
+    //MARK: BUTTON UPLOAD BUTTONS
+    public func Add_Video(){
+        recordVideo = true
+        let picker = UIImagePickerController()
+        
+        // Configure ImagePickerController
+        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.mediaTypes = [kUTTypeMovie as String]
+        picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+        //picker.mediaTypes
+        
+        var topController = UIApplication.shared.keyWindow?.rootViewController
+        while let presentedViewController = topController?.presentedViewController {
+            topController = presentedViewController
+        }
+        topController?.present(picker, animated: true, completion:nil)
+        
+    }
+    public func Add_Sound(){
+        recordVideo = false
+        let picker = UIImagePickerController()
+        
+        // Configure ImagePickerController
+        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.mediaTypes = [kUTTypeMovie as String]
+        picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+        //picker.mediaTypes
+        
+        var topController = UIApplication.shared.keyWindow?.rootViewController
+        while let presentedViewController = topController?.presentedViewController {
+            topController = presentedViewController
+        }
+        topController?.present(picker, animated: true, completion:nil)
+    }
+    
+   public func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true, completion:nil)
+    
+    if (recordVideo == true){
+        if let videoURL = info[UIImagePickerControllerMediaURL] as? NSURL {
+            let videoUploadManager = UploadManager()
+            let videoPath = Constants.Exp.userPath + "/" + "\(Int(Date.timeIntervalSinceReferenceDate * 1000)).mp4"
+        
+            videoUploadManager.uploadVideo(videoURL, path: videoPath, progressBlock: { (percentage) in
+                print(percentage)
+            }, completionBlock: { [weak self] (fileURL, errorMessage) in
+                guard let strongself = self else {return}
+                // Handle Error
+                if let error = errorMessage {
+                    print("Error uploading: \(error)")
+                    //self.urlTextView.text = "Upload Failed"
+                    return
+                }
+                // Handle fileURL by real time database
+                self?.uploadSuccess(fileURL!)
+        })
+        }
+    }
+    else { //audio recording
+        let audioUploadManager = UploadManager()
+        let url = info[UIImagePickerControllerMediaURL] as? NSURL
+        let asset = AVURLAsset(url: url as! URL)
+        //let newurl = Bundle.url(forResource: "temp", ofType: "m4a")
+        let audioPath = "\(Int(Date.timeIntervalSinceReferenceDate * 1000)).m4a"
+        let newurl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(audioPath) as NSURL
+        
+        asset.writeAudioTrackToURL(URL: newurl, completion: { (success, error) -> () in
+            if !success {
+                print(error)
+            }
+        }
+        )
+        let videoPath = Constants.Exp.userPath + "/" + audioPath
+        
+        audioUploadManager.uploadAudio(newurl, path: videoPath, progressBlock: { (percentage) in
+            print(percentage)
+        }, completionBlock: { [weak self] (fileURL, errorMessage) in
+            guard let strongself = self else {return}
+            // Handle Error
+            if let error = errorMessage {
+                print("Error uploading: \(error)")
+                //self.urlTextView.text = "Upload Failed"
+                return
+            }
+            // Handle fileURL by real time database
+            self?.uploadSuccess(fileURL!)
+    })
+    }
+    }
+
+    
+func uploadSuccess(_ fileURL: URL) {
+    if let uid = Auth.auth().currentUser?.uid {
+        // Photo uploaded to firebase storage, now add image URL to realtime database
+        print("Upload Succeeded!")
+
+        let button1 = ["action" : fileURL.absoluteString, "locationx": 5, "locationy": 0, "locationz": -5] as [String : Any]
+        
+                let panoindex = GlobalCurrentPanoramaIndex_Edit
+        let panorama = GlobalCurrentExperience?.panoramas[panoindex] as! Panorama
+        let numButts = String(buttonLocations.count)
+        let uid = Auth.auth().currentUser?.uid
+        GlobalRef?.child("user").child(uid!).child(GlobalCurrentExperienceID as! String).child(panorama.getId()).child("button").child(numButts).setValue(button1)
+        
+        //ADD NEW BUTTON
+        let new_button = SCNVector3(x:6, y:0, z:-5)
+        buttonLocations.append(new_button)
+        buttonActions.append(fileURL.absoluteString)
+        let geometry:SCNPlane = SCNPlane(width: 1, height: 1)
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "Button1")
+        geometry.firstMaterial?.isDoubleSided = true;
+        
+        let newNode:SCNNode = SCNNode()
+        newNode.geometry = geometry
+        newNode.position = buttonLocations[buttonLocations.count-1]
+        let it = SCNLookAtConstraint(target: cameraNode)
+        it.isGimbalLockEnabled = true
+        newNode.constraints = [it]
+        buttonNodes += [newNode]
+        
+        scene.rootNode.addChildNode(newNode)
+        buttonPressedFlag += [false]
+    }
     }
 }
 
@@ -493,6 +626,69 @@ fileprivate extension FloatingPoint {
     
     func toRadians() -> Self {
         return self * .pi / 180
+    }
+}
+
+class Tab_Editor_NewClass : UITabBar {
+    
+}
+
+extension AVAsset {
+    
+    func writeAudioTrackToURL(URL: NSURL, completion: @escaping (Bool, NSError?) -> ()) {
+        
+        do {
+            
+            let audioAsset = try self.audioAsset()
+            audioAsset.writeToURL(URL: URL, completion: completion)
+            
+        } catch (let error as NSError){
+            
+            completion(false, error)
+            
+        } catch {
+            
+            print("error")
+        }
+    }
+    
+    func writeToURL(URL: NSURL, completion: @escaping (Bool, NSError?) -> ()) {
+        
+        guard let exportSession = AVAssetExportSession(asset: self, presetName: AVAssetExportPresetAppleM4A) else {
+            completion(false, nil)
+            return
+        }
+        
+        exportSession.outputFileType = AVFileType.m4a
+        exportSession.outputURL      = URL as URL
+        
+        exportSession.exportAsynchronously {
+            switch exportSession.status {
+            case .completed:
+                completion(true, nil)
+            case .unknown, .waiting, .exporting, .failed, .cancelled:
+                completion(false, nil)
+            }
+        }
+    }
+    
+    func audioAsset() throws -> AVAsset {
+        
+        let composition = AVMutableComposition()
+        
+        let audioTracks = tracks(withMediaType: AVMediaType.audio)
+        
+        for track in audioTracks {
+            
+            let compositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+            do {
+                try compositionTrack?.insertTimeRange(track.timeRange, of: track, at: track.timeRange.start)
+            } catch {
+                throw error
+            }
+            compositionTrack?.preferredTransform = track.preferredTransform
+        }
+        return composition
     }
 }
 

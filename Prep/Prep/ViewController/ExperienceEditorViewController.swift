@@ -17,13 +17,36 @@ import SceneKit
 
 class ExperienceEditorViewController: UIViewController {
     @IBOutlet weak var experience_viewer_panorama: NewCTPanoramaView_Editor!
+    
+    @IBAction func Add_Sound(_ sender: Any) {
+        experience_viewer_panorama.Add_Sound()
+    }
+    @IBAction func Add_Video(_ sender: Any) {
+        experience_viewer_panorama.Add_Video()
+    }
     var currentPanoramaIndex:Int = 0;
     var currentExperience:Experience? = nil
+   
+    
+    @IBOutlet weak var add_Sound_button: UIButton!
+    @IBOutlet weak var add_Video_button: UIButton!
+    
     var playerController = AVPlayerViewController()
     var avPlayer : AVPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        add_Sound_button.backgroundColor = UIColor.PrepPurple
+        add_Video_button.backgroundColor = UIColor.PrepPurple
+        
+        add_Sound_button.layer.cornerRadius = 5
+        add_Sound_button.layer.borderWidth = 1
+        add_Sound_button.layer.borderColor = UIColor.PrepPurple.cgColor
+        
+        add_Video_button.layer.cornerRadius = 5
+        add_Video_button.layer.borderWidth = 1
+        add_Video_button.layer.borderColor = UIColor.PrepPurple.cgColor
+        
         currentPanoramaIndex = GlobalCurrentPanoramaIndex_Edit;
         //currentExperience = initializeFirstExperience() we have to obtain the Experience from the Collection
         currentExperience = GlobalCurrentExperience

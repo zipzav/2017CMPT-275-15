@@ -14,6 +14,8 @@
 		3688DD3B1FAFB0C4000BBA38 /* video2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */; };
 		3688DD3D1FAFC265000BBA38 /* baristainteraction.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */; };
 		3688DD3F1FAFC2C7000BBA38 /* waitinginline.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */; };
+		369044611FD345D100D6385D /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 369044601FD345D100D6385D /* MobileCoreServices.framework */; };
+		369044671FD477B700D6385D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 369044661FD477B400D6385D /* GoogleService-Info.plist */; };
 		36D682F71FABCE01009E7803 /* car_honk.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F51FABCDEF009E7803 /* car_honk.wav */; };
 		36D682F81FABCE01009E7803 /* car-pass.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F61FABCDF0009E7803 /* car-pass.wav */; };
 		36D682F91FABCE01009E7803 /* dogs-barking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 36D682F31FABCDEE009E7803 /* dogs-barking.wav */; };
@@ -39,7 +41,6 @@
 		40D00E9C1FB6658800BF28C1 /* EditorStartPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D00E9B1FB6658800BF28C1 /* EditorStartPageViewController.swift */; };
 		40E2154E1FAC1EBD00B147ED /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E2154D1FAC1EBD00B147ED /* SettingViewController.swift */; };
 		877540321FB667ED0014CF99 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877540311FB667ED0014CF99 /* LogInViewController.swift */; };
-		877540351FB681D40014CF99 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 877540341FB680460014CF99 /* GoogleService-Info.plist */; };
 		A71521923266CD994744F895 /* Pods_Prep.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4D6DAC6326A3FE5BD0D13F7 /* Pods_Prep.framework */; };
 		D1ECFB025E75F92946B35E2F /* Pods_PrepTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */; };
 		D795DA008921F38F534B2CBA /* Pods_PrepUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C26E1F863580E3329D85D233 /* Pods_PrepUITests.framework */; };
@@ -72,6 +73,8 @@
 		3688DD3A1FAFB0BB000BBA38 /* video2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video2.mp4; sourceTree = "<group>"; };
 		3688DD3C1FAFC196000BBA38 /* baristainteraction.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = baristainteraction.mp4; sourceTree = "<group>"; };
 		3688DD3E1FAFC2C0000BBA38 /* waitinginline.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = waitinginline.mp4; sourceTree = "<group>"; };
+		369044601FD345D100D6385D /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		369044661FD477B400D6385D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		36D682F21FABCDED009E7803 /* train-pulls-into-the-station.flac */ = {isa = PBXFileReference; lastKnownFileType = file; path = "train-pulls-into-the-station.flac"; sourceTree = "<group>"; };
 		36D682F31FABCDEE009E7803 /* dogs-barking.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "dogs-barking.wav"; sourceTree = "<group>"; };
 		36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "outdoor-crowd-noise.wav"; sourceTree = "<group>"; };
@@ -107,7 +110,6 @@
 		5C4F6A5028616F86210D904E /* Pods-PrepUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepUITests/Pods-PrepUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5C950575FC963E329D6D87AD /* Pods-PrepTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrepTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrepTests/Pods-PrepTests.release.xcconfig"; sourceTree = "<group>"; };
 		877540311FB667ED0014CF99 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
-		877540341FB680460014CF99 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B3A6C582F0175F6DA6F0AEFB /* Pods-Prep.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Prep.release.xcconfig"; path = "Pods/Target Support Files/Pods-Prep/Pods-Prep.release.xcconfig"; sourceTree = "<group>"; };
 		C26E1F863580E3329D85D233 /* Pods_PrepUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PrepUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D6DAC6326A3FE5BD0D13F7 /* Pods_Prep.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Prep.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				369044611FD345D100D6385D /* MobileCoreServices.framework in Frameworks */,
 				A71521923266CD994744F895 /* Pods_Prep.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,6 +149,7 @@
 		1A05A2F870796C2589D9ADDA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				369044601FD345D100D6385D /* MobileCoreServices.framework */,
 				D4D6DAC6326A3FE5BD0D13F7 /* Pods_Prep.framework */,
 				316EA1D50DAE51D5E9C4A74D /* Pods_PrepTests.framework */,
 				C26E1F863580E3329D85D233 /* Pods_PrepUITests.framework */,
@@ -209,13 +213,13 @@
 				36D682F61FABCDF0009E7803 /* car-pass.wav */,
 				36D682F31FABCDEE009E7803 /* dogs-barking.wav */,
 				36D682F41FABCDEF009E7803 /* outdoor-crowd-noise.wav */,
+				369044661FD477B400D6385D /* GoogleService-Info.plist */,
 				36EEC14C1F7C663A0043A02F /* Assets.xcassets */,
 				36EEC14E1F7C663A0043A02F /* LaunchScreen.storyboard */,
 				36EEC1511F7C663A0043A02F /* Info.plist */,
 				40606CC71FB8F3B9002737C6 /* Prep-Bridging-Header.h */,
 				40606CC81FB8F3BA002737C6 /* UIViewController+Alerts.h */,
 				40606CC91FB8F3BA002737C6 /* UIViewController+Alerts.m */,
-				877540341FB680460014CF99 /* GoogleService-Info.plist */,
 			);
 			path = Prep;
 			sourceTree = "<group>";
@@ -396,7 +400,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				877540351FB681D40014CF99 /* GoogleService-Info.plist in Resources */,
+				369044671FD477B700D6385D /* GoogleService-Info.plist in Resources */,
 				3688DD3F1FAFC2C7000BBA38 /* waitinginline.mp4 in Resources */,
 				3688DD3D1FAFC265000BBA38 /* baristainteraction.mp4 in Resources */,
 				3688DD3B1FAFB0C4000BBA38 /* video2.mp4 in Resources */,
@@ -796,7 +800,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MU5L824F6X;
+				DEVELOPMENT_TEAM = W2L84ABWT7;
 				INFOPLIST_FILE = Prep/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -818,7 +822,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MU5L824F6X;
+				DEVELOPMENT_TEAM = W2L84ABWT7;
 				INFOPLIST_FILE = Prep/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

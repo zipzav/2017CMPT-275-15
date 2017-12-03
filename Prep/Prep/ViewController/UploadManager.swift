@@ -9,7 +9,8 @@
 import UIKit
 import FirebaseStorage
 import FirebaseAuth
-
+import MobileCoreServices
+import AssetsLibrary
 struct Constants {
     struct Exp {
         static let userPath = "user/\(Auth.auth().currentUser!.uid)"
@@ -47,5 +48,39 @@ class UploadManager: NSObject {
             completionBlock(nil, "Image couldn't be converted to Data.")
         }
     }
+    
+    func uploadVideo(_ video: NSURL, path: String, progressBlock: @escaping (_ percentage: Double)-> Void, completionBlock: @escaping (_ url: URL?, _ errorMessage: String?) -> Void) {
+        
+        // storage/user/{user id}/{experience id}/image.jpeg
+        let storage = Storage.storage()
+        let storageReference = storage.reference()
+        let videoReference = storageReference.child(path)
+            
+        // Start the video storage process
+        videoReference.putFile(from: video as URL, metadata: nil, completion: { (metadata, error) in
+            if let metaData = metadata {
+                completionBlock(metaData.downloadURL(), nil) // Has meta, Return URL
+            } else {
+                completionBlock(nil, error?.localizedDescription)
+            }
+            })
+        }
+    func uploadAudio(_ audio: NSURL, path: String, progressBlock: @escaping (_ percentage: Double)-> Void, completionBlock: @escaping (_ url: URL?, _ errorMessage: String?) -> Void) {
+        
+        // storage/user/{user id}/{experience id}/image.jpeg
+        let storage = Storage.storage()
+        let storageReference = storage.reference()
+        let videoReference = storageReference.child(path)
+        
+        // Start the video storage process
+        videoReference.putFile(from: audio as URL, metadata: nil, completion: { (metadata, error) in
+            if let metaData = metadata {
+                completionBlock(metaData.downloadURL(), nil) // Has meta, Return URL
+            } else {
+                completionBlock(nil, error?.localizedDescription)
+            }
+        })
+    }
+
     
 }
