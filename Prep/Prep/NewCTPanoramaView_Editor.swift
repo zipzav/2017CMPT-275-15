@@ -159,8 +159,19 @@ let radius: CGFloat = 20
                         }
                         let DeleteButton = UIAlertAction(title: "Delete", style: .default) { (action) in
                             self.move_Flag = false
-                            //arrayOfExperiences.remove(at: indexPath!.row)
-                            //ref.child("user").child(GlobalUserID!).child(GlobalCurrentExperienceID!).removeValue()
+                            node.removeFromParentNode()
+                            self.buttonLocations.remove(at: index)
+                            self.buttonActions.remove(at: index)
+                            self.buttonNodes.remove(at: index)
+                            
+                            var loop_index = 0
+                            var newButton_array: Array<[String: Any]> = []
+                            for button in self.buttonLocations{
+                                newButton_array.append(["action" : self.buttonActions[loop_index], "locationx": button.x, "locationy": button.y, "locationz": button.z])
+                                loop_index += 1
+                            }
+                            GlobalRef?.child("user").child((Auth.auth().currentUser?.uid)!).child(GlobalCurrentExperienceID!).child((GlobalCurrentPanorama?.getId())!).child("button").setValue(newButton_array)
+                            
                         }
                         let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                         sheet.addAction(MoveButton)

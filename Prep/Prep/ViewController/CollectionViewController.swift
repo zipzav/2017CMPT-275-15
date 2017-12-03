@@ -281,29 +281,33 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             //First Pre-made Experience
             let ExperienceID = ref.child(uid).childByAutoId().key
             
-            let panCoffeeID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            let panTrainID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            let panTownID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            let panparkID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let b1ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let b2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let b3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let b4ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             
             let button1ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
+            let button4ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             
-            let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/waitinginline.mp4?alt=media&token=e9bf2128-26db-4327-8ed8-a486f1efecda", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
-            let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
-            let button3 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/baristainteraction.mp4?alt=media&token=76c3911a-fdcf-45df-be2f-9e8846a989ef", "locationx": 7, "locationy": 1, "locationz": 5] as [String : Any]
-            let buttonall = [button1, button2, button3]
-            let coffeeImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience2.jpg?alt=media&token=20b85093-1ed5-4fee-9014-64cf394c19d6", "button" : buttonall] as [String : Any]
-            let parkImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience5.jpg?alt=media&token=24420a39-9526-42c6-ba73-1f142fa3c834"]
-            let trainImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience9.jpg?alt=media&token=6b16efef-00d8-4be5-b058-d74970131324"]
-            let townImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience4.jpg?alt=media&token=026b35e4-e01c-413f-92db-fd433a3a113c"]
             
-            let premadeObject = ["name": "Day in London", "description": "We'll be riding the train into London. Maybe some tea and biscuits with 'Nan. We'll head off to shop for knick-knacks and have a jolly good time by Big Ben",  panTrainID : trainImg, panCoffeeID : coffeeImg,  panTownID : townImg, panparkID : parkImg ] as [String : Any]
+            let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/flock-of-seagulls_daniel-simion.mp3?alt=media&token=e1a85ea4-0e8c-48f7-8a62-ae011d25c7a2", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
+            let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Beach%20Soundscape%203-SoundBible.com-416299667.mp3?alt=media&token=b0c1f305-9091-4782-a2f3-8d7ce086ae3c", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
+            let button3 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Beach%20Waves-SoundBible.com-1024681188.mp3?alt=media&token=a6161914-360e-4d98-bad1-8a34665e1889", "locationx": 7, "locationy": 1, "locationz": 5] as [String : Any]
+            let button4 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/South%20Beach%20Ocean%20View.mp4?alt=media&token=332c03b7-502e-40a6-86c1-6ca5d2ff20f2", "locationx": 7, "locationy": 1, "locationz": 5] as [String : Any]
+            let buttonsl = [button1]
+            let buttons24 = [button2, button4]
+            let beachPan1 = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/beachPan2.jpg?alt=media&token=bfa010fd-023e-4811-a61f-a881d8ad59fc", "button" : buttonsl] as [String : Any]
+            let beachPan2 = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/beachpan3.jpg?alt=media&token=f040e8e4-d02d-4a89-9cf3-97325dedf682","button" : buttons24] as [String : Any]
+            let beachPan3 = ["image": "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/beachpan4.jpg?alt=media&token=12d1dcf5-be1c-479e-aea3-c4a14dae22cb"]
+            let beachPan4 = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/panorama_beach_1.jpg?alt=media&token=a8f692bd-47fa-4030-bb82-c0e2c5297ba8","button" : [button3]] as [String : Any]
             
+            let premadeObject = ["name": "Day at Miami Beach", "description": "A nice relaxing walk through the beach all the way to the ocean for a swim.",  b1ID : beachPan1, b2ID : beachPan2,  b3ID : beachPan3, b4ID : beachPan4 ] as [String : Any]
             ref.child("user").child(uid).child(ExperienceID).setValue(premadeObject)
-            //End First Pre-made Experience
-            //Second Pre-made Experience
+            
+            /////////////////////////////////////////////////////////////////////////////////
+            
             let Experience2ID = ref.child(uid).childByAutoId().key
             let CityafterdarkID = ref.child(uid).child(Experience2ID).childByAutoId().key
             
@@ -315,9 +319,31 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             let E2_buttonall = [E2_button1, E2_button2]
             let CityafterdarkImg = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Experience8.jpg?alt=media&token=d4df86a4-9e8d-4f9e-8dc7-c418bbe39e6c", "button" : E2_buttonall] as [String : Any]
             
-            let E2_premadeObject = ["name": "Night at the city center", "description": "Downtown's noisy, ain't it? Let's be sure to look both ways when crossing the street",  CityafterdarkID : CityafterdarkImg ] as [String : Any]
+            let E2_premadeObject = ["name": "Night at The City Center", "description": "Downtown's noisy, ain't it? Let's be sure to look both ways when crossing the street.",  CityafterdarkID : CityafterdarkImg ] as [String : Any]
             
             ref.child("user").child(uid).child(Experience2ID).setValue(E2_premadeObject)
+            
+            let ExperienceID3 = ref.child(uid).childByAutoId().key
+            
+            let rest1 = ref.child(uid).child(ExperienceID3).childByAutoId().key
+            let rest2 = ref.child(uid).child(ExperienceID3).childByAutoId().key
+            
+            let r1ID = ref.child(uid).child(ExperienceID3).childByAutoId().key
+            let r2ID = ref.child(uid).child(ExperienceID3).childByAutoId().key
+            let r3ID = ref.child(uid).child(ExperienceID3).childByAutoId().key
+            
+            let rB1 = ["action" : "hhttps://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/baristainteraction.mp4?alt=media&token=76c3911a-fdcf-45df-be2f-9e8846a989ef", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
+            let rB2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Restaurant%20Ambiance%20-SoundBible.com-628640170.mp3?alt=media&token=39f0bb6b-6889-4688-bdbf-3a4bd1d6fed3", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
+            let rB3 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/outdoor-crowd-noise.wav?alt=media&token=d6a92193-9e39-4d57-8ae3-4c7688351574", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
+            let insideRest = [rB1, rB2]
+            
+            let restPan1 = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/rPan1.jpeg?alt=media&token=dcd8f6cd-30f2-4f5c-82a0-7bd197c6d9b0", "button" : insideRest] as [String : Any]
+            let restPan2 = ["image" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/rPan2.jpeg?alt=media&token=63ddc5b0-edd7-4475-9ced-09a26074a2bb", "button" : [rB3]] as [String : Any]
+            
+            let restPremadeObject = ["name": "Forage Restaurant in Vancouver", "description": "Wineing and Dining inside Forage on Robson.",  rest1 : restPan1, rest2 : restPan2] as [String : Any]
+            
+            ref.child("user").child(uid).child(ExperienceID3).setValue(restPremadeObject)
+
         }
     }
     
