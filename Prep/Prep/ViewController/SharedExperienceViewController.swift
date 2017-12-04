@@ -15,9 +15,6 @@ import FirebaseAuth
 import FirebaseDatabase
 import DTZFloatingActionButton
 
-//class Cell: ScalingCarouselCell {}
-
-
 class SharedExperienceViewController: UIViewController {
     
     var arrayOfExperienceSnapshots: Array<DataSnapshot> = []
@@ -44,11 +41,15 @@ class SharedExperienceViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        // Set up
         showSpinner()
         self.navigationItem.setHidesBackButton(true, animated: false)
+        // Check connection before fetching
         network().checkConnection()
         fetchSharedExperience()
+        // Reload data when user returned from another screen
         carousel.reloadData()
+        // Set timer 
         Timer.scheduledTimer(withTimeInterval: 8, repeats: false, block: { (timer) in
             self.hideSpinner()
             if (hasConnection == false) {
@@ -62,11 +63,13 @@ class SharedExperienceViewController: UIViewController {
     func fetchSharedExperience() {
         var exp: Experience?
         
+        // Ensure user is logged on before talking to database
         guard let uid = Auth.auth().currentUser?.uid else {
             print("user is not logged in")
             return
         }
         
+        // Remove all contents to restart count
         arrayOfSharedExperiences.removeAll()
         arrayOfExperienceSnapshots.removeAll()
         
@@ -99,6 +102,7 @@ class SharedExperienceViewController: UIViewController {
                         if let data = try? Data(contentsOf: url!) {
                             exp?.addPanorama(newImage: UIImage(data: data)!, Id: snap.key)
                         }
+                        // Get button coordinates
                         if let buttons = snapObject["button"]{
                             for button in buttons as! NSMutableArray{
                                 let temp = button as! [String : AnyObject]
@@ -136,6 +140,7 @@ class SharedExperienceViewController: UIViewController {
         sharedExperienceRef.observe(.childRemoved, with: { (snapshot) -> Void in
             let index = self.indexOfMessage(snapshot)
             self.arrayOfExperienceSnapshots.remove(at: index)
+            // Update collection view
             DispatchQueue.main.async(execute: {
                 self.carousel.deleteItems(at: [IndexPath(row: index, section: 0)])
             })
@@ -148,6 +153,7 @@ class SharedExperienceViewController: UIViewController {
         
     }
     
+    // Compare indexes to identify which cell have been added recently or removed recently
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
         for  snap in arrayOfExperienceSnapshots {
@@ -167,7 +173,7 @@ class SharedExperienceViewController: UIViewController {
     
     // MARK: - Button Actions
     
-    // Add button
+    // Add button - For developer to upload content to database
     func floatingButton() {
         let actionButton = DTZFloatingActionButton(frame:CGRect(x: view.frame.size.width - 56 - 14,
                                                                 y: view.frame.size.height - 56 - 14,
@@ -221,29 +227,21 @@ class SharedExperienceViewController: UIViewController {
                 
             }
         }
+        // Button configuration
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    // --------------------------------- End of SharedExperienceViewController 
     
 }
 
+// Mark: Data Source    
 
 typealias CarouselDatasource = SharedExperienceViewController
 extension CarouselDatasource: UICollectionViewDataSource {
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return arrayOfExperienceSnapshots.count
     }
@@ -256,7 +254,7 @@ extension CarouselDatasource: UICollectionViewDataSource {
             scalingCell.cellImage.image = cellExperiences.getPanorama(index: 0)
             scalingCell.cellTitle.text = cellExperiences.getTitle()
             
-            // Add style
+            // Cell configuration
             scalingCell.clipsToBounds = true
             scalingCell.mainView.clipsToBounds = true
             scalingCell.layer.cornerRadius = 20
@@ -267,9 +265,12 @@ extension CarouselDatasource: UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         GlobalCurrentExperience = arrayOfSharedExperiences[indexPath.row]
+        // Redirect user
         performSegue(withIdentifier: "SharedExperienceToViewer", sender: self)
     }
 }
+
+// MARK: Delegate and Flowlayout
 
 typealias CarouselDelegate = SharedExperienceViewController
 extension SharedExperienceViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

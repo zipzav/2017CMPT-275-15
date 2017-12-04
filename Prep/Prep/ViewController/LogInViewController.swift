@@ -10,8 +10,8 @@ import UIKit
 import FirebaseAuth
 
 class LogInViewController: UIViewController {
-
-
+    
+    // MARK: IBOutlets
     @IBOutlet weak var SignInSelection: UISegmentedControl!
     
     @IBOutlet weak var SignInLabel: UILabel!
@@ -26,8 +26,7 @@ class LogInViewController: UIViewController {
     
     var isSignIn:Bool = true
     
-    //SignInSelection.tintColor = UIColor(red: 140.0/255.0, green: 228.0/255.0, blue: 161.0/255.0, alpha: 1.0)
-
+    // MARK: Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         network().checkConnection()
@@ -67,6 +66,7 @@ class LogInViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: Button
     @IBAction func SignInSelectorChanged(_ sender: UISegmentedControl) {
         isSignIn = !isSignIn
         //Check the bool and set the button and labels
@@ -76,7 +76,7 @@ class LogInViewController: UIViewController {
         }
         else {
             //SignInLabel.text = "Register"
-            SignInButton.setTitle("Register", for: .normal)
+            SignInButton.setTitle("Register", for: .nsormal)
         }
     }
     
@@ -87,7 +87,7 @@ class LogInViewController: UIViewController {
             return
         }
         
-        //Checking email and password
+     //Checking email and password
     if let email = EmailTextField.text, let password = PasswordTextField.text {
             //Check if it's signin or register
             if isSignIn {
@@ -97,12 +97,6 @@ class LogInViewController: UIViewController {
 //                        guard let errorCode = (authError as NSError).code as Int? else { return }
 //                        switch errorCode {
 //                            case AuthErrorCode.userNotFound.rawValue:
-//                                self.showMessagePrompt("the user account was not found. This could happen if the user account has been deleted.")
-//                            case AuthErrorCode.networkError.rawValue:
-//                                self.showMessagePrompt("A network error occurred during the operation")
-//                            default:
-//                                self.showMessagePrompt("An internal error occurred. Please report the error")
-//                        }
                     //Check that user is not null
                     if let u = user{
                         //User is found. Take to home screen
