@@ -13,6 +13,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import SceneKit
 
+// Table view
 class PanoramaTableViewCell : UITableViewCell{
     var previewImage = UIImageView()
 }
@@ -22,14 +23,16 @@ class PanoramaTableView : UITableView, UIImagePickerControllerDelegate, UINaviga
     }
 
 }
+
+// Global variables
 var GlobalCurrentPanoramaIndex_Edit = 0
 var GlobalCurrentPanorama: Panorama? = nil
-//var GlobalPanoramaSnapshots: Array<DataSnapshot> = []
+
 class EditorStartPageViewController :UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
    //@IBOutlet weak var panoramatableview: PanoramaTableView!
     var panoramatableview: PanoramaTableView!
     var currentExperience: Experience? = nil
-    
+    // MARK: EditorStartPage Outlets
     @IBOutlet weak var addPanorama: UIButton!
     @IBOutlet weak var experienceTitle: UITextField!
     @IBOutlet weak var experienceDescription: UITextField!
@@ -61,6 +64,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         ref = Database.database().reference()
         storageRef = Storage.storage().reference()
         
+        // identify whether this is a new experience
         if GlobalcurrentExperienceIndex != -1 {
             // Setup TextView when existing experience have been selected
             currentExperience = arrayOfExperiences[GlobalcurrentExperienceIndex]
@@ -109,7 +113,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     
     func fetchPanoramas() {
-        
+        // Ensure user is signed in before talkin to database
         guard let uid = Auth.auth().currentUser?.uid else {
             print("user is not logged in")
             return
@@ -158,8 +162,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             GlobalExperienceSnapshots.append(snapshot)
         }, withCancel: nil)
         
-        
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -171,6 +173,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         super.didReceiveMemoryWarning()
     }
     
+    // data source for table view
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -232,6 +235,8 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
             topController?.present(alert, animated: true, completion: nil)
         }
     }
+    
+    // MARK: IBAction on Editor Start Page
     @IBAction func trashButton(_ sender: UIButton) {
         // Remove child node and its subfields from database
         if GlobalcurrentExperienceIndex != -1 {
@@ -239,6 +244,7 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
         } else {
             ref.child("user").child(GlobalUserID!).child(ExperienceID).removeValue()
         }
+        // Redirect user
         self.performSegue(withIdentifier: "EditorStartPageToHomePage", sender: self)
     }
     
@@ -259,8 +265,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     }
     
     // MARK: - Image Picker
-    
-
     @IBAction func didTapTakPicture(_ sender: AnyObject) {
         let picker = UIImagePickerController()
         
@@ -321,7 +325,6 @@ class EditorStartPageViewController :UIViewController, UITableViewDataSource, UI
     
     // Hide keyboard when user tap screen
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?){
-        
         experienceTitle.resignFirstResponder()
         experienceDescription.resignFirstResponder()
     }
