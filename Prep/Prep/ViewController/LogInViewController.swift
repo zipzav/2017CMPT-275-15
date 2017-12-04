@@ -76,7 +76,7 @@ class LogInViewController: UIViewController {
         }
         else {
             //SignInLabel.text = "Register"
-            SignInButton.setTitle("Register", for: .nsormal)
+            SignInButton.setTitle("Register", for: .normal)
         }
     }
     
