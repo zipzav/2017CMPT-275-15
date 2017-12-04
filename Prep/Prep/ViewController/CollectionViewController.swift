@@ -20,13 +20,15 @@ import FirebaseStorage
 
 // Global Variables
 var GlobalCurrentExperience:Experience? = nil
-var arrayOfExperiences = [Experience]()
+var arrayOfExperiences = [Experience]() 
 var GlobalRef: DatabaseReference? = nil
 var GlobalcurrentExperienceIndex:Int = 0
 
 var GlobalExperienceSnapshots: Array<DataSnapshot> = []
-var GlobalCurrentExperienceID: String? = ""
+var GlobalCurrentExperienceID: String? = "" // -1 if new experience
 var GlobalUserID: String? = ""
+
+// Reloads data when user drags the collection view cell downwards
 extension UIRefreshControl {
     func refreshManually() {
         if let scrollView = superview as? UIScrollView {
@@ -41,13 +43,17 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var arrayOfColors = [UIColor]()
+    
+    // Private variables
     private let leftAndRightPaddings: CGFloat = 20
     private let numberOfItemsPerRow: CGFloat = 3
     private let heightAdjustment: CGFloat = 150
     private let refreshControl = UIRefreshControl()
-    var cellSelected:IndexPath?
     
+    var cellSelected:IndexPath?
+    var arrayOfColors = [UIColor]()
+    
+    // Database references
     var ref: DatabaseReference!
     var userRef: DatabaseReference!
     var _refHandle: DatabaseHandle!
@@ -55,13 +61,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     @IBOutlet weak var fetchprogress: UILabel!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.title = "My Collection"
-        //initializePreMades()
-        //navigationItem.hidesBackButton = true
-        
         addButton.isEnabled = false
         // Set the Firebase reference
         ref = Database.database().reference()
@@ -97,6 +98,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     func fetchExperience() {
         var exp: Experience?
         
+        // Ensure the user is logged in before talking to database
         guard let uid = Auth.auth().currentUser?.uid else {
             print("user is not logged in")
             return
@@ -183,6 +185,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //}, withCancel: nil)
     }
     
+    // Compare index to find out whether to add a cell or delete a cell from collection view
     func indexOfMessage(_ snapshot: DataSnapshot) -> Int {
         var index = 0
         for  snap in GlobalExperienceSnapshots {
@@ -196,6 +199,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     override func viewWillDisappear(_ animated: Bool) {
         if(userRef != nil ) {
+            // Detach listener (no longer observe database changes)
             userRef.removeAllObservers()
         }
     }
@@ -221,10 +225,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return leftAndRightPaddings
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return GlobalExperienceSnapshots.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -255,8 +255,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         imageView!.image = cellExperiences.getPanorama(index: 0)
         
         // Add Style
-        //let randomIndex = Int(arc4random_uniform(UInt32(arrayOfColors.count)))
-        //cell.backgroundColor = arrayOfColors[randomIndex]
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         
@@ -264,7 +262,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         let longPressGestureRecong = UILongPressGestureRecognizer(target: self, action: #selector(longPress(press:)))
         longPressGestureRecong.minimumPressDuration = 1.3
         cell.addGestureRecognizer(longPressGestureRecong)
-        
+    }
+    
+    // CollectionView Data source
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return GlobalExperienceSnapshots.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -277,6 +279,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         //performSegue(withIdentifier: "HomeToViewer", sender: self)
     }
     
+    // For developers to upload experiences to the database
     @IBAction func uploadPreMades(_ sender: UIButton) {
         
         if let uid = Auth.auth().currentUser?.uid {
@@ -292,7 +295,6 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
             let button2ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button3ID = ref.child(uid).child(ExperienceID).childByAutoId().key
             let button4ID = ref.child(uid).child(ExperienceID).childByAutoId().key
-            
             
             let button1 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/flock-of-seagulls_daniel-simion.mp3?alt=media&token=e1a85ea4-0e8c-48f7-8a62-ae011d25c7a2", "locationx": 5, "locationy": 0, "locationz": 5] as [String : Any]
             let button2 = ["action" : "https://firebasestorage.googleapis.com/v0/b/cmpt-275-group11-8d3c8.appspot.com/o/Beach%20Soundscape%203-SoundBible.com-416299667.mp3?alt=media&token=b0c1f305-9091-4782-a2f3-8d7ce086ae3c", "locationx": -5, "locationy": 0, "locationz": -5] as [String : Any]
@@ -349,13 +351,18 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         }
     }
     
+    // implements the modal dialogue that shows up when user use Long press gester control on collection view cell
     @objc func longPress(press:UILongPressGestureRecognizer)
     {
         if press.state == .began
         {
+            //  find out which cell is pressed by getting the coordinates
             let touchPoint = press.location(in: collectionView)
             let indexPath = collectionView.indexPathForItem(at: touchPoint)
+            
+            // Implement each button of in modal dialogue
             if indexPath != nil {
+                // Title and description
                 GlobalcurrentExperienceIndex = indexPath!.row
                 GlobalCurrentExperience = arrayOfExperiences[indexPath!.row]
                 GlobalCurrentExperienceID = GlobalCurrentExperience?.key // get experience id
@@ -364,6 +371,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     GlobalcurrentExperienceIndex = indexPath!.row
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
+                // Share button
                 let shareExp = UIAlertAction(title: "Share", style: .default) { (action) in
                     var snapshot = GlobalExperienceSnapshots[indexPath!.row] // get snapshot object for particular index
                     var experienceID = snapshot.key // get experience id
@@ -401,6 +409,7 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                         }
                     }
                 }
+                // Delete button
                 let deleteExp = UIAlertAction(title: "Delete", style: .default) { (action) in
                     //arrayOfExperiences.remove(at: indexPath!.row)
                     if GlobalcurrentExperienceIndex != -1 {
@@ -411,9 +420,10 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                     GlobalExperienceSnapshots.remove(at: indexPath!.row)
                     arrayOfExperiences.remove(at: indexPath!.row)
                     DispatchQueue.main.async(execute: {
-                        self.collectionView.deleteItems(at: [indexPath!])
+                        self.collectionView.deleteItems(at: [indexPath!]) // Delete cell and reload data
                     })
                 }
+                // Cancel button
                 let backToHome = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 sheet.addAction(goToEditor)
                 sheet.addAction(shareExp)
@@ -439,20 +449,23 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         ))
         actionButton.handler = {
             button in
-            // Did Tap Button
+            // If button is tapped
             network().checkConnection()
             if hasConnection == true {
+                // Has wifi connection
                 if arrayOfExperiences.count >= 10{
                     self.showMessagePrompt("You can create up to 10 experiences")
                 } else {
                     GlobalcurrentExperienceIndex = -1 // -1 for new experience
                     self.performSegue(withIdentifier: "HomePageToEditorStartPage", sender: self)
                 }
+                // Not connection to wift
             } else {
                 self.showMessagePrompt("We're having trouble connecting to Prep right now. Check your connection or try again in a bit")
             }
         }
         
+        // Button configuration
         actionButton.layer.shadowColor = UIColor.darkGray.cgColor
         actionButton.layer.shadowOffset = CGSize(width: 3, height: 3)
         actionButton.layer.shadowRadius = 3
@@ -461,6 +474,8 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
         actionButton.isScrollView = true
         self.view.addSubview(actionButton)
     }
+    
+    // Navigation item
     @IBAction func GoToSharedExperiences(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "HomePageToSharedExperiences", sender: self)
     }
