@@ -8,12 +8,9 @@
 
 import UIKit
 
-//protocol CollectionViewCellDelegate: class {
-//    func delete(cell: CollectionViewCell)
-//}
-
 class CollectionViewCell: UICollectionViewCell {
     
+    // Outlets for CollectionViewController.swift or Home page
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var previewImage: UIImageView!
     @IBOutlet weak var desc: UILabel!
