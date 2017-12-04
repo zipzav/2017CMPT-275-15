@@ -12,17 +12,17 @@
 
 import UIKit
 import FirebaseAuth
+
+
 extension NewCTPanoramaView {
     func ChangeNavigationSettings(swipe: Bool)
     {
         if(swipe == true){
             controlMethod = .motion
-        }
-        else{
+        } else{
             controlMethod = .touch
         }
     }
-    
 }
 
 class SettingViewController: UITableViewController {
@@ -50,34 +50,7 @@ class SettingViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-/*
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 1
-    }
-    */
-    
-    @IBAction func controlMethodSwitch(_ sender: UISwitch) {
-        if(sender.isOn == true) {
-            sender.setOn(false, animated: true)
-            experience_switch = false
-            NewCTPanoramaView().ChangeNavigationSettings(swipe:true)
-            
-            UserDefaults.standard.set(false, forKey: "lButtonSelected")
-        }
-        else {
-            sender.setOn(true, animated: true)
-            experience_switch = true
-            NewCTPanoramaView().ChangeNavigationSettings(swipe:false)
-            
-            UserDefaults.standard.set(true, forKey: "lButtonSelected")
-        }
-    }
     
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -133,6 +106,24 @@ class SettingViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: IBAction
+    @IBAction func controlMethodSwitch(_ sender: UISwitch) {
+        if(sender.isOn == true) {
+            sender.setOn(false, animated: true)
+            experience_switch = false
+            NewCTPanoramaView().ChangeNavigationSettings(swipe:true)
+            // Save user settings
+            UserDefaults.standard.set(false, forKey: "lButtonSelected")
+        }
+        else {
+            sender.setOn(true, animated: true)
+            experience_switch = true
+            NewCTPanoramaView().ChangeNavigationSettings(swipe:false)
+             // Save user settings
+            UserDefaults.standard.set(true, forKey: "lButtonSelected")
+        }
+    }
     
     @IBAction func onSignOutTapped(_ sender: Any) {
         do {
