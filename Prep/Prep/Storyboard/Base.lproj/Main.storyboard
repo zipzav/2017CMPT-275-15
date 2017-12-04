@@ -138,14 +138,6 @@
                                     <outlet property="delegate" destination="ILP-Ib-Gy2" id="MQZ-2Y-yfI"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8g-UF-OaF">
-                                <rect key="frame" x="444" y="652" width="122" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Upload premades"/>
-                                <connections>
-                                    <action selector="uploadPreMades:" destination="ILP-Ib-Gy2" eventType="touchUpInside" id="hWg-Lr-mji"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="HWn-8M-zAd"/>
@@ -430,7 +422,7 @@
                     <toolbarItems/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pq6-rJ-nde">
-                        <rect key="frame" x="0.0" y="20" width="1024" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="1024" height="48"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.5490196078431373" green="0.89411764705882346" blue="0.63137254901960782" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
@@ -670,6 +662,7 @@
         <image name="preplogo" width="650" height="883"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="ytS-St-Bpf"/>
         <segue reference="N1p-8i-LMe"/>
         <segue reference="K6F-Q2-4hZ"/>
         <segue reference="VO9-bZ-EBk"/>

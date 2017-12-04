@@ -143,9 +143,11 @@ class CollectionViewController: UIViewController, UICollectionViewDataSource, UI
                                 
                                 let actionurl = temp["action"] as! String
                                 if let data = try? Data(contentsOf: url!) {
+                                    if(panoindex >= (exp?.panoramas.count)!){
                                     exp?.panoramas[panoindex].addButton(
                                         newButtonLocation: SCNVector3(x:Float(x),y:Float(y),z:Float(z)),
                                         newObject: actionurl)
+                                    }
                                 }
                             }
                         }

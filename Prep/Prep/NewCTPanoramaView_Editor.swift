@@ -446,40 +446,94 @@ let radius: CGFloat = 20
     //MARK: BUTTON UPLOAD BUTTONS
     public func Add_Video(){
         recordVideo = true
-        let picker = UIImagePickerController()
-        
-        // Configure ImagePickerController
-        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
-        picker.delegate = self
-        picker.allowsEditing = true
-        picker.mediaTypes = [kUTTypeMovie as String]
-        picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
-        //picker.mediaTypes
+        let alert = UIAlertController(title: "Take Media from?", message: "Camera or Phto Library", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: "Default action"), style: .`default`, handler: { _ in
+            let picker = UIImagePickerController()
+            
+            // Configure ImagePickerController
+            picker.sourceType = .camera // Assume photo sphere is stiched up by another app so didn't
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+            //picker.mediaTypes
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(picker, animated: true, completion:nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Photo Library", comment: "Default action"), style: .`default`, handler: { _ in
+            let picker = UIImagePickerController()
+            
+            // Configure ImagePickerController
+            picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+            //picker.mediaTypes
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(picker, animated: true, completion:nil)
+        }))
         
         var topController = UIApplication.shared.keyWindow?.rootViewController
         while let presentedViewController = topController?.presentedViewController {
             topController = presentedViewController
         }
-        topController?.present(picker, animated: true, completion:nil)
+        topController?.present(alert, animated: true, completion: nil)
+        
+        
         
     }
     public func Add_Sound(){
         recordVideo = false
-        let picker = UIImagePickerController()
-        
-        // Configure ImagePickerController
-        picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
-        picker.delegate = self
-        picker.allowsEditing = true
-        picker.mediaTypes = [kUTTypeMovie as String]
-        picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
-        //picker.mediaTypes
+        let alert = UIAlertController(title: "Take Media from?", message: "Camera or Phto Library", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: "Default action"), style: .`default`, handler: { _ in
+            let picker = UIImagePickerController()
+            
+            // Configure ImagePickerController
+            picker.sourceType = .camera // Assume photo sphere is stiched up by another app so didn't
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+            //picker.mediaTypes
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(picker, animated: true, completion:nil)
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Photo Library", comment: "Default action"), style: .`default`, handler: { _ in
+            let picker = UIImagePickerController()
+            
+            // Configure ImagePickerController
+            picker.sourceType = .photoLibrary // Assume photo sphere is stiched up by another app so didn't
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.modalPresentationStyle = .overCurrentContext // keep the screen in landscape mode
+            //picker.mediaTypes
+            
+            var topController = UIApplication.shared.keyWindow?.rootViewController
+            while let presentedViewController = topController?.presentedViewController {
+                topController = presentedViewController
+            }
+            topController?.present(picker, animated: true, completion:nil)
+        }))
         
         var topController = UIApplication.shared.keyWindow?.rootViewController
         while let presentedViewController = topController?.presentedViewController {
             topController = presentedViewController
         }
-        topController?.present(picker, animated: true, completion:nil)
+        topController?.present(alert, animated: true, completion: nil)
     }
     
    public func imagePickerController(_ picker: UIImagePickerController,
