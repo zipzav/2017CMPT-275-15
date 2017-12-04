@@ -13,22 +13,27 @@ import MobileCoreServices
 import AssetsLibrary
 struct Constants {
     struct Exp {
+        // Set folder path in the Firebase storage
         static let userPath = "user/\(Auth.auth().currentUser!.uid)"
     }
 }
 
 class UploadManager: NSObject {
-
+    
+    // MARK: Helper function
     func uploadImage(_ image: UIImage, path: String, progressBlock: @escaping (_ percentage: Double)-> Void, completionBlock: @escaping (_ url: URL?, _ errorMessage: String?) -> Void) {
+        // ReferenceSetup
         let storage = Storage.storage()
         let storageReference = storage.reference()
         
-        // storage/user/{user id}/{experience id}/image.jpeg
+        // Path: storage/user/{user id}/{experience id}/image.jpeg
         let imagesReference = storageReference.child(path)
+        // Convert to JPG
         if let imageData = UIImageJPEGRepresentation(image, 0.0) {
             let metaData = StorageMetadata()
             metaData.contentType = "images/jpeg"
             
+            // Upload to firebase storage
             let uploadTask = imagesReference.putData(imageData, metadata: metaData, completion: { (metaData, error) in
                 
                     if let metaData = metaData {
@@ -37,6 +42,7 @@ class UploadManager: NSObject {
                         completionBlock(nil, error?.localizedDescription)
                     }
                 })
+            // Observe progress
             uploadTask.observe(.progress, handler: { (snapshot) in
                 guard let progress = snapshot.progress else {
                     return
